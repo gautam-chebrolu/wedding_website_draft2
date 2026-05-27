@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Schedule — Priya &amp; Gautam</title>
+  <meta name="description" content="The full schedule of events for our wedding weekend." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ── Navigation ─────────────────────────────────────────── -->
+  <nav class="site-nav scrolled" aria-label="Main navigation">
+    <a href="index.html" class="nav-logo" aria-label="Home">
+      <img src="media/wedding_logo.svg" alt="Priya &amp; Gautam" />
+    </a>
+    <ul>
+      <li><a href="schedule.html" class="active">Your Schedule</a></li>
+      <li><a href="hotels.html">Hotels</a></li>
+      <li><a href="funds.html">Funds</a></li>
+      <li><a href="pictures.html">Pictures</a></li>
+      <li><a href="https://withjoy.com/gautam-chebrolu-and-priya/rsvp" id="rsvp-link" target="_blank" rel="noopener noreferrer">RSVP</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-wrapper">
+    <div class="page-header" aria-hidden="true"></div>
+
+    <header class="page-hero">
+      <h1>Your Schedule</h1>
+      <p class="page-subtitle">Wedding Weekend Events</p>
+    </header>
+
+    <main class="page-content">
+      
+      <!-- STEP 1: Password -->
+      <div id="step-password" class="auth-section">
+        <div class="info-card">
+          <h2>Private Schedule</h2>
+          <p>Please enter the password provided on your invitation to view your personalized schedule.</p>
+          <form id="password-form" class="auth-form">
+            <input type="text" id="password-input" class="auth-input" placeholder="Password" required />
+            <button type="submit" class="btn">Continue</button>
+          </form>
+          <p id="password-error" class="error-msg" aria-live="polite" style="display: none;"></p>
+        </div>
+      </div>
+
+      <!-- STEP 2: Name Lookup -->
+      <div id="step-name" class="auth-section" style="display: none;">
+        <div class="info-card">
+          <h2>Guest Details</h2>
+          <p>Please enter your First and Last Name exactly as it appears on your invitation envelope.</p>
+          <form id="name-form" class="auth-form">
+            <input type="text" id="fname-input" class="auth-input" placeholder="First Name" required />
+            <input type="text" id="lname-input" class="auth-input" placeholder="Last Name" required />
+            <button type="submit" class="btn">Find Schedule</button>
+          </form>
+          <p id="name-error" class="error-msg" aria-live="polite" style="display: none;"></p>
+        </div>
+      </div>
+
+      <!-- STEP 3: The Personalized Schedule -->
+      <div id="step-schedule" style="display: none;">
+        <div class="schedule-intro">
+          <h2 id="guest-greeting">Welcome!</h2>
+          <p>Here are the events we are so excited to celebrate with you.</p>
+          
+          <div class="rsvp-reminder-box">
+            <h3>Have you RSVP'd yet?</h3>
+            <p>Please note that this personalized schedule is just for your reference and <strong>does not</strong> serve as your RSVP. If you haven't yet, please officially RSVP below!</p>
+            <a href="#" class="pill-btn primary">RSVP Now</a>
+          </div>
+
+          <div style="margin-top: 32px;">
+            <button id="calendar-btn" class="pill-btn outline">Download All to Calendar (ICS)</button>
+          </div>
+        </div>
+        <div id="schedule-container" class="schedule-timeline">
+          <!-- Events injected here by JS -->
+        </div>
+      </div>
+
+    </main>
+
+    <footer class="site-footer">
+      Priya &amp; Gautam &nbsp;·&nbsp; 2026
+    </footer>
+  </div>
+
+  <script src="main.js"></script>
+  <script src="media/events_data.js"></script>
+  <script src="media/guest_data.js"></script>
+  <script src="schedule.js"></script>
+</body>
+</html>

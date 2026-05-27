@@ -1,0 +1,816 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap');
+
+/* ============================================================
+   WEDDING WEBSITE — STYLES
+   Font: Cormorant Garamond (serif, elegant) +
+         Montserrat (sans-serif, modern nav)
+   ============================================================ */
+
+/* ── SPLASH SCREEN ──────────────────────────────────────────── */
+
+#splash {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #0d0c0b;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  transition: opacity 0.9s ease 0.3s, visibility 0.9s ease 0.3s;
+}
+
+#splash.splash-done {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+#splash-logo {
+  width: clamp(160px, 28vw, 280px);
+  height: auto;
+  overflow: visible;
+}
+
+#splash-tagline {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  font-size: clamp(9px, 1vw, 11px);
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0);
+  animation: fadeInTagline 0.8s ease 2.4s forwards;
+}
+
+/* ── Draw animation ──────────────────────────────────────────── */
+
+#splash-logo .draw-path {
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 3000;
+  stroke-dashoffset: 3000;
+  animation:
+    drawPath 2.2s cubic-bezier(0.4, 0, 0.2, 1) forwards,
+    fillFade 0.6s ease 2s forwards;
+}
+
+#splash-logo .draw-path:nth-child(2) {
+  animation:
+    drawPath 2.2s cubic-bezier(0.4, 0, 0.2, 1) 0.25s forwards,
+    fillFade 0.6s ease 2.25s forwards;
+}
+
+@keyframes drawPath {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Fill ends at 100% white — element opacity:0.25 gives exactly 25% apparent */
+@keyframes fillFade {
+  to {
+    fill: rgba(255, 255, 255, 1);
+    stroke: rgba(255, 255, 255, 0);
+  }
+}
+
+@keyframes fadeInTagline {
+  to {
+    color: rgba(255, 255, 255, 0.45);
+  }
+}
+
+/* Prevent page scroll while splash overlay is active */
+body.splash-active {
+  overflow: hidden;
+}
+
+
+/* ── Reset ─────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  background: #0d0c0b;
+  color: #f5f0ea;
+  min-height: 100vh;
+}
+
+/* ── NAVIGATION ─────────────────────────────────────────────
+   Style: Frosted Pill
+   ─────────────────────────────────────────────────────────── */
+
+nav.site-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 28px 40px;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.18) 0%, transparent 100%);
+  pointer-events: none;
+  /* let clicks through the bar itself */
+}
+
+nav.site-nav ul {
+  list-style: none;
+  display: flex;
+  gap: clamp(20px, 4vw, 60px);
+  pointer-events: auto;
+}
+
+nav.site-nav ul li a {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  font-size: clamp(10px, 1.1vw, 13px);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: rgba(21, 49, 124, 0.9);
+  padding: 7px 18px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+nav.site-nav ul li a:hover,
+nav.site-nav ul li a.active {
+  background: rgba(255, 255, 255, 0.22);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+nav.site-nav ul li a::after {
+  display: none;
+}
+
+/* ── Nav logo (top-left, inline with pills) ── */
+.nav-logo {
+  position: absolute;
+  left: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  pointer-events: auto;
+  text-decoration: none;
+}
+
+.nav-logo img {
+  height: 36px;
+  width: auto;
+  /* SVG has black paths — invert to white for the dark nav context */
+  filter: invert(1);
+  opacity: 0.75;
+  transition: opacity 0.3s ease;
+}
+
+.nav-logo:hover img {
+  opacity: 1;
+}
+
+/* On inner pages (scrolled dark nav), keep logo visible */
+nav.site-nav.scrolled .nav-logo img {
+  opacity: 0.65;
+}
+
+nav.site-nav.scrolled .nav-logo:hover img {
+  opacity: 0.9;
+}
+
+@media (max-width: 600px) {
+  .nav-logo {
+    left: 16px;
+  }
+
+  .nav-logo img {
+    height: 28px;
+  }
+}
+
+/* ── HOME PAGE — HERO ───────────────────────────────────────── */
+
+.hero {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('media/website_background_full.png');
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  /* Subtle vignette — darker at the bottom to lift the names */
+  filter: none;
+  z-index: 0;
+}
+
+/* Gradient overlay — heavier at bottom, invisible at top */
+.hero-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom,
+      transparent 0%,
+      transparent 45%,
+      rgba(10, 9, 8, 0.35) 70%,
+      rgba(10, 9, 8, 0.72) 100%);
+}
+
+/* Names + details block */
+.hero-caption {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  /* Adjust padding-bottom to keep it near the bottom edge */
+  padding: 0 20px 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.hero-names {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 300;
+  font-style: italic;
+  font-size: clamp(58px, 9vw, 116px);
+  color: #ffffff;
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+  text-shadow: 0 2px 30px rgba(0, 0, 0, 0.4);
+}
+
+.hero-ampersand {
+  font-weight: 300;
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 0 0.3em;
+}
+
+.hero-divider {
+  width: 60px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.45);
+  margin: 4px auto;
+}
+
+.hero-details {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  font-size: clamp(10px, 1.2vw, 13px);
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.78);
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.35);
+}
+
+.hero-details span {
+  padding: 0 12px;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+
+/* ── INNER PAGES ─────────────────────────────────────────────── */
+
+.page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Simple header bar for inner pages */
+.page-header {
+  height: 90px;
+  /* room for fixed nav */
+  /* Optional: subtle background if you want the header solid */
+  background: #0d0c0b;
+}
+
+.page-hero {
+  background: #0d0c0b;
+  text-align: center;
+  padding: 60px 20px 48px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.page-hero h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-style: italic;
+  font-size: clamp(32px, 5vw, 56px);
+  color: #f5f0ea;
+  letter-spacing: 0.04em;
+  margin-bottom: 12px;
+}
+
+.page-hero .page-subtitle {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(245, 240, 234, 0.45);
+}
+
+/* Inner page nav — same component, but with dark backdrop on scroll */
+nav.site-nav.scrolled {
+  background: rgba(13, 12, 11, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+nav.site-nav.scrolled ul li a {
+  color: rgba(245, 240, 234, 0.75);
+  text-shadow: none;
+}
+
+nav.site-nav.scrolled ul li a:hover {
+  color: #f5f0ea;
+  text-shadow: none;
+}
+
+/* Content area */
+.page-content {
+  flex: 1;
+  max-width: 840px;
+  margin: 0 auto;
+  padding: 60px 24px 100px;
+  width: 100%;
+}
+
+/* Placeholder content styling */
+.placeholder-block {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 4px;
+  padding: 48px 32px;
+  text-align: center;
+  color: rgba(245, 240, 234, 0.35);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/* Info Card (e.g. for Hotels/Schedule) */
+.info-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+  padding: 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.info-card h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 400;
+  font-style: italic;
+  font-size: 28px;
+  color: #f5f0ea;
+  letter-spacing: 0.02em;
+}
+
+.info-card p {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 1.8;
+  color: rgba(245, 240, 234, 0.85);
+}
+
+.info-card .btn {
+  display: inline-block;
+  align-self: flex-start;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #0d0c0b;
+  background: #f5f0ea;
+  padding: 14px 28px;
+  border-radius: 999px;
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.info-card .btn:hover {
+  background: #ffffff;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 600px) {
+  .info-card {
+    padding: 32px 24px;
+  }
+}
+
+/* ── PHOTO GRID ─────────────────────────────────────────────── */
+
+.photo-grid {
+  /* Masonry layout using CSS columns */
+  column-count: 3;
+  column-gap: 24px;
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  .photo-grid {
+    column-count: 2;
+  }
+}
+
+@media (max-width: 600px) {
+  .photo-grid {
+    column-count: 1;
+  }
+}
+
+.photo-item {
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  /* Prevent items from breaking across columns */
+  break-inside: avoid;
+  margin-bottom: 24px;
+  /* subtle shadow to lift the photos from the dark background */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  /* smooth zoom effect on hover */
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.photo-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.photo-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+}
+
+.photo-item:hover img {
+  transform: scale(1.05);
+}
+
+/* ── SCHEDULE INTERACTIVE FLOW ──────────────────────────────── */
+
+.auth-section {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 10px;
+}
+
+.auth-input {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  padding: 14px 18px;
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.auth-input:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.error-msg {
+  color: #ff6b6b !important;
+  font-size: 12px !important;
+  margin-top: 8px;
+}
+
+.schedule-intro {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.schedule-intro h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-style: italic;
+  font-size: 36px;
+  color: #f5f0ea;
+  margin-bottom: 12px;
+}
+
+.schedule-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  position: relative;
+}
+
+/* Vertical line connecting events */
+.schedule-timeline::before {
+  content: '';
+  position: absolute;
+  top: 24px;
+  bottom: 24px;
+  left: 32px;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  z-index: 0;
+}
+
+.schedule-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+  padding: 32px 32px 32px 64px;
+  z-index: 1;
+}
+
+/* Timeline dot */
+.schedule-card::before {
+  content: '';
+  position: absolute;
+  top: 40px;
+  left: 28px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #f5f0ea;
+  box-shadow: 0 0 0 4px rgba(13, 12, 11, 1);
+}
+
+.schedule-date {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 12px;
+}
+
+.schedule-content h3 {
+  margin: 0 0 10px 0;
+  font-family: 'Karnak', serif;
+  font-weight: normal;
+  font-size: 24px;
+  color: #fff;
+  letter-spacing: 0.05em;
+}
+
+.schedule-description {
+  margin-top: 10px;
+  margin-bottom: 16px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.5;
+}
+
+.schedule-description p {
+  margin: 0 0 8px 0;
+}
+
+.schedule-description p:last-child {
+  margin-bottom: 0;
+}
+
+.schedule-location {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.schedule-location svg {
+  opacity: 0.6;
+}
+
+.schedule-address-link {
+  display: block;
+  margin-top: 6px;
+  margin-left: 24px;
+  /* Align with text after the SVG */
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  font-size: 12px;
+  color: #f5f0ea;
+  text-decoration: underline;
+  text-decoration-color: rgba(245, 240, 234, 0.3);
+  text-underline-offset: 4px;
+  transition: color 0.3s ease, text-decoration-color 0.3s ease;
+}
+
+.schedule-address-link:hover {
+  color: #fff;
+  text-decoration-color: #fff;
+}
+
+.event-calendar-links {
+  margin-top: 18px;
+  margin-left: 24px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.event-calendar-links a {
+  padding: 6px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 99px;
+  color: #f5f0ea;
+  text-decoration: none;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.event-calendar-links a:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.no-events-msg {
+  text-align: center;
+  font-family: 'Montserrat', sans-serif;
+  color: rgba(255, 255, 255, 0.6);
+  padding: 40px;
+}
+
+.outline-btn {
+  background: transparent !important;
+  color: #f5f0ea !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+.outline-btn:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: #f5f0ea !important;
+}
+
+@media (max-width: 600px) {
+  .schedule-timeline::before {
+    left: 20px;
+  }
+
+  .schedule-card {
+    padding: 24px 24px 24px 44px;
+  }
+
+  .schedule-card::before {
+    left: 16px;
+    top: 32px;
+  }
+}
+
+/* ── FOOTER ─────────────────────────────────────────────────── */
+
+footer.site-footer {
+  text-align: center;
+  padding: 32px 20px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(245, 240, 234, 0.25);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* ── RESPONSIVE ─────────────────────────────────────────────── */
+
+@media (max-width: 600px) {
+  nav.site-nav {
+    padding: 20px 16px;
+  }
+
+  nav.site-nav ul {
+    gap: 14px;
+  }
+
+  nav.site-nav ul li a {
+    font-size: 9px;
+    letter-spacing: 0.14em;
+  }
+
+  .hero-caption {
+    padding-bottom: 48px;
+  }
+}
+
+/* ── RSVP REMINDER & PILL BUTTON ────────────────────────────── */
+
+.rsvp-reminder-box {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 32px 24px;
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.rsvp-reminder-box h3 {
+  font-family: 'Karnak', serif;
+  font-size: 20px;
+  font-weight: normal;
+  color: #fff;
+  margin: 0 0 12px 0;
+  letter-spacing: 0.02em;
+}
+
+.rsvp-reminder-box p {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
+  margin: 0 0 24px 0;
+}
+
+.pill-btn {
+  display: inline-block;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 14px 28px;
+  border-radius: 999px;
+  transition: transform 0.3s ease, background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  cursor: pointer;
+  border: none;
+}
+
+.pill-btn.primary {
+  background: #f5f0ea;
+  color: #0d0c0b;
+}
+
+.pill-btn.primary:hover {
+  background: #ffffff;
+  transform: translateY(-2px);
+}
+
+.pill-btn.outline {
+  background: transparent;
+  color: #f5f0ea;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.pill-btn.outline:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.6);
+  transform: translateY(-2px);
+}

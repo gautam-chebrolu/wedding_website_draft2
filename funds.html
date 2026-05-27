@@ -32,12 +32,23 @@
     </header>
 
     <main class="page-content">
-      <!--
-        ADD YOUR REGISTRY / FUND DETAILS HERE.
-        Example: Zola link, Venmo, honeymoon fund, etc.
-      -->
-      <div class="placeholder-block">
-        Registry details coming soon
+      <div class="info-card" style="text-align: center; max-width: 600px; margin: 0 auto; padding: 48px 32px;">
+        <h2 style="margin-bottom: 8px;">A Note on Gifts</h2>
+        <p>Your presence at our wedding is the greatest gift of all. If you wish to bless us with a gift, we have created funds to help us start our new life together.</p>
+        
+        <p style="font-weight: 400; color: #fff; margin-top: 16px;">
+          <em>Please note that 20% of all donations will go directly to charity.</em>
+        </p>
+
+        <div class="funds-buttons" style="display: flex; flex-direction: column; gap: 16px; margin-top: 40px; align-items: center;">
+          <a href="https://venmo.com/goatt" target="_blank" rel="noopener noreferrer" class="pill-btn primary" style="font-size: 14px; padding: 18px 32px; width: 100%; max-width: 320px;">
+            Donate via Venmo (@goatt)
+          </a>
+          <button id="zelle-btn" class="pill-btn outline" style="font-size: 14px; padding: 18px 32px; width: 100%; max-width: 320px;">
+            Zelle (706-662-9655)
+          </button>
+        </div>
+        <p id="zelle-hint" style="font-size: 11px; margin-top: 12px; opacity: 0.6;">Click the Zelle button to copy the phone number!</p>
       </div>
     </main>
 
@@ -47,5 +58,21 @@
   </div>
 
   <script src="main.js"></script>
+  <script>
+    const zelleBtn = document.getElementById('zelle-btn');
+    if (zelleBtn) {
+      zelleBtn.addEventListener('click', function() {
+        navigator.clipboard.writeText('706-662-9655').then(function() {
+          const originalText = zelleBtn.innerHTML;
+          zelleBtn.innerHTML = 'Phone Number Copied!';
+          zelleBtn.style.backgroundColor = 'rgba(255,255,255,0.1)';
+          setTimeout(() => {
+            zelleBtn.innerHTML = originalText;
+            zelleBtn.style.backgroundColor = '';
+          }, 3000);
+        });
+      });
+    }
+  </script>
 </body>
 </html>

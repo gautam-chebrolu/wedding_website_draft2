@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,6 +8,7 @@
   <meta name="description" content="Wedding registry and funds information." />
   <link rel="stylesheet" href="styles.css" />
 </head>
+
 <body>
 
   <!-- ── Navigation ─────────────────────────────────────────── -->
@@ -19,7 +21,8 @@
       <li><a href="hotels.html">Hotels</a></li>
       <li><a href="funds.html" class="active">Funds</a></li>
       <li><a href="pictures.html">Pictures</a></li>
-      <li><a href="https://withjoy.com/gautam-chebrolu-and-priya/rsvp" id="rsvp-link" target="_blank" rel="noopener noreferrer">RSVP</a></li>
+      <li><a href="https://withjoy.com/gautam-chebrolu-and-priya/rsvp" id="rsvp-link" target="_blank"
+          rel="noopener noreferrer">RSVP</a></li>
     </ul>
   </nav>
 
@@ -34,21 +37,23 @@
     <main class="page-content">
       <div class="info-card" style="text-align: center; max-width: 600px; margin: 0 auto; padding: 48px 32px;">
         <h2 style="margin-bottom: 8px;">A Note on Gifts</h2>
-        <p>Your presence at our wedding is the greatest gift of all. If you wish to bless us with a gift, we have created funds to help us start our new life together.</p>
-        
-        <p style="font-weight: 400; color: #fff; margin-top: 16px;">
-          <em>Please note that 20% of all donations will go directly to charity.</em>
-        </p>
+        <p>Your presence at our wedding is the greatest gift of all. If you wish to bless us with a gift, we have
+          created funds to help us start our new life together. Please note that a portion of all gifts will go to a
+          charity of our choice.</p>
 
-        <div class="funds-buttons" style="display: flex; flex-direction: column; gap: 16px; margin-top: 40px; align-items: center;">
-          <a href="https://venmo.com/goatt" target="_blank" rel="noopener noreferrer" class="pill-btn primary" style="font-size: 14px; padding: 18px 32px; width: 100%; max-width: 320px;">
-            Donate via Venmo (@goatt)
+        <div class="funds-buttons"
+          style="display: flex; flex-direction: column; gap: 16px; margin-top: 40px; align-items: center;">
+          <a href="https://venmo.com/Priya-Gupta-5" target="_blank" rel="noopener noreferrer" class="pill-btn primary"
+            style="font-size: 14px; padding: 18px 32px; width: 100%; max-width: 320px;">
+            Donate via Venmo (@Priya-Gupta-5)
           </a>
-          <button id="zelle-btn" class="pill-btn outline" style="font-size: 14px; padding: 18px 32px; width: 100%; max-width: 320px;">
-            Zelle (706-662-9655)
+          <button id="zelle-btn" class="pill-btn outline"
+            style="font-size: 14px; padding: 18px 32px; width: 100%; max-width: 320px;">
+            Zelle (919-757-5166)
           </button>
         </div>
-        <p id="zelle-hint" style="font-size: 11px; margin-top: 12px; opacity: 0.6;">Click the Zelle button to copy the phone number!</p>
+        <p id="zelle-hint" style="font-size: 11px; margin-top: 12px; opacity: 0.6;">Click the Zelle button to copy the
+          phone number!</p>
       </div>
     </main>
 
@@ -61,8 +66,8 @@
   <script>
     const zelleBtn = document.getElementById('zelle-btn');
     if (zelleBtn) {
-      zelleBtn.addEventListener('click', function() {
-        navigator.clipboard.writeText('706-662-9655').then(function() {
+      zelleBtn.addEventListener('click', function () {
+        navigator.clipboard.writeText('919-757-5166').then(function () {
           const originalText = zelleBtn.innerHTML;
           zelleBtn.innerHTML = 'Phone Number Copied!';
           zelleBtn.style.backgroundColor = 'rgba(255,255,255,0.1)';
@@ -75,4 +80,5 @@
     }
   </script>
 </body>
+
 </html>

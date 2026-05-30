@@ -9,9 +9,9 @@ const EVENTS = {
     icsStart: "20261118T153000Z",
     icsEnd: "20261118T190000Z",
     description: [
-      "To kick off the wedding festivities, Priya and her family will gather to seek blessings for an auspicious, smooth, and joyful journey ahead, marking the official start of our wedding celebrations.",
+      "To kick off the wedding festivities, Priya and her family will gather to seek blessings for an auspicious and joyful journey ahead, without obstacles, marking the official start of our wedding celebrations.",
       "Lunch will be provided after the ceremony.",
-      "Attire is traditional Indian"
+      "Attire: Traditional Indian"
     ]
   },
   "Haldi": {
@@ -26,7 +26,7 @@ const EVENTS = {
     description: [
       "Join Priya and Gautam as their families and friends come together to apply turmeric paste to the bride and groom for good luck, health, and a wedding-ready glow.",
       "Dinner will be provided after the ceremony",
-      "For attire, we ask that all guests wear pastel colors (think soft yellow, mint green, powder blue, peach, lilac, etc.)"
+      "Attire: Wear pastel colors (think soft yellow, mint green, powder blue, peach, lilac, etc.)"
     ]
   },
   "Sangeet": {
@@ -41,7 +41,7 @@ const EVENTS = {
     description: [
       "This is our official pre-wedding bash filled with dance performances, lots of music, and food.",
       "A variety of live stations will be serving food throughout the evening for dinner.",
-      "Attire is Indian festive or Cocktail glam"
+      "Attire: Indian Festive or Cocktail Glam"
     ]
   },
   "Wedding": {
@@ -54,9 +54,9 @@ const EVENTS = {
     icsStart: "20261121T134500Z",
     icsEnd: "20261121T190000Z",
     description: [
-      "Groom's procession (baraat) will begin promptly at 8:45 AM followed by hand-held light refreshments prior to the ceremony.",
+      "Groom's procession (baraat) will begin promptly at 8:45 AM at Washington Duke Inn followed by light refreshments prior to the ceremony.",
       "Lunch will be served after the wedding",
-      "For attire, we ask that guests avoid wearing pink"
+      "Attire: Avoid wearing pink"
     ]
   },
   "Reception": {
@@ -71,7 +71,7 @@ const EVENTS = {
     description: [
       "Please join us to wrap up our wedding weekend at our evening reception! Cocktail hour will begin at 6 PM.",
       "Dinner will be served after reception activities.",
-      "Attire is black tie optional, Indian formal"
+      "Attire: Western or Indian formal"
     ]
   },
   "Sat Puja": {
@@ -84,9 +84,24 @@ const EVENTS = {
     icsStart: "20261122T160000Z",
     icsEnd: "20261122T190000Z",
     description: [
-      "Join Priya and Gautam as they perform their first prayer ceremony as a married couple seeking joy, prosperity, and good health in their lives ahead.",
+      "Join Priya and Gautam as they perform their first prayer ceremony as a married couple seeking divine blessings for happiness, prosperity, and good health in their future lives togethers.",
       "Lunch will be provided after the ceremony.",
-      "Attire is traditional Indian"
+      "Attire: Traditional Indian"
+    ]
+  },
+  "ATL Reception": {
+    name: "Balaji Kalyanam",
+    date: "December 5, 2026",
+    time: "9:30am - 2pm",
+    location: "Hindu Temple of Atlanta",
+    address: "5851 GA-85, Riverdale, GA 30274",
+    mapLink: "https://maps.app.goo.gl/4XQ24dC1f5FfD7Tz8",
+    icsStart: "20261205T143000Z",
+    icsEnd: "20261205T190000Z",
+    description: [
+      "Following our wedding ceremony in Raleigh, we invite you to join us in Atlanta as we seek the ultimate blessings for our new beginning.",
+      "A traditional vegetarian lunch & Prasadam will be served after the ceremony.",
+      "Attire: Traditional Indian"
     ]
   }
 };

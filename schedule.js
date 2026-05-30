@@ -27,11 +27,25 @@ document.addEventListener('DOMContentLoaded', function () {
   // Fixed password
   const CORRECT_PASSWORD = "pg2026";
 
+  // ── LocalStorage Key ─────────────────────────────────────────
+  const LS_PASSWORD_KEY = 'pg_pwd_verified';
+
+  // ── Auto-restore session on page load ───────────────────────
+  // If the password was already entered on this device, skip straight
+  // to the name step. Each person still enters their own name.
+  (function restoreSession() {
+    if (localStorage.getItem(LS_PASSWORD_KEY) === 'true') {
+      stepPassword.style.display = 'none';
+      stepName.style.display     = 'block';
+    }
+  })();
+
   // ── Step 1: Password ────────────────────────────────────────
   passwordForm.addEventListener('submit', function (e) {
     e.preventDefault();
     const inputPwd = passwordInput.value.trim().toLowerCase();
     if (inputPwd === CORRECT_PASSWORD) {
+      localStorage.setItem(LS_PASSWORD_KEY, 'true'); // Remember password was entered
       passwordError.style.display = 'none';
       stepPassword.style.display = 'none';
       stepName.style.display = 'block';
@@ -114,6 +128,12 @@ document.addEventListener('DOMContentLoaded', function () {
     nameError.textContent = msg;
     nameError.style.display = 'block';
   }
+
+  // Clear saved password (call from browser console to reset: clearScheduleSession())
+  window.clearScheduleSession = function () {
+    localStorage.removeItem(LS_PASSWORD_KEY);
+    location.reload();
+  };
 
   // DJB2 Hash for key lookup
   function hashString(str) {

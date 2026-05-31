@@ -89,7 +89,7 @@ const EVENTS = {
       "Attire: Traditional Indian"
     ]
   },
-  "ATL Reception": {
+  "Atlanta Reception": {
     name: "Balaji Kalyanam",
     date: "December 5, 2026",
     time: "9:30am - 2pm",

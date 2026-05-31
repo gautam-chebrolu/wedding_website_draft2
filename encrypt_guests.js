@@ -57,22 +57,37 @@ function parseCSV(csvText) {
     rows.push(currentRow);
   }
 
+  if (rows.length < 2) return [];
+
+  // Resolve column indices from header row (case-insensitive, trimmed)
+  const headers = rows[0].map(h => h.trim().toLowerCase());
+  const col = name => headers.indexOf(name.toLowerCase());
+
+  const firstNameIdx = col('first name');
+  const lastNameIdx  = col('last name');
+  const tagsIdx      = col('tags');
+
+  if (firstNameIdx === -1 || lastNameIdx === -1 || tagsIdx === -1) {
+    throw new Error(
+      `Could not find required columns. Found headers: ${headers.join(', ')}`
+    );
+  }
+
   const data = [];
   for (let i = 1; i < rows.length; i++) {
     const row = rows[i];
-    if (row.length >= 3 && row[0].trim() !== '') {
-      data.push({
-        firstName: row[0].trim(),
-        lastName: row[1].trim(),
-        tags: row[2] ? row[2].trim() : ''
-      });
+    const firstName = (row[firstNameIdx] || '').trim();
+    const lastName  = (row[lastNameIdx]  || '').trim();
+    const tags      = (row[tagsIdx]      || '').trim();
+    if (firstName !== '') {
+      data.push({ firstName, lastName, tags });
     }
   }
   return data;
 }
 
 const PASSWORD = "pg2026";
-const csv = fs.readFileSync('media/wedding_guest_list.csv', 'utf8');
+const csv = fs.readFileSync('media/wedding_guest_list_may31.csv', 'utf8');
 const parsed = parseCSV(csv);
 
 const secureData = {};

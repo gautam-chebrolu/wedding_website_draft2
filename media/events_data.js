@@ -26,7 +26,7 @@ const EVENTS = {
     description: [
       "Join Priya and Gautam as their families and friends come together to apply turmeric paste to the bride and groom for good luck, health, and a wedding-ready glow.",
       "Dinner will be provided after the ceremony",
-      "Attire: Wear pastel colors (think soft yellow, mint green, powder blue, peach, lilac, etc.)"
+      "Attire: Pastel Colors (think soft yellow, mint green, powder blue, peach, lilac, etc.)"
     ]
   },
   "Sangeet": {
@@ -56,7 +56,7 @@ const EVENTS = {
     description: [
       "Groom's procession (baraat) will begin promptly at 8:45 AM at Washington Duke Inn followed by light refreshments prior to the ceremony.",
       "Lunch will be served after the wedding",
-      "Attire: Avoid wearing pink"
+      "Attire: Western or Indian Formal; please avoid wearing pink"
     ]
   },
   "Reception": {
@@ -71,7 +71,7 @@ const EVENTS = {
     description: [
       "Please join us to wrap up our wedding weekend at our evening reception! Cocktail hour will begin at 6 PM.",
       "Dinner will be served after reception activities.",
-      "Attire: Western or Indian formal"
+      "Attire: Western or Indian Formal"
     ]
   },
   "Sat Puja": {

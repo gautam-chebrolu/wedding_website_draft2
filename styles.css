@@ -90,6 +90,28 @@ body.splash-active {
 }
 
 
+/* ── DAHLIA CORNER DECORATION ───────────────────────────────── */
+
+.dahlia-corner {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 55px;
+  height: 55px;
+  opacity: 1;
+  pointer-events: none;
+  z-index: 5;
+  user-select: none;
+}
+
+@media (max-width: 600px) {
+  .dahlia-corner {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+
 /* ── Reset ─────────────────────────────────────────────────── */
 *,
 *::before,

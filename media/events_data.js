@@ -41,6 +41,7 @@ const EVENTS = {
     description: [
       "This is our official pre-wedding bash filled with dance performances, lots of music, and food.",
       "A variety of live stations will be serving food throughout the evening for dinner.",
+      "Round trip transportation will be provided to and from Sangeet venue (Brier Creek) and Washington Duke Inn.",
       "Attire: Indian Festive or Cocktail Glam"
     ]
   },

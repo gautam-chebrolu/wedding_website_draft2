@@ -87,7 +87,7 @@ function parseCSV(csvText) {
 }
 
 const PASSWORD = "pg2026";
-const csv = fs.readFileSync('media/wedding_guest_list_may31.csv', 'utf8');
+const csv = fs.readFileSync('media/wedding_guest_list_june4.csv', 'utf8');
 const parsed = parseCSV(csv);
 
 const secureData = {};
@@ -97,7 +97,8 @@ parsed.forEach(guest => {
   const nameHash = hashString(normalizedName);
   const encryptionKey = normalizedName + PASSWORD;
   
-  const encryptedTags = encrypt(guest.tags, encryptionKey);
+  const payload = guest.firstName + "|" + guest.tags;
+  const encryptedTags = encrypt(payload, encryptionKey);
   secureData[nameHash] = encryptedTags;
 });
 

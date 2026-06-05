@@ -79,8 +79,18 @@ document.addEventListener('DOMContentLoaded', function () {
     if (encryptedTags) {
       nameError.style.display = 'none';
       const key = normalizedName + CORRECT_PASSWORD;
-      const tagsStr = decrypt(encryptedTags, key);
-      renderSchedule(fname, tagsStr);
+      const decryptedStr = decrypt(encryptedTags, key);
+      
+      let realFirstName = fname;
+      let tagsStr = decryptedStr;
+      
+      if (decryptedStr.includes('|')) {
+        const parts = decryptedStr.split('|');
+        realFirstName = parts[0];
+        tagsStr = parts.slice(1).join('|');
+      }
+      
+      renderSchedule(realFirstName, tagsStr);
       stepName.style.display = 'none';
       stepSchedule.style.display = 'block';
     } else {

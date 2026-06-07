@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>You're Invited — Priya &amp; Gautam's Wedding</title>
+  <meta name="description"
+    content="Digital wedding invitation for the marriage of Priya Gupta and Gautam Chebrolu. November 21, 2026 at Washington Duke Inn, Durham, NC." />
+  <link rel="stylesheet" href="invitation.css" />
+</head>
+
+<body>
+
+  <!-- ── Background Music ─────────────────────────────────── -->
+  <audio id="bg-music" loop preload="auto">
+    <source src="media/invitation_music.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- ── Opening Screen ───────────────────────────────────── -->
+  <div id="opening-screen">
+    <div class="opening-content">
+
+      <!-- Small ornamental divider -->
+      <svg class="opening-ornament" viewBox="0 0 80 20" fill="none" stroke="rgba(196,169,106,0.6)"
+        stroke-width="0.8" stroke-linecap="round">
+        <line x1="0" y1="10" x2="30" y2="10" />
+        <circle cx="40" cy="10" r="3" fill="none" />
+        <line x1="50" y1="10" x2="80" y2="10" />
+      </svg>
+
+      <p class="opening-subtitle">You are invited to celebrate the wedding of</p>
+      <h1 class="opening-names">Priya &amp; Gautam</h1>
+      <p class="opening-date">November 21, 2026</p>
+      <div class="opening-divider"></div>
+      <button id="open-btn" class="open-btn" type="button">Open Invitation</button>
+    </div>
+  </div>
+
+  <!-- ── Music Toggle ─────────────────────────────────────── -->
+  <button id="music-toggle" class="music-toggle" aria-label="Toggle music" title="Toggle music" type="button">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+      stroke-linejoin="round">
+      <path d="M9 18V5l12-2v13" />
+      <circle cx="6" cy="18" r="3" />
+      <circle cx="18" cy="16" r="3" />
+    </svg>
+    <div class="sound-bars">
+      <span></span><span></span><span></span>
+    </div>
+  </button>
+
+  <!-- ── Floating Particles ───────────────────────────────── -->
+  <div id="particles" class="particles-container"></div>
+
+  <!-- ── Invitation Container ─────────────────────────────── -->
+  <div id="invitation-container" class="invitation-container">
+
+    <!-- ─────────────────────────────────────────────────────
+         MAIN INVITATION CARD  (Temple / Mandir Shape)
+         ───────────────────────────────────────────────────── -->
+    <div class="main-card" id="main-card">
+
+      <!-- SVG background — Pentagon (temple) shape with gold border -->
+      <svg class="card-shape" viewBox="0 0 500 800" preserveAspectRatio="xMidYMid meet">
+        <polygon points="250,15 488,135 488,788 12,788 12,135" fill="transparent" stroke="#c4a96a"
+          stroke-width="4" stroke-linejoin="miter" />
+      </svg>
+
+      <!-- Ganesha icon at the peak -->
+      <div class="ganesha-wrapper anim-el">
+        <svg class="ganesha-icon" viewBox="0 0 60 70" fill="none" stroke="rgba(255,255,255,0.82)" stroke-width="1.2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <!-- Crown petals -->
+          <path d="M22,25 L25,15 L28,22 L30,11 L32,22 L35,15 L38,25" />
+          <!-- Head -->
+          <ellipse cx="30" cy="37" rx="11" ry="13" />
+          <!-- Left ear -->
+          <path d="M19,34 C14,29 13,40 19,37" />
+          <!-- Right ear -->
+          <path d="M41,34 C46,29 47,40 41,37" />
+          <!-- Trunk curving left -->
+          <path d="M30,50 C30,55 27,59 24,62 C22,64 24,66 26,64" />
+          <!-- Right tusk -->
+          <path d="M35,47 C37,51 38,50" />
+          <!-- Third eye -->
+          <circle cx="30" cy="30" r="0.8" fill="rgba(255,255,255,0.8)" stroke="none" />
+          <!-- Eyes -->
+          <circle cx="26" cy="34" r="1" fill="rgba(255,255,255,0.8)" stroke="none" />
+          <circle cx="34" cy="34" r="1" fill="rgba(255,255,255,0.8)" stroke="none" />
+        </svg>
+      </div>
+
+      <!-- Card text content -->
+      <div class="card-text">
+
+        <p class="parent-request anim-el">
+          Mr. Pratik Gupta and Dr. Jyotsna Gupta request the<br>
+          pleasure of your company at the marriage of their daughter
+        </p>
+
+        <h2 class="bride-name anim-el">PRIYA</h2>
+        <p class="to-text anim-el">to</p>
+        <h2 class="groom-name anim-el">GAUTAM</h2>
+
+        <p class="groom-parents anim-el">
+          son of Mr. Varaprasad Chebrolu and Dr. Rani Chebrolu
+        </p>
+
+        <div class="date-block anim-el">
+          <p class="wedding-date">11.21.26</p>
+          <p class="wedding-venue">Washington Duke Inn | Durham, NC</p>
+          <p class="reception-note">reception to follow in the evening</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ─────────────────────────────────────────────────────
+         RSVP CARD
+         ───────────────────────────────────────────────────── -->
+    <div class="rsvp-card anim-el" id="rsvp-card">
+
+      <div class="rsvp-top">
+        <div>
+          <h3 class="rsvp-heading">RSVP</h3>
+          <p class="rsvp-deadline">by August 1, 2026</p>
+          <p class="rsvp-website-info">priyagautam.com&ensp;|&ensp;pw: pg2026</p>
+          <p class="rsvp-website-sub">RSVP &amp; Schedule on website</p>
+        </div>
+      </div>
+
+      <div class="rsvp-divider"></div>
+
+      <div class="rsvp-details">
+        <p><strong>Wedding of Priya Gupta and Gautam Chebrolu</strong></p>
+        <p>Saturday November 21, 2026</p>
+        <p>Washington Duke Inn</p>
+        <p>3001 Cameron Blvd, Durham, NC 27705</p>
+      </div>
+
+      <div class="rsvp-actions">
+        <a href="https://withjoy.com/gautam-chebrolu-and-priya/rsvp" class="rsvp-btn" target="_blank"
+          rel="noopener noreferrer">RSVP Now</a>
+        <a href="schedule.html" class="schedule-btn">View Your Schedule</a>
+      </div>
+
+      <!-- Leaf decoration — bottom right -->
+      <svg class="leaf-decor leaf-br" viewBox="0 0 120 100" fill="none">
+        <path d="M110,90 C90,82 68,70 48,76 C36,80 24,72 14,58" stroke="#c8c2b6" stroke-width="1.5"
+          stroke-linecap="round" />
+        <path d="M82,78 C78,66 66,68 74,78Z" fill="#d4cfc7" />
+        <path d="M60,72 C56,60 44,62 52,72Z" fill="#d4cfc7" />
+        <path d="M38,66 C34,54 22,56 30,66Z" fill="#d4cfc7" />
+        <path d="M96,84 C94,74 84,74 90,83Z" fill="#d4cfc7" />
+        <path d="M24,60 C20,48 12,52 20,61Z" fill="#d4cfc7" />
+      </svg>
+
+      <!-- Leaf decoration — bottom left (mirrored) -->
+      <svg class="leaf-decor leaf-bl" viewBox="0 0 120 100" fill="none">
+        <path d="M110,90 C90,82 68,70 48,76 C36,80 24,72 14,58" stroke="#c8c2b6" stroke-width="1.5"
+          stroke-linecap="round" />
+        <path d="M82,78 C78,66 66,68 74,78Z" fill="#d4cfc7" />
+        <path d="M60,72 C56,60 44,62 52,72Z" fill="#d4cfc7" />
+        <path d="M38,66 C34,54 22,56 30,66Z" fill="#d4cfc7" />
+        <path d="M96,84 C94,74 84,74 90,83Z" fill="#d4cfc7" />
+      </svg>
+
+    </div>
+    <!-- END RSVP CARD -->
+
+  </div>
+  <!-- END INVITATION CONTAINER -->
+
+  <script src="invitation.js"></script>
+</body>
+
+</html>

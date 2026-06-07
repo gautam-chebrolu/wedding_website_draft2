@@ -21,7 +21,7 @@ function parseCSV(csvText) {
   let currentRow = [];
   let currentVal = '';
   let inQuotes = false;
-  
+
   for (let i = 0; i < csvText.length; i++) {
     const char = csvText[i];
     const nextChar = csvText[i + 1];
@@ -64,8 +64,8 @@ function parseCSV(csvText) {
   const col = name => headers.indexOf(name.toLowerCase());
 
   const firstNameIdx = col('first name');
-  const lastNameIdx  = col('last name');
-  const tagsIdx      = col('tags');
+  const lastNameIdx = col('last name');
+  const tagsIdx = col('tags');
 
   if (firstNameIdx === -1 || lastNameIdx === -1 || tagsIdx === -1) {
     throw new Error(
@@ -77,8 +77,8 @@ function parseCSV(csvText) {
   for (let i = 1; i < rows.length; i++) {
     const row = rows[i];
     const firstName = (row[firstNameIdx] || '').trim();
-    const lastName  = (row[lastNameIdx]  || '').trim();
-    const tags      = (row[tagsIdx]      || '').trim();
+    const lastName = (row[lastNameIdx] || '').trim();
+    const tags = (row[tagsIdx] || '').trim();
     if (firstName !== '') {
       data.push({ firstName, lastName, tags });
     }
@@ -87,7 +87,7 @@ function parseCSV(csvText) {
 }
 
 const PASSWORD = "pg2026";
-const csv = fs.readFileSync('media/wedding_guest_list_june4.csv', 'utf8');
+const csv = fs.readFileSync('media/wedding_guest_list_june7.csv', 'utf8');
 const parsed = parseCSV(csv);
 
 const secureData = {};
@@ -96,7 +96,7 @@ parsed.forEach(guest => {
   const normalizedName = guest.firstName.toLowerCase() + " " + guest.lastName.toLowerCase();
   const nameHash = hashString(normalizedName);
   const encryptionKey = normalizedName + PASSWORD;
-  
+
   const payload = guest.firstName + "|" + guest.tags;
   const encryptedTags = encrypt(payload, encryptionKey);
   secureData[nameHash] = encryptedTags;

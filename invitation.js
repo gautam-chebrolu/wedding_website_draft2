@@ -6,13 +6,13 @@
 document.addEventListener('DOMContentLoaded', () => {
 
   /* ── DOM References ───────────────────────────────────────── */
-  const openingScreen   = document.getElementById('opening-screen');
-  const openBtn         = document.getElementById('open-btn');
-  const invContainer    = document.getElementById('invitation-container');
-  const mainCard        = document.getElementById('main-card');
-  const audio           = document.getElementById('bg-music');
-  const musicToggle     = document.getElementById('music-toggle');
-  const particlesEl     = document.getElementById('particles');
+  const openingScreen = document.getElementById('opening-screen');
+  const openBtn = document.getElementById('open-btn');
+  const invContainer = document.getElementById('invitation-container');
+  const mainCard = document.getElementById('main-card');
+  const audio = document.getElementById('bg-music');
+  const musicToggle = document.getElementById('music-toggle');
+  const particlesEl = document.getElementById('particles');
 
   let musicPlaying = false;
 
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
       audio.play().then(() => {
         musicPlaying = true;
         musicToggle.classList.add('playing');
-      }).catch(() => {});
+      }).catch(() => { });
     }
   });
 
@@ -111,11 +111,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Random properties
       const size = Math.random() * 4 + 1.5;
-      p.style.width  = size + 'px';
+      p.style.width = size + 'px';
       p.style.height = size + 'px';
-      p.style.left   = Math.random() * 100 + '%';
+      p.style.left = Math.random() * 100 + '%';
       p.style.animationDuration = (Math.random() * 8 + 8) + 's';
-      p.style.animationDelay    = (Math.random() * 10) + 's';
+      p.style.animationDelay = (Math.random() * 10) + 's';
 
       particlesEl.appendChild(p);
     }

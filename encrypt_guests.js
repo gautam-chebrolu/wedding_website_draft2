@@ -87,7 +87,7 @@ function parseCSV(csvText) {
 }
 
 const PASSWORD = "pg2026";
-const csv = fs.readFileSync('media/wedding_guest_list_june7.csv', 'utf8');
+const csv = fs.readFileSync('media/wedding_guest_list_june8.csv', 'utf8');
 const parsed = parseCSV(csv);
 
 const secureData = {};

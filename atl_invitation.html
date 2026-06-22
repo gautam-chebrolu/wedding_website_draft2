@@ -370,6 +370,7 @@
     /* ── GANESHA ICON ────────────────────────────────────────── */
     .ganesha-wrapper {
       position: absolute;
+      margin-top: 3.5vh;
       top: 3.8%;
       left: 50%;
       transform: translateX(-50%);
@@ -742,8 +743,7 @@
       margin-top: 40px;
       padding: 40px 36px 44px;
       filter:
-        drop-shadow(0 8px 24px rgba(0, 0, 0, 0.3))
-        drop-shadow(0 24px 50px rgba(0, 0, 0, 0.18));
+        drop-shadow(0 8px 24px rgba(0, 0, 0, 0.3)) drop-shadow(0 24px 50px rgba(0, 0, 0, 0.18));
     }
 
     .atl-rsvp-header {
@@ -882,7 +882,9 @@
     }
 
     @keyframes atlSpin {
-      to { transform: rotate(360deg); }
+      to {
+        transform: rotate(360deg);
+      }
     }
 
     .atl-form-error-banner {
@@ -1019,7 +1021,7 @@
           Priya Gupta and Gautam Chebrolu
         </p>
 
-        <p class="card-intro anim-el" style="margin-top:-1%;">
+        <p class="card-intro anim-el" style="margin-top:-3%;">
           joyfully invite you to the
         </p>
 
@@ -1066,13 +1068,14 @@
     <div class="atl-rsvp-card anim-el" id="atl-rsvp-card">
 
       <div class="atl-rsvp-header">
-        <svg class="atl-rsvp-ornament" viewBox="0 0 80 20" fill="none" stroke="rgba(196,169,106,0.7)" stroke-width="0.8" stroke-linecap="round">
+        <svg class="atl-rsvp-ornament" viewBox="0 0 80 20" fill="none" stroke="rgba(196,169,106,0.7)" stroke-width="0.8"
+          stroke-linecap="round">
           <line x1="0" y1="10" x2="26" y2="10" />
           <circle cx="40" cy="10" r="3" fill="none" />
           <line x1="54" y1="10" x2="80" y2="10" />
         </svg>
         <h2 class="atl-rsvp-title">RSVP</h2>
-        <p class="atl-rsvp-subtitle">Kindly respond by November 15, 2026</p>
+        <p class="atl-rsvp-subtitle">Kindly respond by October 15, 2026</p>
       </div>
 
       <form id="atl-rsvp-form" class="atl-rsvp-form" novalidate>
@@ -1085,7 +1088,8 @@
           <label class="atl-form-label" for="atl-guests">
             Number Attending <span class="atl-form-hint">(including yourself)</span>
           </label>
-          <input class="atl-form-input atl-form-input-narrow" type="number" id="atl-guests" min="1" max="30" placeholder="1" />
+          <input class="atl-form-input atl-form-input-narrow" type="number" id="atl-guests" min="1" max="30"
+            placeholder="1" />
           <span class="atl-form-field-error" id="atl-guests-err" aria-live="polite"></span>
         </div>
         <div class="atl-form-field">
@@ -1106,14 +1110,15 @@
       <div id="atl-success" class="atl-rsvp-success" style="display:none;" aria-live="polite">
         <div class="atl-success-icon">&#10003;</div>
         <h3 class="atl-success-title">We'll see you there!</h3>
-        <p class="atl-success-text">A confirmation email is on its way. We can't wait to celebrate with you in Atlanta.</p>
+        <p class="atl-success-text">A confirmation email is on its way. We can't wait to celebrate with you in Atlanta.
+        </p>
       </div>
 
     </div>
 
     <!-- Visit Website link -->
-    <a id="visit-btn" href="https://priyagautam.com" class="visit-website-btn anim-el" target="_blank"
-      rel="noopener noreferrer">Visit Our Website</a>
+    <!-- <a id="visit-btn" href="https://priyagautam.com" class="visit-website-btn anim-el" target="_blank"
+      rel="noopener noreferrer">Visit Our Website</a> -->
 
   </div><!-- /.invitation-container -->
 
@@ -1222,16 +1227,16 @@
       }
 
       /* ── ATL RSVP Form Handler ────────────────────────────── */
-      const atlForm      = document.getElementById('atl-rsvp-form');
-      const atlSuccess   = document.getElementById('atl-success');
+      const atlForm = document.getElementById('atl-rsvp-form');
+      const atlSuccess = document.getElementById('atl-success');
       const atlSubmitBtn = document.getElementById('atl-submit-btn');
       const atlErrBanner = document.getElementById('atl-form-error');
 
       function showAtlFieldError(inputId, errId, msg) {
         const input = document.getElementById(inputId);
-        const err   = document.getElementById(errId);
+        const err = document.getElementById(errId);
         if (input) input.classList.toggle('atl-input-error', !!msg);
-        if (err)   err.textContent = msg || '';
+        if (err) err.textContent = msg || '';
       }
 
       if (atlForm) {
@@ -1245,10 +1250,10 @@
           });
           atlErrBanner.style.display = 'none';
 
-          const name   = document.getElementById('atl-name').value.trim();
+          const name = document.getElementById('atl-name').value.trim();
           const guests = parseInt(document.getElementById('atl-guests').value, 10);
-          const phone  = document.getElementById('atl-phone').value.trim();
-          const email  = document.getElementById('atl-email').value.trim();
+          const phone = document.getElementById('atl-phone').value.trim();
+          const email = document.getElementById('atl-email').value.trim();
 
           // Validation
           let valid = true;

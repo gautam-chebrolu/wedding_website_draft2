@@ -75,7 +75,7 @@ const EVENTS = {
       "Attire: Western or Indian Formal"
     ]
   },
-  "Sat Puja": {
+  "Satyanarayana Puja": {
     name: "Satyanārāyaṇa Puja",
     date: "November 22, 2026",
     time: "11am - 2pm",

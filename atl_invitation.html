@@ -657,7 +657,7 @@
     @keyframes floatUp {
       0% {
         opacity: 0;
-        transform: translateY(100vh) scale(0.5);
+        transform: translateY(110vh) scale(0.5);
       }
 
       8% {
@@ -670,7 +670,7 @@
 
       100% {
         opacity: 0;
-        transform: translateY(-10vh) scale(1);
+        transform: translateY(-110vh) scale(1);
       }
     }
 
@@ -731,6 +731,212 @@
 
       .visit-website-btn {
         font-size: 14px !important;
+      }
+    }
+
+    /* ── ATL RSVP FORM CARD ───────────────────────────────────── */
+    .atl-rsvp-card {
+      background: var(--cream);
+      border: 2px solid rgba(196, 169, 106, 0.7);
+      border-radius: 4px;
+      margin-top: 40px;
+      padding: 40px 36px 44px;
+      filter:
+        drop-shadow(0 8px 24px rgba(0, 0, 0, 0.3))
+        drop-shadow(0 24px 50px rgba(0, 0, 0, 0.18));
+    }
+
+    .atl-rsvp-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .atl-rsvp-ornament {
+      width: 60px;
+      height: auto;
+      margin-bottom: 10px;
+    }
+
+    .atl-rsvp-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      font-size: clamp(32px, 6vw, 48px);
+      color: var(--green);
+      line-height: 1;
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+    }
+
+    .atl-rsvp-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(13px, 2.4vw, 16px);
+      color: var(--text-muted);
+    }
+
+    .atl-rsvp-form {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .atl-form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .atl-form-label {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 400;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .atl-form-hint {
+      font-size: 9px;
+      letter-spacing: 0.08em;
+      color: var(--gold);
+      text-transform: none;
+    }
+
+    .atl-form-input {
+      background: rgba(255, 255, 255, 0.75);
+      border: 1px solid rgba(196, 169, 106, 0.4);
+      border-radius: 4px;
+      padding: 12px 14px;
+      color: var(--text);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16px;
+      width: 100%;
+      transition: border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+      -webkit-appearance: none;
+    }
+
+    .atl-form-input:focus {
+      outline: none;
+      border-color: var(--gold);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(196, 169, 106, 0.1);
+    }
+
+    .atl-input-error {
+      border-color: rgba(180, 50, 50, 0.55) !important;
+      background: rgba(180, 50, 50, 0.04) !important;
+    }
+
+    .atl-form-input-narrow {
+      max-width: 130px;
+    }
+
+    .atl-form-field-error {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      color: rgba(160, 45, 45, 0.9);
+      min-height: 14px;
+    }
+
+    .atl-submit-btn {
+      margin-top: 8px;
+      width: 100%;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 400;
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #fff;
+      background: var(--green);
+      border: none;
+      padding: 18px 32px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .atl-submit-btn:hover:not(:disabled) {
+      background: var(--green-deep);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(47, 82, 51, 0.35);
+    }
+
+    .atl-submit-btn:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .atl-btn-spinner {
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: atlSpin 0.7s linear infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes atlSpin {
+      to { transform: rotate(360deg); }
+    }
+
+    .atl-form-error-banner {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      font-weight: 300;
+      color: rgba(160, 45, 45, 0.9);
+      text-align: center;
+      margin-top: 4px;
+      line-height: 1.5;
+    }
+
+    /* Success state */
+    .atl-rsvp-success {
+      text-align: center;
+      padding: 8px 0 4px;
+      animation: fadeSlideUp 0.6s ease;
+    }
+
+    .atl-success-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: rgba(47, 82, 51, 0.1);
+      border: 1.5px solid rgba(47, 82, 51, 0.3);
+      color: var(--green);
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+    }
+
+    .atl-success-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      font-style: italic;
+      font-size: clamp(24px, 5vw, 32px);
+      color: var(--green);
+      margin-bottom: 12px;
+    }
+
+    .atl-success-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(14px, 2.8vw, 17px);
+      color: var(--text-mid);
+      line-height: 1.7;
+    }
+
+    @media (max-width: 600px) {
+      .atl-rsvp-card {
+        padding: 28px 20px 32px;
+        margin-top: 28px;
       }
     }
   </style>
@@ -856,7 +1062,56 @@
 
     </div>
 
-    <!-- Visit Website button -->
+    <!-- ATL RSVP Form Card -->
+    <div class="atl-rsvp-card anim-el" id="atl-rsvp-card">
+
+      <div class="atl-rsvp-header">
+        <svg class="atl-rsvp-ornament" viewBox="0 0 80 20" fill="none" stroke="rgba(196,169,106,0.7)" stroke-width="0.8" stroke-linecap="round">
+          <line x1="0" y1="10" x2="26" y2="10" />
+          <circle cx="40" cy="10" r="3" fill="none" />
+          <line x1="54" y1="10" x2="80" y2="10" />
+        </svg>
+        <h2 class="atl-rsvp-title">RSVP</h2>
+        <p class="atl-rsvp-subtitle">Kindly respond by November 15, 2026</p>
+      </div>
+
+      <form id="atl-rsvp-form" class="atl-rsvp-form" novalidate>
+        <div class="atl-form-field">
+          <label class="atl-form-label" for="atl-name">Full Name</label>
+          <input class="atl-form-input" type="text" id="atl-name" autocomplete="name" placeholder="Your full name" />
+          <span class="atl-form-field-error" id="atl-name-err" aria-live="polite"></span>
+        </div>
+        <div class="atl-form-field">
+          <label class="atl-form-label" for="atl-guests">
+            Number Attending <span class="atl-form-hint">(including yourself)</span>
+          </label>
+          <input class="atl-form-input atl-form-input-narrow" type="number" id="atl-guests" min="1" max="30" placeholder="1" />
+          <span class="atl-form-field-error" id="atl-guests-err" aria-live="polite"></span>
+        </div>
+        <div class="atl-form-field">
+          <label class="atl-form-label" for="atl-phone">Phone Number</label>
+          <input class="atl-form-input" type="tel" id="atl-phone" autocomplete="tel" placeholder="(555) 123-4567" />
+          <span class="atl-form-field-error" id="atl-phone-err" aria-live="polite"></span>
+        </div>
+        <div class="atl-form-field">
+          <label class="atl-form-label" for="atl-email">Email Address</label>
+          <input class="atl-form-input" type="email" id="atl-email" autocomplete="email" placeholder="your@email.com" />
+          <span class="atl-form-field-error" id="atl-email-err" aria-live="polite"></span>
+        </div>
+        <button type="submit" id="atl-submit-btn" class="atl-submit-btn">Confirm Attendance</button>
+        <p id="atl-form-error" class="atl-form-error-banner" aria-live="polite" style="display:none;"></p>
+      </form>
+
+      <!-- Success message (shown after successful submission) -->
+      <div id="atl-success" class="atl-rsvp-success" style="display:none;" aria-live="polite">
+        <div class="atl-success-icon">&#10003;</div>
+        <h3 class="atl-success-title">We'll see you there!</h3>
+        <p class="atl-success-text">A confirmation email is on its way. We can't wait to celebrate with you in Atlanta.</p>
+      </div>
+
+    </div>
+
+    <!-- Visit Website link -->
     <a id="visit-btn" href="https://priyagautam.com" class="visit-website-btn anim-el" target="_blank"
       rel="noopener noreferrer">Visit Our Website</a>
 
@@ -877,6 +1132,8 @@
       const particlesEl = document.getElementById('particles');
 
       let musicPlaying = false;
+      let isAtlSubmitting = false;
+      const ATL_RSVP_API_URL = 'https://script.google.com/macros/s/AKfycbwJJOaKdTIcPv9ZdqX44sgSbYeUPF4Lu6OuOPM28Kfva7LJZ_eLjj-yrlROV2h0dniv/exec';
 
       /* ── Open Invitation ────────────────────────────────────── */
       openBtn.addEventListener('click', () => {
@@ -937,8 +1194,10 @@
           5000,   // 7: Divider bottom
           5400,   // 8: Date/time/venue block
           5900,   // 9: Attire
-          6300,   // 10: Website (on card)
-          6900,   // 11: Visit Our Website button
+          6300,   // 10: No boxed gifts
+          6700,   // 11: Website (on card)
+          7100,   // 12: RSVP form card
+          7600,   // 13: Visit Our Website button
         ];
 
         animEls.forEach((el, i) => {
@@ -962,7 +1221,98 @@
         }
       }
 
-      /* ── Audio Error Handling ───────────────────────────────── */
+      /* ── ATL RSVP Form Handler ────────────────────────────── */
+      const atlForm      = document.getElementById('atl-rsvp-form');
+      const atlSuccess   = document.getElementById('atl-success');
+      const atlSubmitBtn = document.getElementById('atl-submit-btn');
+      const atlErrBanner = document.getElementById('atl-form-error');
+
+      function showAtlFieldError(inputId, errId, msg) {
+        const input = document.getElementById(inputId);
+        const err   = document.getElementById(errId);
+        if (input) input.classList.toggle('atl-input-error', !!msg);
+        if (err)   err.textContent = msg || '';
+      }
+
+      if (atlForm) {
+        atlForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          if (isAtlSubmitting) return;
+
+          // Clear previous errors
+          ['atl-name', 'atl-guests', 'atl-phone', 'atl-email'].forEach(id => {
+            showAtlFieldError(id, id + '-err', '');
+          });
+          atlErrBanner.style.display = 'none';
+
+          const name   = document.getElementById('atl-name').value.trim();
+          const guests = parseInt(document.getElementById('atl-guests').value, 10);
+          const phone  = document.getElementById('atl-phone').value.trim();
+          const email  = document.getElementById('atl-email').value.trim();
+
+          // Validation
+          let valid = true;
+          if (!name) {
+            showAtlFieldError('atl-name', 'atl-name-err', 'Please enter your full name.');
+            valid = false;
+          }
+          if (!guests || guests < 1 || guests > 30) {
+            showAtlFieldError('atl-guests', 'atl-guests-err', 'Please enter a number between 1 and 30.');
+            valid = false;
+          }
+          if (!phone || phone.replace(/\D/g, '').length < 7) {
+            showAtlFieldError('atl-phone', 'atl-phone-err', 'Please enter a valid phone number.');
+            valid = false;
+          }
+          if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            showAtlFieldError('atl-email', 'atl-email-err', 'Please enter a valid email address.');
+            valid = false;
+          }
+          if (!valid) return;
+
+          // Show loading state
+          isAtlSubmitting = true;
+          atlSubmitBtn.disabled = true;
+          atlSubmitBtn.innerHTML = '<div class="atl-btn-spinner"></div>Sending…';
+
+          const payload = { action: 'atl_submit', pwd: 'pg2026', name, guests, phone, email };
+
+          try {
+            let result;
+            try {
+              // Prefer POST
+              const resp = await fetch(ATL_RSVP_API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify(payload),
+                redirect: 'follow'
+              });
+              result = await resp.json();
+            } catch (_) {
+              // GET fallback for CORS environments
+              const url = ATL_RSVP_API_URL + '?action=atl_submit&pwd=pg2026&data=' +
+                encodeURIComponent(JSON.stringify(payload));
+              const resp = await fetch(url, { redirect: 'follow' });
+              result = await resp.json();
+            }
+
+            if (result && result.success) {
+              atlForm.style.display = 'none';
+              atlSuccess.style.display = 'block';
+            } else {
+              throw new Error((result && result.error) || 'Submission failed');
+            }
+          } catch (err) {
+            atlErrBanner.textContent = 'Something went wrong. Please try again or contact us directly.';
+            atlErrBanner.style.display = 'block';
+            atlSubmitBtn.innerHTML = 'Confirm Attendance';
+            atlSubmitBtn.disabled = false;
+            isAtlSubmitting = false;
+          }
+        });
+      }
+
+      /* ── Audio Error Handling ──────────────────────────────── */
       if (audio) {
         audio.addEventListener('error', () => {
           musicToggle.style.display = 'none';

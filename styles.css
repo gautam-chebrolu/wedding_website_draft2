@@ -426,6 +426,16 @@ nav.site-nav.scrolled ul li a.active {
   width: 100%;
 }
 
+.page-content.schedule-page {
+  max-width: 70%;
+}
+
+@media (max-width: 900px) {
+  .page-content.schedule-page {
+    max-width: 100%;
+  }
+}
+
 /* Placeholder content styling */
 .placeholder-block {
   background: rgba(255, 255, 255, 0.03);
@@ -621,8 +631,25 @@ nav.site-nav.scrolled ul li a.active {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 8px;
-  padding: 32px 32px 32px 64px;
+  padding: 28px 28px 28px 60px;
   z-index: 1;
+  transition: border-color 0.25s ease;
+}
+
+.schedule-card:has(.rsvp-toggle.selected) {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* Inner two-column layout: info left, RSVP right */
+.schedule-card-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.schedule-card-info {
+  flex: 1;
+  min-width: 0;
 }
 
 /* Timeline dot */
@@ -640,19 +667,27 @@ nav.site-nav.scrolled ul li a.active {
 
 .schedule-date {
   font-family: 'Montserrat', sans-serif;
-  font-weight: 400;
-  font-size: 10px;
-  letter-spacing: 0.25em;
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.4);
-  margin-bottom: 12px;
+  color: rgba(201, 169, 110, 0.85);
+  margin-bottom: 14px;
+}
+
+.schedule-time {
+  display: block;
+  font-size: 10px;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 4px;
 }
 
 .schedule-content h3 {
   margin: 0 0 10px 0;
   font-family: 'Karnak', serif;
   font-weight: normal;
-  font-size: 24px;
+  font-size: 32px;
   color: #fff;
   letter-spacing: 0.05em;
 }
@@ -761,12 +796,36 @@ nav.site-nav.scrolled ul li a.active {
   }
 
   .schedule-card {
-    padding: 24px 24px 24px 44px;
+    padding: 20px 16px 20px 40px;
   }
 
   .schedule-card::before {
     left: 16px;
-    top: 32px;
+    top: 28px;
+  }
+
+  /* Stack RSVP col below event info on mobile */
+  .schedule-card-body {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .card-rsvp-col {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    border-left: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 16px 0 0 0;
+    gap: 10px;
+  }
+
+  .card-rsvp-col .rsvp-toggle {
+    width: auto;
+    flex: 1;
+    text-align: center;
+    font-size: 9px;
+    padding: 10px 12px;
   }
 }
 
@@ -849,7 +908,10 @@ footer.site-footer {
 }
 
 .pill-btn {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   font-family: 'Montserrat', sans-serif;
   font-weight: 400;
   font-size: 11px;
@@ -861,6 +923,26 @@ footer.site-footer {
   transition: transform 0.3s ease, background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
   cursor: pointer;
   border: none;
+}
+
+/* Loading spinner inside the button */
+@keyframes btn-spin {
+  to { transform: rotate(360deg); }
+}
+
+.btn-spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(13, 12, 11, 0.3);
+  border-top-color: #0d0c0b;
+  border-radius: 50%;
+  animation: btn-spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+.btn-spinner-label {
+  /* inherits pill-btn font */
 }
 
 .pill-btn.primary {
@@ -883,4 +965,1017 @@ footer.site-footer {
   background: rgba(255, 255, 255, 0.1);
   border-color: rgba(255, 255, 255, 0.6);
   transform: translateY(-2px);
+}
+
+/* ── RSVP SYSTEM ────────────────────────────────────────────── */
+
+/* Party info text */
+.party-info-text {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  font-size: 13px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(245, 240, 234, 0.5);
+  margin-top: 4px;
+}
+
+/* ── PARTY ROSTER (Step 3) ───────────────────────────────── */
+
+.party-roster-header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.party-roster-header h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-style: italic;
+  font-size: 36px;
+  color: #f5f0ea;
+  margin-bottom: 6px;
+}
+
+.party-roster-hint {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  font-size: 13px;
+  color: rgba(245, 240, 234, 0.5);
+  margin-top: 16px;
+}
+
+.party-roster {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Each member card is a button for full keyboard/touch accessibility */
+.party-roster-card {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 18px 20px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
+}
+
+.party-roster-card:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.18);
+  transform: translateY(-2px);
+}
+
+.party-roster-card:active {
+  transform: translateY(0);
+}
+
+.roster-card-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1;
+  min-width: 0;
+}
+
+.roster-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(201, 169, 110, 0.15);
+  border: 1px solid rgba(201, 169, 110, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  letter-spacing: 0.05em;
+  color: #c9a96e;
+  flex-shrink: 0;
+}
+
+.roster-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.roster-name {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 15px;
+  color: #f5f0ea;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.roster-event-count {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: rgba(245, 240, 234, 0.4);
+}
+
+.roster-card-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+/* ── Roster status badges ────────────────────────────────── */
+
+.roster-badge {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid;
+}
+
+.roster-badge.pending {
+  color: rgba(245, 240, 234, 0.45);
+  border-color: rgba(255, 255, 255, 0.12);
+  background: transparent;
+}
+
+.roster-badge.attending {
+  color: #8fbc8f;
+  border-color: rgba(143, 188, 143, 0.3);
+  background: rgba(143, 188, 143, 0.08);
+}
+
+.roster-badge.attending-some {
+  color: #c9a96e;
+  border-color: rgba(201, 169, 110, 0.35);
+  background: rgba(201, 169, 110, 0.1);
+}
+
+.roster-badge.declined {
+  color: rgba(245, 240, 234, 0.4);
+  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.roster-badge.partial {
+  color: rgba(245, 240, 234, 0.5);
+  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.roster-chevron {
+  color: rgba(255, 255, 255, 0.25);
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.party-roster-card:hover .roster-chevron {
+  color: rgba(255, 255, 255, 0.6);
+  transform: translateX(3px);
+}
+
+/* ── INDIVIDUAL SCHEDULE HEADER (Step 4) ─────────────────── */
+
+.member-schedule-header {
+  margin-bottom: 36px;
+}
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(245, 240, 234, 0.55);
+  cursor: pointer;
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+  margin-bottom: 20px;
+}
+
+.back-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(245, 240, 234, 0.85);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.back-btn svg {
+  opacity: 0.7;
+  transition: transform 0.2s ease;
+}
+
+.back-btn:hover svg {
+  transform: translateX(-2px);
+}
+
+.member-schedule-name-wrap {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.member-schedule-name-wrap h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-style: italic;
+  font-size: 36px;
+  color: #f5f0ea;
+}
+
+/* Badge on the individual schedule view header */
+.member-rsvp-badge {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid;
+  align-self: center;
+}
+
+.member-rsvp-badge.pending {
+  color: rgba(245, 240, 234, 0.45);
+  border-color: rgba(255, 255, 255, 0.12);
+  background: transparent;
+}
+
+.member-rsvp-badge.attending {
+  color: #8fbc8f;
+  border-color: rgba(143, 188, 143, 0.3);
+  background: rgba(143, 188, 143, 0.08);
+}
+
+.member-rsvp-badge.attending-some {
+  color: #c9a96e;
+  border-color: rgba(201, 169, 110, 0.35);
+  background: rgba(201, 169, 110, 0.1);
+}
+
+.member-rsvp-badge.declined {
+  color: rgba(245, 240, 234, 0.4);
+  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.member-rsvp-badge.partial {
+  color: rgba(245, 240, 234, 0.5);
+  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* ── Mobile responsive ─────────────────────────────────────── */
+
+@media (max-width: 600px) {
+  .party-roster-header h2 {
+    font-size: 28px;
+  }
+
+  .party-roster-card {
+    padding: 14px 16px;
+  }
+
+  .roster-badge {
+    display: none; /* shown via chevron on mobile, saves space */
+  }
+
+  .member-schedule-name-wrap h2 {
+    font-size: 28px;
+  }
+}
+
+/* ── RSVP Section within Event Card ────────────────────────── */
+
+.rsvp-section {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.rsvp-member-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px 0;
+  transition: background 0.3s ease;
+  border-radius: 6px;
+}
+
+.rsvp-member-row + .rsvp-member-row {
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.rsvp-member-row.rsvp-incomplete {
+  animation: shakeIncomplete 0.4s ease;
+}
+
+@keyframes shakeIncomplete {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-4px); }
+  40% { transform: translateX(4px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(3px); }
+}
+
+.rsvp-member-name {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.75);
+  min-width: 120px;
+}
+
+.rsvp-toggle-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.rsvp-toggle {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.rsvp-toggle:hover {
+  border-color: rgba(255, 255, 255, 0.35);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Accept — warm gold accent */
+.rsvp-toggle.accept.selected {
+  background: rgba(201, 169, 110, 0.2);
+  border-color: rgba(201, 169, 110, 0.6);
+  color: #c9a96e;
+}
+
+/* Decline — muted subtle */
+.rsvp-toggle.decline.selected {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+
+/* ── Supplemental Questions ────────────────────────────────── */
+
+.rsvp-questions-container {
+  margin-top: 48px;
+  padding-top: 40px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.rsvp-questions-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-style: italic;
+  font-size: 28px;
+  color: #f5f0ea;
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.rsvp-member-questions {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+  padding: 32px;
+  margin-bottom: 20px;
+}
+
+.rsvp-member-questions-name {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.rsvp-field {
+  margin-bottom: 20px;
+}
+
+.rsvp-field:last-child {
+  margin-bottom: 0;
+}
+
+.rsvp-field > label {
+  display: block;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(245, 240, 234, 0.5);
+  margin-bottom: 8px;
+}
+
+.rsvp-required {
+  color: rgba(201, 169, 110, 0.9);
+  font-style: normal;
+  margin-left: 2px;
+}
+
+.rsvp-input {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  padding: 12px 16px;
+  color: #f5f0ea;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 300;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.rsvp-input:focus {
+  outline: none;
+  border-color: rgba(201, 169, 110, 0.5);
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.rsvp-input.rsvp-input-error {
+  border-color: rgba(220, 80, 80, 0.7);
+  background: rgba(220, 80, 80, 0.06);
+}
+
+.rsvp-input.rsvp-input-error:focus {
+  border-color: rgba(220, 80, 80, 0.9);
+}
+
+.rsvp-field-error {
+  display: block;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: rgba(220, 100, 100, 0.9);
+  margin-top: 6px;
+  min-height: 0;             /* collapses when empty */
+  transition: opacity 0.2s ease;
+}
+
+.rsvp-input::placeholder {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+/* Radio group (for Yes/No questions) */
+.rsvp-radio-group {
+  display: flex;
+  gap: 16px;
+}
+
+.rsvp-radio {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  color: rgba(245, 240, 234, 0.75);
+}
+
+.rsvp-radio input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.3s ease;
+}
+
+.rsvp-radio input[type="radio"]:checked {
+  border-color: #c9a96e;
+}
+
+.rsvp-radio input[type="radio"]:checked::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #c9a96e;
+}
+
+.rsvp-radio input[type="radio"]:focus {
+  outline: none;
+  border-color: rgba(201, 169, 110, 0.5);
+}
+
+
+/* ── Submit Section ────────────────────────────────────────── */
+
+.rsvp-submit-section {
+  text-align: center;
+  margin-top: 40px;
+  padding-top: 32px;
+}
+
+.submit-rsvp-btn {
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  padding: 16px 48px;
+  min-width: 200px;
+}
+
+.submit-rsvp-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+
+/* ── Loading State ─────────────────────────────────────────── */
+
+.rsvp-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 48px 24px;
+}
+
+.rsvp-loading p {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  font-size: 13px;
+  color: rgba(245, 240, 234, 0.5);
+  letter-spacing: 0.1em;
+}
+
+.rsvp-spinner {
+  width: 32px;
+  height: 32px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-top-color: rgba(201, 169, 110, 0.6);
+  border-radius: 50%;
+  animation: rsvpSpin 0.8s linear infinite;
+}
+
+@keyframes rsvpSpin {
+  to { transform: rotate(360deg); }
+}
+
+
+/* ── Success State ─────────────────────────────────────────── */
+
+.rsvp-success {
+  text-align: center;
+  padding: 32px;
+  margin-bottom: 32px;
+  background: rgba(143, 188, 143, 0.08);
+  border: 1px solid rgba(143, 188, 143, 0.2);
+  border-radius: 8px;
+  animation: fadeInUp 0.5s ease;
+}
+
+.rsvp-success-icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(143, 188, 143, 0.15);
+  color: #8fbc8f;
+  font-size: 24px;
+}
+
+.rsvp-success h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-style: italic;
+  font-size: 28px;
+  color: #f5f0ea;
+  margin-bottom: 8px;
+}
+
+.rsvp-success p {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  color: rgba(245, 240, 234, 0.75);
+  line-height: 1.6;
+}
+
+.rsvp-success-sub {
+  font-size: 12px !important;
+  color: rgba(245, 240, 234, 0.45) !important;
+  margin-top: 8px;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* ── Error Banner ──────────────────────────────────────────── */
+
+.rsvp-error-banner {
+  text-align: center;
+  padding: 24px;
+  margin-bottom: 24px;
+  background: rgba(255, 107, 107, 0.06);
+  border: 1px solid rgba(255, 107, 107, 0.15);
+  border-radius: 8px;
+}
+
+.rsvp-error-banner p {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  font-size: 13px;
+  color: rgba(245, 240, 234, 0.7);
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+.rsvp-error-banner p:last-child {
+  margin-bottom: 0;
+}
+
+.rsvp-error-banner a {
+  color: #f5f0ea;
+  text-decoration: underline;
+  text-decoration-color: rgba(245, 240, 234, 0.3);
+}
+
+
+/* ── Toast Notification ────────────────────────────────────── */
+
+.rsvp-toast {
+  position: fixed;
+  bottom: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(30, 28, 26, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 14px 28px;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 300;
+  color: rgba(245, 240, 234, 0.85);
+  z-index: 10000;
+  transition: bottom 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  max-width: 90vw;
+  text-align: center;
+}
+
+.rsvp-toast.show {
+  bottom: 32px;
+}
+
+
+/* ── RSVP Mobile Responsive ────────────────────────────────── */
+
+@media (max-width: 600px) {
+  .rsvp-member-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .rsvp-toggle-group {
+    width: 100%;
+  }
+
+  .rsvp-toggle {
+    flex: 1;
+    text-align: center;
+    font-size: 9px;
+    padding: 7px 12px;
+  }
+
+  .rsvp-member-questions {
+    padding: 24px 18px;
+  }
+
+  .rsvp-questions-title {
+    font-size: 24px;
+  }
+
+  .submit-rsvp-btn {
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .rsvp-toast {
+    left: 16px;
+    right: 16px;
+    transform: none;
+    max-width: none;
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   INDIVIDUAL SCHEDULE — TWO-COLUMN LAYOUT
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Outer grid: sidebar (questions) left, schedule right */
+.member-schedule-grid {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 40px;
+  align-items: start;
+  margin-top: 32px;
+}
+
+/* LEFT column — Additional Information */
+.member-schedule-sidebar {
+  position: sticky;
+  top: 96px;  /* clears the fixed nav */
+}
+
+/* RIGHT column — Event cards */
+.member-schedule-main {
+  min-width: 0;
+}
+
+/* Adjust questions container when inside the sidebar (no top border separation needed) */
+.member-schedule-sidebar .rsvp-questions-container {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
+/* Mobile: single column, sidebar comes first (HTML order) */
+@media (max-width: 900px) {
+  .member-schedule-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .member-schedule-sidebar {
+    position: static;
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   EVENT CARD — RIGHT-SIDE RSVP COLUMN
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Vertical RSVP column on the right of each card */
+.card-rsvp-col {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  flex-shrink: 0;
+  width: 160px;
+  padding-left: 24px;
+  border-left: 1px solid rgba(255, 255, 255, 0.06);
+  justify-content: center;
+  min-height: 80px;
+}
+
+/* Override base rsvp-toggle to be more prominent in vertical layout */
+.card-rsvp-col .rsvp-toggle {
+  font-size: 10px;
+  padding: 12px 16px;
+  border-radius: 8px;         /* softer rect instead of pill */
+  text-align: center;
+  letter-spacing: 0.1em;
+  width: 100%;
+  white-space: normal;
+  line-height: 1.4;
+}
+
+/* Gold highlight for Accept in this layout */
+.card-rsvp-col .rsvp-toggle.accept {
+  border-color: rgba(201, 169, 110, 0.25);
+  color: rgba(245, 240, 234, 0.7);
+}
+
+.card-rsvp-col .rsvp-toggle.accept:hover {
+  background: rgba(201, 169, 110, 0.12);
+  border-color: rgba(201, 169, 110, 0.5);
+  color: #c9a96e;
+}
+
+.card-rsvp-col .rsvp-toggle.accept.selected {
+  background: rgba(201, 169, 110, 0.2);
+  border-color: rgba(201, 169, 110, 0.65);
+  color: #c9a96e;
+  box-shadow: 0 0 0 1px rgba(201, 169, 110, 0.2);
+}
+
+/* Muted for Decline */
+.card-rsvp-col .rsvp-toggle.decline {
+  border-color: rgba(255, 255, 255, 0.1);
+  color: rgba(245, 240, 234, 0.35);
+}
+
+.card-rsvp-col .rsvp-toggle.decline:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: rgba(245, 240, 234, 0.6);
+}
+
+.card-rsvp-col .rsvp-toggle.decline.selected {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: rgba(245, 240, 234, 0.55);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   STICKY SAVE BAR
+   ═══════════════════════════════════════════════════════════════ */
+
+.rsvp-save-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 500;
+  background: rgba(20, 18, 16, 0.92);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 14px 24px;
+  display: flex;             /* display:flex is set via JS, toggled by .visible */
+  align-items: center;
+  justify-content: center;
+  transform: translateY(100%);
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), background 0.4s ease, border-color 0.4s ease;
+  overflow: hidden;
+}
+
+.rsvp-save-bar.visible {
+  transform: translateY(0);
+}
+
+/* ── Loading State — whole bar becomes a gold shimmer indicator ── */
+
+@keyframes saveBarShimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes saveBarPulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.7; }
+}
+
+.rsvp-save-bar.loading {
+  background: linear-gradient(
+    90deg,
+    rgba(140, 100, 40, 0.85) 0%,
+    rgba(201, 169, 110, 0.95) 30%,
+    rgba(230, 200, 140, 1) 50%,
+    rgba(201, 169, 110, 0.95) 70%,
+    rgba(140, 100, 40, 0.85) 100%
+  );
+  background-size: 200% auto;
+  animation: saveBarShimmer 1.8s linear infinite;
+  border-top-color: rgba(201, 169, 110, 0.5);
+  pointer-events: none;   /* prevent double-clicks */
+}
+
+.rsvp-save-bar.loading .rsvp-save-bar-inner {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+/* Loading label that appears centered in the bar */
+.rsvp-save-bar-loading-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(13, 12, 11, 0.85);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease 0.1s;
+}
+
+.rsvp-save-bar-loading-label .save-bar-mini-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(13, 12, 11, 0.25);
+  border-top-color: rgba(13, 12, 11, 0.75);
+  border-radius: 50%;
+  animation: rsvpSpin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+.rsvp-save-bar.loading .rsvp-save-bar-loading-label {
+  opacity: 1;
+}
+
+.rsvp-save-bar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+  max-width: 720px;
+  transition: opacity 0.2s ease;
+}
+
+.rsvp-save-bar-hint {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+  font-size: 13px;
+  color: rgba(245, 240, 234, 0.6);
+  flex: 1;
+}
+
+.rsvp-save-bar-hint svg {
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+.rsvp-save-bar-actions {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+/* Keep save bar above page footer */
+@media (max-width: 600px) {
+  .rsvp-save-bar-inner {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+
+  .rsvp-save-bar-hint {
+    justify-content: center;
+  }
+
+  .rsvp-save-bar-actions {
+    justify-content: center;
+  }
+
+  .rsvp-save-bar {
+    padding: 16px 20px;
+  }
 }

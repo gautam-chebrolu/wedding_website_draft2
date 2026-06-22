@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>You're Invited — Balaji Kalyanam · Priya &amp; Gautam</title>
+  <meta name="description"
+    content="You are invited to the Balaji Kalyanam celebration for Priya and Gautam — December 5, 2026 at the Hindu Temple of Atlanta." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ── RESET & TOKENS ──────────────────────────────────────── */
+    :root {
+      --gold:       #c4a96a;
+      --gold-light: #dcc288;
+      --green:      #2f5233;
+      --green-deep: #1e3622;
+      --cream:      #faf6f0;
+      --cream-deep: #f0ead9;
+      --dark:       #0d0c0b;
+      --text:       #1a1814;
+      --text-mid:   #4a4540;
+      --text-muted: #7a7060;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+    }
+
+    body {
+      background: #2f5233;
+      color: #fff;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── OPENING SCREEN ──────────────────────────────────────── */
+    #opening-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: var(--dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.9s ease, visibility 0.9s ease;
+    }
+
+    #opening-screen.fade-out {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .opening-content {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      padding: 24px;
+    }
+
+    .opening-ornament {
+      width: 60px;
+      height: auto;
+      opacity: 0.5;
+      margin-bottom: 4px;
+    }
+
+    .opening-tag {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 300;
+      font-size: clamp(9px, 1.2vw, 11px);
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0;
+      animation: fadeSlideUp 0.8s ease 0.2s forwards;
+    }
+
+    .opening-names {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(48px, 10vw, 80px);
+      color: #fff;
+      line-height: 1.1;
+      opacity: 0;
+      animation: fadeSlideUp 0.8s ease 0.6s forwards;
+    }
+
+    .opening-event {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(18px, 3.5vw, 26px);
+      color: var(--gold-light);
+      opacity: 0;
+      animation: fadeSlideUp 0.8s ease 1.0s forwards;
+    }
+
+    .opening-date {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 200;
+      font-size: clamp(10px, 1.3vw, 13px);
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.45);
+      opacity: 0;
+      animation: fadeSlideUp 0.8s ease 1.4s forwards;
+    }
+
+    .opening-divider {
+      width: 50px;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0;
+      animation: fadeIn 0.8s ease 1.7s forwards;
+      margin: 4px 0;
+    }
+
+    .open-btn {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 300;
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      background: transparent;
+      border: 1px solid rgba(196, 169, 106, 0.5);
+      padding: 16px 40px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      opacity: 0;
+      animation: fadeSlideUp 0.8s ease 1.9s forwards, btnPulse 2.5s ease-in-out 2.7s infinite;
+      margin-top: 6px;
+    }
+
+    .open-btn:hover {
+      background: var(--gold);
+      color: var(--dark);
+      border-color: var(--gold);
+    }
+
+    /* ── MUSIC TOGGLE ────────────────────────────────────────── */
+    .music-toggle {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 900;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      color: rgba(255, 255, 255, 0.5);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .music-toggle.show { opacity: 1; pointer-events: auto; }
+    .music-toggle:hover { background: rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.8); }
+    .music-toggle svg { width: 18px; height: 18px; }
+
+    .music-toggle .sound-bars {
+      position: absolute;
+      bottom: -2px;
+      right: -2px;
+      display: flex;
+      align-items: flex-end;
+      gap: 2px;
+      height: 12px;
+    }
+
+    .music-toggle .sound-bars span {
+      display: block;
+      width: 3px;
+      background: var(--gold);
+      border-radius: 1px;
+      height: 3px;
+      transition: height 0.3s ease;
+    }
+
+    .music-toggle.playing .sound-bars span:nth-child(1) { animation: soundBar 0.6s ease-in-out infinite alternate; }
+    .music-toggle.playing .sound-bars span:nth-child(2) { animation: soundBar 0.6s ease-in-out 0.15s infinite alternate; }
+    .music-toggle.playing .sound-bars span:nth-child(3) { animation: soundBar 0.6s ease-in-out 0.3s infinite alternate; }
+    .music-toggle:not(.playing) .sound-bars span { height: 3px !important; animation: none; }
+
+    /* ── PARTICLES ───────────────────────────────────────────── */
+    .particles-container {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(196, 169, 106, 0.55) 0%, rgba(196, 169, 106, 0) 70%);
+      pointer-events: none;
+      animation: floatUp linear infinite;
+    }
+
+    /* ── INVITATION CONTAINER ────────────────────────────────── */
+    .invitation-container {
+      display: none;
+      position: relative;
+      z-index: 10;
+      padding: 60px 20px 80px;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .invitation-container.show { display: block; }
+
+    /* ── MAIN CARD (white, temple / pentagon shape) ──────────── */
+    .main-card {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 500 / 820;
+      opacity: 0;
+      transform: scale(0.94);
+      transition: opacity 1s ease, transform 1s ease;
+      /* 3-D lift shadow — drop-shadow respects the pentagon shape */
+      filter:
+        drop-shadow(0 8px 24px rgba(0, 0, 0, 0.35))
+        drop-shadow(0 24px 60px rgba(0, 0, 0, 0.28));
+    }
+
+    .main-card.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* SVG background shape */
+    .card-shape {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* White fill polygon */
+    .card-fill {
+      fill: var(--cream);
+      opacity: 0;
+      transition: opacity 0.6s ease 1.4s;
+    }
+
+    .main-card.visible .card-fill { opacity: 1; }
+
+    /* Gold border polygon */
+    .card-border {
+      fill: none;
+      stroke: var(--gold);
+      stroke-width: 3;
+      stroke-linejoin: miter;
+      stroke-dasharray: 2650;
+      stroke-dashoffset: 2650;
+      transition: none;
+    }
+
+    .main-card.visible .card-border {
+      animation: drawCardBorder 1.8s ease-in-out forwards;
+    }
+
+    /* Inner accent border (offset slightly inward) */
+    .card-inner-border {
+      fill: none;
+      stroke: var(--gold);
+      stroke-width: 0.8;
+      stroke-linejoin: miter;
+      stroke-dasharray: 2500;
+      stroke-dashoffset: 2500;
+      opacity: 0.45;
+      transition: none;
+    }
+
+    .main-card.visible .card-inner-border {
+      animation: drawCardBorder 2.2s ease-in-out 0.3s forwards;
+    }
+
+    /* Shimmer on card border after reveal */
+    .main-card.visible .card-shape {
+      animation: shimmerGold 3s ease-in-out 3.5s infinite;
+    }
+
+    /* ── WEBSITE BUTTON (below card) ────────────────────────── */
+    .visit-website-btn {
+      display: block;
+      width: fit-content;
+      margin: 36px auto 0;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 300;
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.75);
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 16px 36px;
+      border-radius: 999px;
+      text-decoration: none;
+      transition: background 0.35s ease, color 0.35s ease, border-color 0.35s ease, transform 0.3s ease;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+
+    .visit-website-btn:hover {
+      background: rgba(196, 169, 106, 0.15);
+      color: var(--gold-light);
+      border-color: rgba(196, 169, 106, 0.5);
+      transform: translateY(-3px);
+    }
+
+    /* ── GANESHA ICON ────────────────────────────────────────── */
+    .ganesha-wrapper {
+      position: absolute;
+      top: 3.8%;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 5;
+      width: 10%;
+      display: flex;
+      justify-content: center;
+    }
+
+    /* Tint Ganesha gold on the white card */
+    .ganesha-wrapper img {
+      width: 100%;
+      height: auto;
+      filter: sepia(1) saturate(0.6) brightness(0.55);
+    }
+
+    .ganesha-wrapper path,
+    .ganesha-wrapper ellipse,
+    .ganesha-wrapper circle,
+    .ganesha-wrapper line {
+      stroke-dasharray: 300;
+      stroke-dashoffset: 300;
+    }
+
+    .ganesha-wrapper.anim-visible img {
+      animation: ganeshaReveal 1.2s ease forwards;
+    }
+
+    /* ── CARD TEXT CONTENT ───────────────────────────────────── */
+    .card-text {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 17% 9% 7%;
+      gap: 0;
+    }
+
+    .card-blessing {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(12px, 2.2vw, 15px);
+      color: var(--gold);
+      letter-spacing: 0.05em;
+      margin-bottom: 3%;
+    }
+
+    .card-intro {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(13px, 2.5vw, 16px);
+      color: var(--text-mid);
+      line-height: 1.7;
+      margin-bottom: 3%;
+    }
+
+    .card-names {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      font-size: clamp(38px, 8vw, 60px);
+      letter-spacing: 0.18em;
+      color: var(--green);
+      line-height: 1.1;
+      text-indent: 0.18em;
+    }
+
+    .card-names-connector {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(22px, 4.5vw, 32px);
+      color: var(--text-muted);
+      margin: 1% 0;
+    }
+
+    /* Gold ornamental divider */
+    .card-divider {
+      width: 70%;
+      margin: 4% auto;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .card-divider-line {
+      flex: 1;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0.5;
+    }
+
+    .card-divider-diamond {
+      width: 6px;
+      height: 6px;
+      background: var(--gold);
+      transform: rotate(45deg);
+      flex-shrink: 0;
+    }
+
+    /* Event name */
+    .card-event-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      font-size: clamp(26px, 5.5vw, 40px);
+      letter-spacing: 0.08em;
+      color: var(--green);
+      margin-bottom: 1.5%;
+    }
+
+    .card-event-subtitle {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 300;
+      font-size: clamp(9px, 1.4vw, 11px);
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 5%;
+    }
+
+    /* Date / time / venue block */
+    .card-details-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      width: 100%;
+    }
+
+    .card-date {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      font-size: clamp(26px, 5.5vw, 38px);
+      letter-spacing: 0.06em;
+      color: var(--text);
+    }
+
+    .card-time {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 300;
+      font-size: clamp(9px, 1.5vw, 12px);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .card-venue {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(14px, 2.8vw, 18px);
+      color: var(--text-mid);
+      margin-top: 4px;
+    }
+
+    .card-address {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 300;
+      font-size: clamp(8px, 1.3vw, 10px);
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .card-attire {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(12px, 2.2vw, 15px);
+      color: var(--gold);
+      margin-top: 4%;
+    }
+
+    .card-website {
+      margin-top: 5%;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 300;
+      font-size: clamp(8px, 1.3vw, 10px);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .card-website a {
+      color: var(--green);
+      text-decoration: none;
+    }
+
+    /* ── ANIMATION ELEMENTS ──────────────────────────────────── */
+    .anim-el {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.9s ease-out, transform 0.9s ease-out;
+    }
+
+    .anim-el.anim-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Ganesha needs translateX preserved */
+    .ganesha-wrapper.anim-el {
+      transform: translateX(-50%) translateY(18px);
+    }
+
+    .ganesha-wrapper.anim-el.anim-visible {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ── KEYFRAMES ───────────────────────────────────────────── */
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    @keyframes btnPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(196, 169, 106, 0); }
+      50%       { box-shadow: 0 0 24px 4px rgba(196, 169, 106, 0.12); }
+    }
+
+    @keyframes drawCardBorder {
+      to { stroke-dashoffset: 0; }
+    }
+
+    @keyframes shimmerGold {
+      0%, 100% { filter: drop-shadow(0 0 3px rgba(196, 169, 106, 0.2)); }
+      50%       { filter: drop-shadow(0 0 12px rgba(196, 169, 106, 0.5)); }
+    }
+
+    @keyframes ganeshaReveal {
+      from { opacity: 0; transform: scale(0.85); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes soundBar {
+      0%   { height: 3px; }
+      100% { height: 11px; }
+    }
+
+    @keyframes floatUp {
+      0%   { opacity: 0; transform: translateY(100vh) scale(0.5); }
+      8%   { opacity: 1; }
+      85%  { opacity: 0.7; }
+      100% { opacity: 0; transform: translateY(-10vh) scale(1); }
+    }
+
+    /* ── RESPONSIVE ──────────────────────────────────────────── */
+    @media (max-width: 600px) {
+      .invitation-container {
+        padding: 40px 12px 60px;
+      }
+
+      .card-text {
+        padding: 20% 7% 6%;
+      }
+
+      .ganesha-wrapper {
+        width: 12%;
+        top: 3.5%;
+      }
+
+      .music-toggle {
+        bottom: 16px;
+        right: 16px;
+        width: 42px;
+        height: 42px;
+      }
+
+      /* Larger fonts for readability on mobile */
+      .card-blessing { font-size: 16px !important; }
+      .card-intro { font-size: 18px !important; }
+      .card-event-subtitle { font-size: 13px !important; }
+      .card-time { font-size: 13px !important; }
+      .card-venue { font-size: 18px !important; }
+      .card-address { font-size: 12px !important; }
+      .card-attire { font-size: 16px !important; }
+      .card-website { font-size: 13px !important; }
+      .visit-website-btn { font-size: 14px !important; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── Background Music ─────────────────────────────────── -->
+  <audio id="bg-music" loop preload="auto">
+    <source src="media/invitation_music.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- ── Opening Screen ───────────────────────────────────── -->
+  <div id="opening-screen">
+    <div class="opening-content">
+
+      <svg class="opening-ornament" viewBox="0 0 80 20" fill="none" stroke="rgba(196,169,106,0.6)" stroke-width="0.8" stroke-linecap="round">
+        <line x1="0" y1="10" x2="30" y2="10" />
+        <circle cx="40" cy="10" r="3" fill="none" />
+        <line x1="50" y1="10" x2="80" y2="10" />
+      </svg>
+
+      <p class="opening-tag">You are invited</p>
+      <h1 class="opening-names">Priya &amp; Gautam</h1>
+      <p class="opening-event">Balaji Kalyanam</p>
+      <p class="opening-date">December 5, 2026 · Atlanta</p>
+      <div class="opening-divider"></div>
+      <button id="open-btn" class="open-btn" type="button">Open Invitation</button>
+
+    </div>
+  </div>
+
+  <!-- ── Music Toggle ─────────────────────────────────────── -->
+  <button id="music-toggle" class="music-toggle" aria-label="Toggle music" title="Toggle music" type="button">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9 18V5l12-2v13" />
+      <circle cx="6" cy="18" r="3" />
+      <circle cx="18" cy="16" r="3" />
+    </svg>
+    <div class="sound-bars">
+      <span></span><span></span><span></span>
+    </div>
+  </button>
+
+  <!-- ── Floating Particles ───────────────────────────────── -->
+  <div id="particles" class="particles-container"></div>
+
+  <!-- ── Invitation Container ─────────────────────────────── -->
+  <div id="invitation-container" class="invitation-container">
+
+    <!-- ─────────────────────────────────────────────────────
+         SINGLE WHITE CARD
+         ───────────────────────────────────────────────────── -->
+    <div class="main-card" id="main-card">
+
+      <!-- Pentagon (temple roof) shape — white fill, gold border -->
+      <svg class="card-shape" viewBox="0 0 500 820" preserveAspectRatio="xMidYMid meet">
+        <!-- White fill -->
+        <polygon class="card-fill"
+          points="250,14 490,138 490,808 10,808 10,138" />
+        <!-- Inner accent border -->
+        <polygon class="card-inner-border"
+          points="250,28 476,146 476,794 24,794 24,146" />
+        <!-- Outer gold border (animated draw) -->
+        <polygon class="card-border"
+          points="250,14 490,138 490,808 10,808 10,138" />
+      </svg>
+
+      <!-- Ganesha icon at the peak -->
+      <div class="ganesha-wrapper anim-el">
+        <img src="media/ganesha.png" alt="Ganesha" />
+      </div>
+
+      <!-- Card text content -->
+      <div class="card-text">
+
+        <p class="card-blessing anim-el">॥ श्री गणेशाय नमः ॥</p>
+
+        <p class="card-intro anim-el">
+          Together with their families,<br>
+          Priya Gupta and Gautam Chebrolu
+        </p>
+
+        <p class="card-intro anim-el" style="margin-top:-1%;">
+          joyfully invite you to the
+        </p>
+
+        <div class="anim-el" style="width:80%;margin:3% auto 1%;">
+          <div class="card-divider">
+            <div class="card-divider-line"></div>
+            <div class="card-divider-diamond"></div>
+            <div class="card-divider-line"></div>
+          </div>
+        </div>
+
+        <h2 class="card-event-name anim-el">Balaji Kalyanam</h2>
+        <p class="card-event-subtitle anim-el">Atlanta Reception</p>
+
+        <div class="anim-el" style="width:80%;margin:0 auto 4%;">
+          <div class="card-divider">
+            <div class="card-divider-line"></div>
+            <div class="card-divider-diamond"></div>
+            <div class="card-divider-line"></div>
+          </div>
+        </div>
+
+        <div class="card-details-block anim-el">
+          <p class="card-date">December 5, 2026</p>
+          <p class="card-time">9:30 am &ndash; 2:00 pm</p>
+          <p class="card-venue">Hindu Temple of Atlanta</p>
+          <p class="card-address">5851 GA-85 &middot; Riverdale, GA 30274</p>
+        </div>
+
+        <p class="card-attire anim-el">Attire: Traditional Indian</p>
+
+        <p class="card-attire anim-el" style="margin-top:1%;">No boxed gifts please.</p>
+
+        <p class="card-website anim-el">
+          <a href="https://priyagautam.com">priyagautam.com</a>
+          &ensp;·&ensp; pw: pg2026
+        </p>
+
+      </div><!-- /.main-card -->
+
+    </div>
+
+    <!-- Visit Website button -->
+    <a id="visit-btn"
+       href="https://priyagautam.com"
+       class="visit-website-btn anim-el"
+       target="_blank"
+       rel="noopener noreferrer">Visit Our Website</a>
+
+  </div><!-- /.invitation-container -->
+
+  <script>
+    /* ============================================================
+       ATL INVITATION — inline JS
+       ============================================================ */
+    document.addEventListener('DOMContentLoaded', () => {
+
+      const openingScreen  = document.getElementById('opening-screen');
+      const openBtn        = document.getElementById('open-btn');
+      const invContainer   = document.getElementById('invitation-container');
+      const mainCard       = document.getElementById('main-card');
+      const audio          = document.getElementById('bg-music');
+      const musicToggle    = document.getElementById('music-toggle');
+      const particlesEl    = document.getElementById('particles');
+
+      let musicPlaying = false;
+
+      /* ── Open Invitation ────────────────────────────────────── */
+      openBtn.addEventListener('click', () => {
+        openingScreen.classList.add('fade-out');
+
+        setTimeout(() => {
+          openingScreen.style.display = 'none';
+          invContainer.classList.add('show');
+          musicToggle.classList.add('show');
+
+          // Try to play music
+          if (audio) {
+            audio.volume = 0.4;
+            audio.play().then(() => {
+              musicPlaying = true;
+              musicToggle.classList.add('playing');
+            }).catch(() => {
+              musicPlaying = false;
+            });
+          }
+
+          startAnimationSequence();
+          createParticles();
+
+        }, 900);
+      });
+
+      /* ── Music Toggle ───────────────────────────────────────── */
+      musicToggle.addEventListener('click', () => {
+        if (!audio) return;
+        if (musicPlaying) {
+          audio.pause();
+          musicPlaying = false;
+          musicToggle.classList.remove('playing');
+        } else {
+          audio.play().then(() => {
+            musicPlaying = true;
+            musicToggle.classList.add('playing');
+          }).catch(() => {});
+        }
+      });
+
+      /* ── Animation Sequence ─────────────────────────────────── */
+      function startAnimationSequence() {
+        // Step 1: draw the card border + white fill
+        setTimeout(() => { mainCard.classList.add('visible'); }, 200);
+
+        // Step 2: staggered content elements
+        const animEls = document.querySelectorAll('.anim-el');
+        const delays  = [
+          2200,   // 0: Ganesha
+          2800,   // 1: Blessing text
+          3300,   // 2: Intro (names)
+          3600,   // 3: Intro (invite)
+          4000,   // 4: Divider top
+          4400,   // 5: Event name
+          4700,   // 6: Event subtitle
+          5000,   // 7: Divider bottom
+          5400,   // 8: Date/time/venue block
+          5900,   // 9: Attire
+          6300,   // 10: Website (on card)
+          6900,   // 11: Visit Our Website button
+        ];
+
+        animEls.forEach((el, i) => {
+          const delay = delays[i] !== undefined ? delays[i] : (i * 400 + 2200);
+          setTimeout(() => { el.classList.add('anim-visible'); }, delay);
+        });
+      }
+
+      /* ── Floating Particles ─────────────────────────────────── */
+      function createParticles() {
+        for (let i = 0; i < 22; i++) {
+          const p = document.createElement('div');
+          p.className = 'particle';
+          const size = Math.random() * 4 + 1.5;
+          p.style.width  = size + 'px';
+          p.style.height = size + 'px';
+          p.style.left   = Math.random() * 100 + '%';
+          p.style.animationDuration = (Math.random() * 8 + 8) + 's';
+          p.style.animationDelay    = (Math.random() * 10) + 's';
+          particlesEl.appendChild(p);
+        }
+      }
+
+      /* ── Audio Error Handling ───────────────────────────────── */
+      if (audio) {
+        audio.addEventListener('error', () => {
+          musicToggle.style.display = 'none';
+        });
+      }
+
+    });
+  </script>
+
+</body>
+</html>

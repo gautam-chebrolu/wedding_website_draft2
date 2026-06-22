@@ -4,8 +4,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Your Schedule — Priya &amp; Gautam</title>
-  <meta name="description" content="The full schedule of events for our wedding weekend." />
+  <title>Your Schedule &amp; RSVP — Priya &amp; Gautam</title>
+  <meta name="description" content="View your personalized event schedule and RSVP for Priya and Gautam's wedding." />
   <link rel="stylesheet" href="styles.css" />
 </head>
 
@@ -17,12 +17,10 @@
       <img src="media/wedding_logo.svg" alt="Priya &amp; Gautam" />
     </a>
     <ul>
-      <li><a href="schedule.html" class="active">Your Schedule</a></li>
+      <li><a href="schedule.html" class="active">Schedule / RSVP</a></li>
       <li><a href="hotels.html">Hotels</a></li>
-      <li><a href="funds.html">Funds</a></li>
+      <li><a href="funds.html">Gifts</a></li>
       <li><a href="pictures.html">Pictures</a></li>
-      <li><a href="https://withjoy.com/gautam-chebrolu-and-priya/rsvp" id="rsvp-link" target="_blank"
-          rel="noopener noreferrer">RSVP</a></li>
     </ul>
   </nav>
 
@@ -30,11 +28,11 @@
     <div class="page-header" aria-hidden="true"></div>
 
     <header class="page-hero">
-      <h1>Your Schedule</h1>
-      <p class="page-subtitle">Wedding Weekend Events</p>
+      <h1>Your Schedule + RSVP</h1>
+      <p class="page-subtitle">Wedding Weekend Events &amp; RSVP</p>
     </header>
 
-    <main class="page-content">
+    <main class="page-content schedule-page">
 
       <!-- STEP 1: Password -->
       <div id="step-password" class="auth-section">
@@ -62,27 +60,85 @@
         </div>
       </div>
 
-      <!-- STEP 3: The Personalized Schedule -->
-      <div id="step-schedule" style="display: none;">
-        <div class="schedule-intro">
-          <h2 id="guest-greeting">Welcome!</h2>
-          <p>Here are the events we are so excited to celebrate with you.</p>
+      <!-- STEP 3: Party Roster -->
+      <div id="step-party" style="display: none;">
 
-          <div class="rsvp-reminder-box">
-            <h3>Have you RSVP'd yet?</h3>
-            <p>Please note that this personalized schedule is just for your reference and <strong>does not</strong>
-              serve as your RSVP. If you haven't yet, please officially RSVP below!</p>
-            <a href="https://withjoy.com/gautam-chebrolu-and-priya/rsvp" class="pill-btn primary">RSVP Now</a>
-          </div>
+        <!-- Loading state -->
+        <div id="rsvp-loading" class="rsvp-loading" style="display: none;">
+          <div class="rsvp-spinner"></div>
+          <p>Loading your party information…</p>
+        </div>
+
+        <!-- Error banner -->
+        <div id="rsvp-error-banner" class="rsvp-error-banner" style="display: none;">
+          <p>We couldn't load your RSVP information right now. You can still view your schedule below.</p>
+          <p>To RSVP, please email us at
+            <a href="mailto:priyagupta0829@gmail.com,varpra1@gmail.com?subject=Wedding%20RSVP">
+              priyagupta0829@gmail.com</a>.
           </p>
+        </div>
 
-          <div style="margin-top: 32px;">
-            <button id="calendar-btn" class="pill-btn outline">Download All to Calendar (ICS)</button>
+        <!-- Party header -->
+        <div class="party-roster-header">
+          <h2 id="guest-greeting">Welcome!</h2>
+          <p id="party-info" class="party-info-text"></p>
+          <p class="party-roster-hint">Select a guest below to view their schedule and RSVP.</p>
+        </div>
+
+        <!-- Party member cards (injected by JS) -->
+        <div id="party-roster" class="party-roster"></div>
+
+      </div>
+
+      <!-- STEP 4: Individual Schedule + RSVP -->
+      <div id="step-schedule" style="display: none;">
+
+        <!-- Back button + member name header (full width) -->
+        <div class="member-schedule-header">
+          <button id="back-to-party-btn" class="back-btn" aria-label="Back to party list">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            All Guests
+          </button>
+          <div class="member-schedule-name-wrap">
+            <h2 id="member-schedule-name"></h2>
+            <span id="member-rsvp-badge" class="member-rsvp-badge"></span>
           </div>
         </div>
-        <div id="schedule-container" class="schedule-timeline">
-          <!-- Events injected here by JS -->
+
+        <!-- Success message (full width) -->
+        <div id="rsvp-success" class="rsvp-success" style="display: none;">
+          <div class="rsvp-success-icon">✓</div>
+          <h3>RSVP Saved!</h3>
+          <p>A confirmation email will be sent shortly.</p>
+          <p class="rsvp-success-sub">You can update your response anytime by revisiting this page.</p>
         </div>
+
+        <!-- ── Two-column layout ─────────────────────────────── -->
+        <div class="member-schedule-grid">
+
+          <!-- LEFT: Additional Information (shown first on mobile) -->
+          <div class="member-schedule-sidebar">
+            <div id="rsvp-questions-section" style="display: none;"></div>
+          </div>
+
+          <!-- RIGHT: Event schedule -->
+          <div class="member-schedule-main">
+            <div id="schedule-container" class="schedule-timeline">
+              <!-- Event cards injected here -->
+            </div>
+
+            <!-- Calendar download -->
+            <div style="margin-top: 32px; text-align: center;">
+              <button id="calendar-btn" class="pill-btn outline">Download to Calendar (ICS)</button>
+            </div>
+          </div>
+
+        </div>
+        <!-- ── End two-column layout ─────────────────────────── -->
+
       </div>
 
     </main>
@@ -99,6 +155,35 @@
       Priya &amp; Gautam &nbsp;·&nbsp; 2026
     </footer>
   </div>
+
+  <!-- ── Sticky Save Bar (floats above footer when changes are made) ── -->
+  <div id="rsvp-save-bar" class="rsvp-save-bar" aria-live="polite" style="display: none;">
+    <div class="rsvp-save-bar-inner">
+      <span class="rsvp-save-bar-hint">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        You have unsaved changes
+      </span>
+      <div class="rsvp-save-bar-actions">
+        <button id="submit-rsvp-btn" class="pill-btn primary submit-rsvp-btn">Save RSVP</button>
+        <button id="update-rsvp-btn" class="pill-btn primary submit-rsvp-btn" style="display: none;">Update
+          RSVP</button>
+      </div>
+    </div>
+    <!-- Loading overlay shown while submission is in progress -->
+    <div class="rsvp-save-bar-loading-label" aria-hidden="true">
+      <div class="save-bar-mini-spinner"></div>
+      Saving…
+    </div>
+  </div>
+
+  <!-- Firebase SDK (compat/v8 — works without a bundler) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
   <script src="main.js"></script>
   <script src="media/events_data.js"></script>

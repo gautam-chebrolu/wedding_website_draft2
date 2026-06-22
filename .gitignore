@@ -4,3 +4,6 @@ media/*.csv
 
 # Node modules (if ever installed locally)
 node_modules/
+
+# ── Apps Script config (contains Sheet IDs / API keys) ──────────
+apps-script/

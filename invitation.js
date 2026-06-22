@@ -104,21 +104,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* ── Floating Particles ───────────────────────────────────── */
   function createParticles() {
-    const count = 25;
-    for (let i = 0; i < count; i++) {
-      const p = document.createElement('div');
-      p.className = 'particle';
+    // Three tiers of particles for visual depth
+    const tiers = [
+      // [className, count, minSize, maxSize, minDuration, maxDuration]
+      ['',        30, 2,   6,   10, 20],  // standard orbs
+      ['sparkle', 28, 3,   7,    8, 16],  // spinning diamond sparkles
+      ['bright',  17, 1.5, 4,   12, 22],  // tiny bright pinpoints
+    ];
 
-      // Random properties
-      const size = Math.random() * 4 + 1.5;
-      p.style.width = size + 'px';
-      p.style.height = size + 'px';
-      p.style.left = Math.random() * 100 + '%';
-      p.style.animationDuration = (Math.random() * 8 + 8) + 's';
-      p.style.animationDelay = (Math.random() * 10) + 's';
+    tiers.forEach(([cls, count, minSize, maxSize, minDur, maxDur]) => {
+      for (let i = 0; i < count; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle' + (cls ? ' ' + cls : '');
 
-      particlesEl.appendChild(p);
-    }
+        const size = Math.random() * (maxSize - minSize) + minSize;
+        p.style.width  = size + 'px';
+        p.style.height = size + 'px';
+        p.style.left   = Math.random() * 100 + '%';
+
+        // Float duration & delay
+        const dur = Math.random() * (maxDur - minDur) + minDur;
+        p.style.animationDuration = dur + 's, ' + (Math.random() * 2.5 + 1.5) + 's';
+        p.style.animationDelay   = (Math.random() * 14) + 's, ' + (Math.random() * 3) + 's';
+
+        particlesEl.appendChild(p);
+      }
+    });
   }
 
   /* ── Audio Error Handling ─────────────────────────────────── */

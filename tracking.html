@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RSVP Tracking — Priya &amp; Gautam</title>
+  <meta name="description" content="Private RSVP tracking dashboard." />
+  <link rel="icon" type="image/x-icon" href="media/wedding_logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500;600&display=swap"
+    rel="stylesheet" />
+
+  <style>
+    /* ── RESET & TOKENS ────────────────────────────────────── */
+    :root {
+      --bg: #FAF9F6;
+      --bg-card: #ffffff;
+      --gold: #c4a96a;
+      --gold-light: #dcc288;
+      --green: #2f5233;
+      --green-deep: #1e3622;
+      --green-soft: #e8f0e9;
+      --text: #1a1814;
+      --text-mid: #4a4540;
+      --text-muted: #7a7060;
+      --border: rgba(0, 0, 0, 0.08);
+      --accepted: #3d8b5f;
+      --declined: #c45c5c;
+      --awaiting: #d4a843;
+      --shadow: 0 2px 12px rgba(0, 0, 0, 0.06), 0 8px 32px rgba(0, 0, 0, 0.04);
+      --radius: 12px;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    /* ── PASSWORD GATE ─────────────────────────────────────── */
+    #password-gate {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+
+    #password-gate.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .gate-card {
+      text-align: center;
+      padding: 48px 40px;
+      max-width: 400px;
+      width: 90%;
+    }
+
+    .gate-ornament {
+      width: 60px;
+      height: auto;
+      margin-bottom: 16px;
+    }
+
+    .gate-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      font-style: italic;
+      font-size: 36px;
+      color: var(--green);
+      margin-bottom: 8px;
+    }
+
+    .gate-subtitle {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 300;
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      color: var(--text-muted);
+      margin-bottom: 32px;
+    }
+
+    .gate-input-wrap {
+      position: relative;
+      margin-bottom: 16px;
+    }
+
+    .gate-input {
+      width: 100%;
+      padding: 14px 18px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+      font-weight: 300;
+      color: var(--text);
+      text-align: center;
+      letter-spacing: 0.08em;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .gate-input:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(196, 169, 106, 0.12);
+    }
+
+    .gate-input.error {
+      border-color: var(--declined);
+      animation: shake 0.4s ease;
+    }
+
+    .gate-btn {
+      width: 100%;
+      padding: 14px 24px;
+      background: var(--green);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 400;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .gate-btn:hover {
+      background: var(--green-deep);
+      transform: translateY(-1px);
+    }
+
+    .gate-error-text {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      color: var(--declined);
+      margin-top: 12px;
+      min-height: 18px;
+    }
+
+    @keyframes shake {
+
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      20% {
+        transform: translateX(-6px);
+      }
+
+      40% {
+        transform: translateX(6px);
+      }
+
+      60% {
+        transform: translateX(-4px);
+      }
+
+      80% {
+        transform: translateX(4px);
+      }
+    }
+
+    /* ── LOADING STATE ─────────────────────────────────────── */
+    #loading-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      background: var(--bg);
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    #loading-overlay.show {
+      display: flex;
+    }
+
+    .loading-spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid var(--border);
+      border-top-color: var(--green);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    .loading-text {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 300;
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* ── DASHBOARD CONTAINER ───────────────────────────────── */
+    #dashboard {
+      display: none;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+      animation: fadeIn 0.6s ease;
+    }
+
+    #dashboard.show {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ── PAGE HEADER ───────────────────────────────────────── */
+    .dash-header {
+      text-align: center;
+      margin-bottom: 48px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dash-header-ornament {
+      width: 50px;
+      height: auto;
+      margin-bottom: 12px;
+    }
+
+    .dash-title {
+      font-weight: 600;
+      font-size: clamp(32px, 5vw, 48px);
+      color: var(--green);
+      letter-spacing: 0.04em;
+      margin-bottom: 6px;
+    }
+
+    .dash-subtitle {
+      font-style: italic;
+      font-size: clamp(14px, 2.5vw, 18px);
+      color: var(--text-muted);
+    }
+
+    .dash-last-updated {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 300;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-top: 12px;
+      text-transform: uppercase;
+    }
+
+    /* ── EVENT CARD ─────────────────────────────────────────── */
+    .event-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 28px 32px;
+      margin-bottom: 20px;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .event-card:hover {
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08), 0 12px 40px rgba(0, 0, 0, 0.05);
+    }
+
+    .event-card.overview-card {
+      border: 1.5px solid rgba(196, 169, 106, 0.35);
+      background: linear-gradient(135deg, #faf9f6 0%, #f5f0e8 100%);
+      margin-bottom: 36px;
+    }
+
+    .event-card-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .event-name {
+      font-weight: 600;
+      font-size: clamp(22px, 4vw, 30px);
+      color: var(--green);
+      letter-spacing: 0.03em;
+    }
+
+    .event-label-tag {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 400;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      background: rgba(196, 169, 106, 0.1);
+      padding: 4px 12px;
+      border-radius: 999px;
+    }
+
+    /* ── STAT CHIPS ─────────────────────────────────────────── */
+    .stat-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .stat-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 8px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: background 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
+      user-select: none;
+    }
+
+    .stat-chip:hover {
+      transform: translateY(-1px);
+    }
+
+    .stat-chip.active {
+      border-color: currentColor;
+    }
+
+    .stat-chip[data-type="invited"] {
+      color: var(--text-mid);
+    }
+
+    .stat-chip[data-type="invited"]:hover,
+    .stat-chip[data-type="invited"].active {
+      background: rgba(74, 69, 64, 0.06);
+    }
+
+    .stat-chip[data-type="accepted"] {
+      color: var(--accepted);
+    }
+
+    .stat-chip[data-type="accepted"]:hover,
+    .stat-chip[data-type="accepted"].active {
+      background: rgba(61, 139, 95, 0.08);
+    }
+
+    .stat-chip[data-type="declined"] {
+      color: var(--declined);
+    }
+
+    .stat-chip[data-type="declined"]:hover,
+    .stat-chip[data-type="declined"].active {
+      background: rgba(196, 92, 92, 0.08);
+    }
+
+    .stat-chip[data-type="awaiting"] {
+      color: var(--awaiting);
+    }
+
+    .stat-chip[data-type="awaiting"]:hover,
+    .stat-chip[data-type="awaiting"].active {
+      background: rgba(212, 168, 67, 0.08);
+    }
+
+    .stat-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+      flex-shrink: 0;
+    }
+
+    .stat-label {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 400;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+    }
+
+    .stat-count {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    /* ── THERMOMETER BAR ───────────────────────────────────── */
+    .thermo-wrap {
+      margin-bottom: 8px;
+    }
+
+    .thermo-bar {
+      display: flex;
+      height: 28px;
+      border-radius: 14px;
+      overflow: hidden;
+      background: rgba(0, 0, 0, 0.04);
+    }
+
+    .thermo-seg {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: filter 0.25s ease, flex 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      min-width: 0;
+    }
+
+    .thermo-seg:hover {
+      filter: brightness(1.08);
+    }
+
+    .thermo-seg.seg-accepted {
+      background: var(--accepted);
+    }
+
+    .thermo-seg.seg-declined {
+      background: var(--declined);
+    }
+
+    .thermo-seg.seg-awaiting {
+      background: var(--awaiting);
+    }
+
+    .thermo-seg-label {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      font-size: 11px;
+      color: #fff;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    /* ── NAME LIST (expandable) ─────────────────────────────── */
+    .name-list-wrap {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease;
+    }
+
+    .name-list-wrap.open {
+      max-height: 2000px;
+      padding-top: 12px;
+    }
+
+    .name-list-header {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 500;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .name-list-header .header-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .name-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .name-tag {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 300;
+      font-size: 12px;
+      padding: 4px 12px;
+      border-radius: 6px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text-mid);
+      white-space: nowrap;
+    }
+
+    /* ── RESPONSIVE ─────────────────────────────────────────── */
+    @media (max-width: 600px) {
+      #dashboard {
+        padding: 24px 16px 60px;
+      }
+
+      .event-card {
+        padding: 20px 18px;
+      }
+
+      .stat-row {
+        gap: 8px;
+      }
+
+      .stat-chip {
+        padding: 6px 10px;
+        gap: 6px;
+      }
+
+      .stat-count {
+        font-size: 13px;
+      }
+
+      .stat-label {
+        font-size: 10px;
+      }
+
+      .thermo-bar {
+        height: 24px;
+      }
+
+      .thermo-seg-label {
+        font-size: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── Password Gate ─────────────────────────────────────── -->
+  <div id="password-gate">
+    <div class="gate-card">
+      <svg class="gate-ornament" viewBox="0 0 80 20" fill="none" stroke="rgba(196,169,106,0.6)" stroke-width="0.8"
+        stroke-linecap="round">
+        <line x1="0" y1="10" x2="26" y2="10" />
+        <circle cx="40" cy="10" r="3" fill="none" />
+        <line x1="54" y1="10" x2="80" y2="10" />
+      </svg>
+      <h1 class="gate-title">RSVP Tracking</h1>
+      <p class="gate-subtitle">Private Dashboard</p>
+      <form id="gate-form">
+        <div class="gate-input-wrap">
+          <input type="password" id="gate-password" class="gate-input" placeholder="Enter password"
+            autocomplete="off" />
+        </div>
+        <button type="submit" class="gate-btn">View Dashboard</button>
+        <p id="gate-error" class="gate-error-text" aria-live="polite"></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- ── Loading Overlay ───────────────────────────────────── -->
+  <div id="loading-overlay">
+    <div class="loading-spinner"></div>
+    <p class="loading-text">Loading RSVP data…</p>
+  </div>
+
+  <!-- ── Dashboard ─────────────────────────────────────────── -->
+  <div id="dashboard">
+    <header class="dash-header">
+      <svg class="dash-header-ornament" viewBox="0 0 80 20" fill="none" stroke="rgba(196,169,106,0.5)"
+        stroke-width="0.8" stroke-linecap="round">
+        <line x1="0" y1="10" x2="26" y2="10" />
+        <circle cx="40" cy="10" r="3" fill="none" />
+        <line x1="54" y1="10" x2="80" y2="10" />
+      </svg>
+      <h1 class="dash-title">RSVP Dashboard</h1>
+      <p class="dash-subtitle">Priya &amp; Gautam's Wedding</p>
+      <p class="dash-last-updated" id="last-updated"></p>
+    </header>
+    <div id="cards-container"></div>
+  </div>
+
+  <script>
+    /* ============================================================
+       TRACKING DASHBOARD — Inline JS
+       ============================================================ */
+
+    const API_URL = 'https://script.google.com/macros/s/AKfycbwJJOaKdTIcPv9ZdqX44sgSbYeUPF4Lu6OuOPM28Kfva7LJZ_eLjj-yrlROV2h0dniv/exec';
+
+    // Event definitions: CSV column prefix → display name
+    const EVENTS = [
+      { inviteCol: 'Ganesh Puja Invite', responseCol: 'Ganesh Puja Response', name: 'Ganesh Puja' },
+      { inviteCol: 'Haldi Invite', responseCol: 'Haldi Response', name: 'Haldi' },
+      { inviteCol: 'Sangeet Invite', responseCol: 'Sangeet Response', name: 'Sangeet' },
+      { inviteCol: 'Wedding Invite', responseCol: 'Wedding Response', name: 'Wedding' },
+      { inviteCol: 'Reception Invite', responseCol: 'Reception Response', name: 'Reception' },
+      { inviteCol: 'Satya Puja Invite', responseCol: 'Satya Puja Response', name: 'Satyanārāyaṇa Puja' },
+      { inviteCol: 'Balaji Kalyanam Invite', responseCol: 'Balaji Kalyanam Response', name: 'Balaji Kalyanam' },
+    ];
+
+    // ── Password Gate ───────────────────────────────────────
+    const gateEl = document.getElementById('password-gate');
+    const gateForm = document.getElementById('gate-form');
+    const gatePwd = document.getElementById('gate-password');
+    const gateError = document.getElementById('gate-error');
+    const loadingOverlay = document.getElementById('loading-overlay');
+    const dashboard = document.getElementById('dashboard');
+    const cardsContainer = document.getElementById('cards-container');
+
+    gateForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const pwd = gatePwd.value.trim().toLowerCase();
+      if (!pwd) {
+        gatePwd.classList.add('error');
+        gateError.textContent = 'Please enter the password.';
+        setTimeout(() => gatePwd.classList.remove('error'), 400);
+        return;
+      }
+
+      // Hide gate, show loading
+      gateEl.classList.add('hidden');
+      loadingOverlay.classList.add('show');
+
+      try {
+        const data = await fetchTrackingData(pwd);
+        if (!data.success) {
+          throw new Error(data.error || 'Failed to load data');
+        }
+        renderDashboard(data.guests);
+        loadingOverlay.classList.remove('show');
+        dashboard.classList.add('show');
+      } catch (err) {
+        loadingOverlay.classList.remove('show');
+        gateEl.classList.remove('hidden');
+        gatePwd.classList.add('error');
+        gateError.textContent = err.message === 'Invalid password'
+          ? 'Incorrect password. Please try again.'
+          : 'Error loading data. Please try again.';
+        setTimeout(() => gatePwd.classList.remove('error'), 400);
+        gatePwd.value = '';
+        gatePwd.focus();
+      }
+    });
+
+    // ── Fetch Data ──────────────────────────────────────────
+    async function fetchTrackingData(pwd) {
+      // Try POST first, fall back to GET for CORS
+      try {
+        const resp = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ action: 'tracking', pwd }),
+          redirect: 'follow'
+        });
+        return await resp.json();
+      } catch (_) {
+        const url = `${API_URL}?action=tracking&pwd=${encodeURIComponent(pwd)}`;
+        const resp = await fetch(url, { redirect: 'follow' });
+        return await resp.json();
+      }
+    }
+
+    // ── Aggregate Data ──────────────────────────────────────
+    function aggregateEvent(guests, event) {
+      const invited = [];
+      const accepted = [];
+      const declined = [];
+      const awaiting = [];
+
+      for (const g of guests) {
+        const inv = g[event.inviteCol];
+        const res = g[event.responseCol];
+        const name = g['display name'] || 'Unknown';
+
+        // Not invited to this event
+        if (inv !== '1') continue;
+
+        invited.push(name);
+
+        if (res === '-') continue; // dash = not invited (shouldn't happen if inv=1, but safety)
+        if (res === '1') {
+          accepted.push(name);
+        } else if (res === '0') {
+          declined.push(name);
+        } else {
+          // blank or space = awaiting
+          awaiting.push(name);
+        }
+      }
+
+      return { invited, accepted, declined, awaiting };
+    }
+
+    // ── Render Dashboard ────────────────────────────────────
+    function renderDashboard(guests) {
+      // Set last updated timestamp
+      document.getElementById('last-updated').textContent =
+        'Last refreshed: ' + new Date().toLocaleString();
+
+      const eventData = [];
+
+      for (const event of EVENTS) {
+        const agg = aggregateEvent(guests, event);
+        eventData.push({ event, agg });
+      }
+
+      let html = '';
+
+      // Render per-event cards
+      for (const { event, agg } of eventData) {
+        const totals = {
+          invited: agg.invited.length,
+          accepted: agg.accepted.length,
+          declined: agg.declined.length,
+          awaiting: agg.awaiting.length,
+        };
+        html += buildCard(event.name, null, totals, agg, event.name.replace(/\s/g, '-'));
+      }
+
+      cardsContainer.innerHTML = html;
+
+      // Attach click handlers
+      attachInteractions();
+    }
+
+    // ── Build Card HTML ─────────────────────────────────────
+    function buildCard(title, subtitle, totals, names, idPrefix, isOverview = false) {
+      const total = totals.invited;
+      const accPct = total ? (totals.accepted / total * 100) : 0;
+      const decPct = total ? (totals.declined / total * 100) : 0;
+      const awaPct = total ? (totals.awaiting / total * 100) : 0;
+
+      const cardClass = isOverview ? 'event-card overview-card' : 'event-card';
+      const tagHtml = isOverview
+        ? '<span class="event-label-tag">Combined</span>'
+        : '';
+
+      return `
+        <div class="${cardClass}" id="card-${idPrefix}">
+          <div class="event-card-header">
+            <h2 class="event-name">${title}</h2>
+            ${tagHtml}
+          </div>
+
+          <div class="stat-row">
+            <div class="stat-chip" data-type="invited" data-card="${idPrefix}" data-list="invited" role="button" tabindex="0">
+              <span class="stat-dot"></span>
+              <span class="stat-count">${totals.invited}</span>
+              <span class="stat-label">Invited</span>
+            </div>
+            <div class="stat-chip" data-type="accepted" data-card="${idPrefix}" data-list="accepted" role="button" tabindex="0">
+              <span class="stat-dot"></span>
+              <span class="stat-count">${totals.accepted} <span style="font-size: 0.85em; opacity: 0.8; font-weight: 400">(${accPct.toFixed(0)}%)</span></span>
+              <span class="stat-label">Accepted</span>
+            </div>
+            <div class="stat-chip" data-type="declined" data-card="${idPrefix}" data-list="declined" role="button" tabindex="0">
+              <span class="stat-dot"></span>
+              <span class="stat-count">${totals.declined} <span style="font-size: 0.85em; opacity: 0.8; font-weight: 400">(${decPct.toFixed(0)}%)</span></span>
+              <span class="stat-label">Declined</span>
+            </div>
+            <div class="stat-chip" data-type="awaiting" data-card="${idPrefix}" data-list="awaiting" role="button" tabindex="0">
+              <span class="stat-dot"></span>
+              <span class="stat-count">${totals.awaiting} <span style="font-size: 0.85em; opacity: 0.8; font-weight: 400">(${awaPct.toFixed(0)}%)</span></span>
+              <span class="stat-label">Awaiting</span>
+            </div>
+          </div>
+
+          <div class="thermo-wrap">
+            <div class="thermo-bar">
+              ${accPct > 0 ? `<div class="thermo-seg seg-accepted" style="flex:${accPct}" data-card="${idPrefix}" data-list="accepted" role="button" tabindex="0">
+                ${accPct > 8 ? `<span class="thermo-seg-label">${totals.accepted}</span>` : ''}
+              </div>` : ''}
+              ${decPct > 0 ? `<div class="thermo-seg seg-declined" style="flex:${decPct}" data-card="${idPrefix}" data-list="declined" role="button" tabindex="0">
+                ${decPct > 8 ? `<span class="thermo-seg-label">${totals.declined}</span>` : ''}
+              </div>` : ''}
+              ${awaPct > 0 ? `<div class="thermo-seg seg-awaiting" style="flex:${awaPct}" data-card="${idPrefix}" data-list="awaiting" role="button" tabindex="0">
+                ${awaPct > 8 ? `<span class="thermo-seg-label">${totals.awaiting}</span>` : ''}
+              </div>` : ''}
+            </div>
+          </div>
+
+          <!-- Name lists (hidden until clicked) -->
+          ${buildNameList(idPrefix, 'invited', 'Invited', names.invited, 'var(--text-mid)')}
+          ${buildNameList(idPrefix, 'accepted', 'Accepted', names.accepted, 'var(--accepted)')}
+          ${buildNameList(idPrefix, 'declined', 'Declined', names.declined, 'var(--declined)')}
+          ${buildNameList(idPrefix, 'awaiting', 'Awaiting Response', names.awaiting, 'var(--awaiting)')}
+        </div>
+      `;
+    }
+
+    function buildNameList(cardId, type, label, names, dotColor) {
+      if (!names || names.length === 0) return '';
+      const sortedNames = [...names].sort((a, b) => a.localeCompare(b));
+      const tags = sortedNames.map(n => `<span class="name-tag">${n}</span>`).join('');
+      return `
+        <div class="name-list-wrap" id="list-${cardId}-${type}">
+          <div class="name-list-header" style="color: ${dotColor}">
+            <span class="header-dot" style="background: ${dotColor}"></span>
+            ${label} (${names.length})
+          </div>
+          <div class="name-list">${tags}</div>
+        </div>
+      `;
+    }
+
+    // ── Click Interactions ───────────────────────────────────
+    function attachInteractions() {
+      // Stat chips and thermometer segments toggle name lists
+      document.querySelectorAll('.stat-chip, .thermo-seg').forEach(el => {
+        const handler = () => {
+          const cardId = el.dataset.card;
+          const listType = el.dataset.list;
+          const listWrap = document.getElementById(`list-${cardId}-${listType}`);
+          if (!listWrap) return;
+
+          const isOpen = listWrap.classList.contains('open');
+
+          // Close all lists in this card
+          const card = document.getElementById(`card-${cardId}`);
+          card.querySelectorAll('.name-list-wrap.open').forEach(w => w.classList.remove('open'));
+          card.querySelectorAll('.stat-chip.active').forEach(c => c.classList.remove('active'));
+
+          // Toggle this one
+          if (!isOpen) {
+            listWrap.classList.add('open');
+            el.classList.add('active');
+            // Also activate matching stat chip / segment
+            card.querySelectorAll(`[data-list="${listType}"][data-card="${cardId}"]`).forEach(s => {
+              s.classList.add('active');
+            });
+          }
+        };
+
+        el.addEventListener('click', handler);
+        el.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handler();
+          }
+        });
+      });
+    }
+  </script>
+
+</body>
+
+</html>

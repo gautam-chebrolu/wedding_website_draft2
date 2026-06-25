@@ -103,7 +103,7 @@ const EVENTS = {
       "Following our wedding ceremony in Raleigh, we invite you to join us in Atlanta as we seek the ultimate blessings for our new beginning.",
       "A traditional vegetarian lunch & Prasadam will be served after the ceremony.",
       "Attire: Traditional Indian",
-      "No boxed gifts please."
+      "No gifts please, only your blessings."
     ]
   }
 };

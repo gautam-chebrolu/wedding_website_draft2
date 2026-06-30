@@ -482,8 +482,25 @@
     }
 
     .name-list-wrap.open {
-      max-height: 2000px;
+      max-height: 360px;
+      overflow-y: auto;
       padding-top: 12px;
+      /* Subtle scrollbar styling */
+      scrollbar-width: thin;
+      scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
+    }
+
+    .name-list-wrap.open::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .name-list-wrap.open::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .name-list-wrap.open::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.15);
+      border-radius: 2px;
     }
 
     .name-list-header {
@@ -506,21 +523,21 @@
     }
 
     .name-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
+      columns: 3 180px;
+      column-gap: 24px;
     }
 
     .name-tag {
       font-family: 'Montserrat', sans-serif;
       font-weight: 300;
       font-size: 12px;
-      padding: 4px 12px;
-      border-radius: 6px;
-      background: var(--bg);
-      border: 1px solid var(--border);
       color: var(--text-mid);
+      padding: 3px 0;
+      display: block;
+      break-inside: avoid;
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     /* ── RESPONSIVE ─────────────────────────────────────────── */

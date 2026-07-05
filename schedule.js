@@ -120,6 +120,74 @@ document.addEventListener('DOMContentLoaded', function () {
   const CORRECT_PASSWORD = 'pg2026';
   const LS_PASSWORD_KEY = 'pg_pwd_verified';
 
+  // ── RSVP Local Cache ──────────────────────────────────────
+  // Cache structure per member key:
+  //   { rsvp, nutAllergy, dietaryRestrictions, email, phone, timestamp }
+  // We keep cached data for up to 30 minutes to cover the database
+  // propagation window (typically 3-5 seconds) and guard against
+  // a stale API response overwriting a just-submitted RSVP.
+  const RSVP_CACHE_PREFIX = 'pg_rsvp_cache_';
+  const RSVP_CACHE_TTL_MS = 30 * 60 * 1000; // 30 minutes
+
+  function rsvpCacheKey(member) {
+    return RSVP_CACHE_PREFIX + memberKey(member);
+  }
+
+  function saveRsvpToCache(member) {
+    try {
+      var entry = {
+        rsvp: member.rsvp || {},
+        nutAllergy: member.nutAllergy || '',
+        dietaryRestrictions: member.dietaryRestrictions || '',
+        email: member.email || '',
+        phone: member.phone || '',
+        timestamp: Date.now()
+      };
+      localStorage.setItem(rsvpCacheKey(member), JSON.stringify(entry));
+    } catch (e) {
+      // localStorage may be full or unavailable — silently ignore
+      console.warn('RSVP cache write failed:', e);
+    }
+  }
+
+  function loadRsvpFromCache(member) {
+    try {
+      var raw = localStorage.getItem(rsvpCacheKey(member));
+      if (!raw) return null;
+      var entry = JSON.parse(raw);
+      // Expire stale entries
+      if (!entry.timestamp || (Date.now() - entry.timestamp) > RSVP_CACHE_TTL_MS) {
+        localStorage.removeItem(rsvpCacheKey(member));
+        return null;
+      }
+      return entry;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  // Merge cached RSVP into a member object (in-place).
+  // Only applies the cache when it is NEWER than the API response
+  // (or when the API response has no timestamp to compare against).
+  function applyCacheToMember(member, apiTimestamp) {
+    var cached = loadRsvpFromCache(member);
+    if (!cached) return;
+
+    // If the API response carries a timestamp, only override when the
+    // cache is newer (i.e. submitted after the last API write completed).
+    if (apiTimestamp) {
+      var apiMs = new Date(apiTimestamp).getTime();
+      if (isNaN(apiMs) || cached.timestamp <= apiMs) return;
+    }
+
+    // Apply the cached values
+    member.rsvp               = cached.rsvp               || member.rsvp;
+    member.nutAllergy         = cached.nutAllergy         !== undefined ? cached.nutAllergy         : member.nutAllergy;
+    member.dietaryRestrictions= cached.dietaryRestrictions !== undefined ? cached.dietaryRestrictions : member.dietaryRestrictions;
+    member.email              = cached.email              !== undefined ? cached.email              : member.email;
+    member.phone              = cached.phone              !== undefined ? cached.phone              : member.phone;
+  }
+
   // ── Auto-restore session ──────────────────────────────────
   (function restoreSession() {
     if (localStorage.getItem(LS_PASSWORD_KEY) === 'true') {
@@ -186,6 +254,33 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (RSVP_API_URL) {
       rsvpLoadingEl.style.display = 'flex';
+
+      // ── Optimistic cache render ──────────────────────────────
+      // Check if any party member has a fresh cache entry.  If so,
+      // build a lightweight skeleton from the local data so the
+      // roster appears immediately — the API fetch runs in
+      // parallel and will refresh the view once it resolves.
+      var tagsStr = decryptedStr.includes('|') ? decryptedStr.split('|').slice(1).join('|') : decryptedStr;
+      var cachedOptimisticKey = RSVP_CACHE_PREFIX +
+        (realFirstName.toLowerCase() + '_' + lname.toLowerCase()).replace(/\s+/g, '_');
+      var optimisticCache = null;
+      try { optimisticCache = localStorage.getItem(cachedOptimisticKey); } catch(e) {}
+      if (optimisticCache) {
+        try {
+          var parsed = JSON.parse(optimisticCache);
+          if (parsed && parsed.timestamp && (Date.now() - parsed.timestamp) < RSVP_CACHE_TTL_MS) {
+            // Show the roster immediately from cache while API loads
+            renderPartyRosterFallback(realFirstName, fname, lname, tagsStr);
+            // Patch the cached member's RSVP into the fallback member
+            if (currentPartyData && currentPartyData.members && currentPartyData.members[0]) {
+              applyCacheToMember(currentPartyData.members[0], null);
+              renderPartyRoster(currentPartyData);
+            }
+          }
+        } catch(e) {}
+      }
+      // ── End optimistic render ───────────────────────────────
+
       try {
         var partyData = await fetchRSVPData(fname, lname);
         currentPartyData = partyData;
@@ -196,8 +291,9 @@ document.addEventListener('DOMContentLoaded', function () {
         rsvpLoadingEl.style.display = 'none';
         rsvpErrorBanner.style.display = 'block';
         // Fall back: create a single-member roster from the encrypted local data
-        var tagsStr = decryptedStr.includes('|') ? decryptedStr.split('|').slice(1).join('|') : decryptedStr;
-        renderPartyRosterFallback(realFirstName, fname, lname, tagsStr);
+        if (!currentPartyData) {
+          renderPartyRosterFallback(realFirstName, fname, lname, tagsStr);
+        }
       }
     } else {
       // No API — schedule-only fallback
@@ -280,6 +376,16 @@ document.addEventListener('DOMContentLoaded', function () {
     var data = await response.json();
 
     if (!data.success) throw new Error(data.error || 'Lookup failed');
+
+    // Merge any locally-cached RSVP data that is newer than what
+    // the API returned (guards against the 3-5 s propagation window).
+    var apiTimestamp = data.timestamp || null;
+    if (data.members && Array.isArray(data.members)) {
+      data.members.forEach(function (m) {
+        applyCacheToMember(m, apiTimestamp);
+      });
+    }
+
     return data;
   }
 
@@ -755,6 +861,14 @@ document.addEventListener('DOMContentLoaded', function () {
         if (dietary) currentMember.dietaryRestrictions = dietary.value.trim();
         if (email) currentMember.email = email.value.trim();
         if (phone) currentMember.phone = phone.value.trim();
+
+        // ── Persist to local cache ────────────────────────────
+        // Write the just-submitted values to localStorage so that
+        // if the user navigates away and returns before the database
+        // fully propagates (3-5 s window), we show the correct data
+        // instead of the stale API response.
+        saveRsvpToCache(currentMember);
+        // ── End cache persist ─────────────────────────────────
 
         // Update roster card and header badge
         updateRosterCard(currentMember);

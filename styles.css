@@ -1332,23 +1332,26 @@ footer.site-footer {
   transition: all 0.3s ease;
 }
 
-.rsvp-toggle:hover {
-  border-color: rgba(255, 255, 255, 0.35);
-  color: rgba(255, 255, 255, 0.8);
+/* Hover only on pointer devices — prevents stuck-highlight on mobile tap */
+@media (hover: hover) {
+  .rsvp-toggle:hover {
+    border-color: rgba(255, 255, 255, 0.35);
+    color: rgba(255, 255, 255, 0.8);
+  }
 }
 
-/* Accept — warm gold accent */
+/* Accept — warm gold accent (more opaque so it reads clearly) */
 .rsvp-toggle.accept.selected {
-  background: rgba(201, 169, 110, 0.2);
-  border-color: rgba(201, 169, 110, 0.6);
-  color: #c9a96e;
+  background: rgba(201, 169, 110, 0.35);
+  border-color: rgba(201, 169, 110, 0.85);
+  color: #e0c07e;
 }
 
-/* Decline — muted subtle */
+/* Decline — muted rose/red so it's clearly distinct from unselected */
 .rsvp-toggle.decline.selected {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.25);
-  color: rgba(255, 255, 255, 0.5);
+  background: rgba(200, 70, 70, 0.18);
+  border-color: rgba(220, 100, 100, 0.55);
+  color: rgba(240, 160, 160, 0.9);
 }
 
 
@@ -1804,35 +1807,41 @@ footer.site-footer {
   color: rgba(245, 240, 234, 0.7);
 }
 
-.card-rsvp-col .rsvp-toggle.accept:hover {
-  background: rgba(201, 169, 110, 0.12);
-  border-color: rgba(201, 169, 110, 0.5);
-  color: #c9a96e;
+/* Hover only on pointer devices — prevents stuck-highlight on mobile after deselect */
+@media (hover: hover) {
+  .card-rsvp-col .rsvp-toggle.accept:hover {
+    background: rgba(201, 169, 110, 0.18);
+    border-color: rgba(201, 169, 110, 0.55);
+    color: #c9a96e;
+  }
 }
 
 .card-rsvp-col .rsvp-toggle.accept.selected {
-  background: rgba(201, 169, 110, 0.2);
-  border-color: rgba(201, 169, 110, 0.65);
-  color: #c9a96e;
-  box-shadow: 0 0 0 1px rgba(201, 169, 110, 0.2);
+  background: rgba(201, 169, 110, 0.35);
+  border-color: rgba(201, 169, 110, 0.85);
+  color: #e0c07e;
+  box-shadow: 0 0 0 1px rgba(201, 169, 110, 0.25);
 }
 
-/* Muted for Decline */
+/* Decline */
 .card-rsvp-col .rsvp-toggle.decline {
   border-color: rgba(255, 255, 255, 0.1);
   color: rgba(245, 240, 234, 0.35);
 }
 
-.card-rsvp-col .rsvp-toggle.decline:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.2);
-  color: rgba(245, 240, 234, 0.6);
+@media (hover: hover) {
+  .card-rsvp-col .rsvp-toggle.decline:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: rgba(245, 240, 234, 0.6);
+  }
 }
 
 .card-rsvp-col .rsvp-toggle.decline.selected {
-  background: rgba(255, 255, 255, 0.07);
-  border-color: rgba(255, 255, 255, 0.2);
-  color: rgba(245, 240, 234, 0.55);
+  background: rgba(200, 70, 70, 0.2);
+  border-color: rgba(220, 100, 100, 0.6);
+  color: rgba(240, 160, 160, 0.9);
+  box-shadow: 0 0 0 1px rgba(200, 70, 70, 0.15);
 }
 
 

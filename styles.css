@@ -1418,6 +1418,13 @@ footer.site-footer {
   margin-left: 2px;
 }
 
+.rsvp-optional {
+  color: rgba(255, 255, 255, 0.4);
+  font-style: normal;
+  font-size: 0.85em;
+  margin-left: 4px;
+}
+
 .rsvp-input {
   width: 100%;
   background: rgba(0, 0, 0, 0.2);

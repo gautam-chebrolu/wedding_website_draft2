@@ -60,6 +60,7 @@ async function writeToFirestore(payload, timestamp) {
         party: party,
         nutAllergy: m.nutAllergy || '',
         dietaryRestrictions: m.dietaryRestrictions || '',
+        songRequests: m.songRequests || '',
         email: m.email || '',
         phone: m.phone || '',
         rsvpTimestamp: timestamp || new Date().toISOString(),
@@ -122,7 +123,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // ── RSVP Local Cache ──────────────────────────────────────
   // Cache structure per member key:
-  //   { rsvp, nutAllergy, dietaryRestrictions, email, phone, timestamp }
+  //   { rsvp, nutAllergy, dietaryRestrictions, songRequests, email, phone, timestamp }
   // We keep cached data for up to 30 minutes to cover the database
   // propagation window (typically 3-5 seconds) and guard against
   // a stale API response overwriting a just-submitted RSVP.
@@ -139,6 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
         rsvp: member.rsvp || {},
         nutAllergy: member.nutAllergy || '',
         dietaryRestrictions: member.dietaryRestrictions || '',
+        songRequests: member.songRequests || '',
         email: member.email || '',
         phone: member.phone || '',
         timestamp: Date.now()
@@ -184,6 +186,7 @@ document.addEventListener('DOMContentLoaded', function () {
     member.rsvp               = cached.rsvp               || member.rsvp;
     member.nutAllergy         = cached.nutAllergy         !== undefined ? cached.nutAllergy         : member.nutAllergy;
     member.dietaryRestrictions= cached.dietaryRestrictions !== undefined ? cached.dietaryRestrictions : member.dietaryRestrictions;
+    member.songRequests       = cached.songRequests       !== undefined ? cached.songRequests       : member.songRequests;
     member.email              = cached.email              !== undefined ? cached.email              : member.email;
     member.phone              = cached.phone              !== undefined ? cached.phone              : member.phone;
   }
@@ -440,6 +443,7 @@ document.addEventListener('DOMContentLoaded', function () {
       rsvp: {},
       nutAllergy: '',
       dietaryRestrictions: '',
+      songRequests: '',
       email: '',
       phone: ''
     };
@@ -687,6 +691,13 @@ document.addEventListener('DOMContentLoaded', function () {
     html += '<input type="text" id="dietary_' + mid + '" class="rsvp-input" placeholder="e.g. Vegetarian, Gluten-free" value="' + escapeAttr(dietaryVal) + '">';
     html += '</div>';
 
+    // Song requests (optional)
+    var songVal = member.songRequests || '';
+    html += '<div class="rsvp-field">';
+    html += '<label for="song_' + mid + '">Song Requests <span class="rsvp-optional">(optional)</span></label>';
+    html += '<input type="text" id="song_' + mid + '" class="rsvp-input" placeholder="e.g. Dancing Queen, September" value="' + escapeAttr(songVal) + '">';
+    html += '</div>';
+
     // Email
     var emailVal = member.email || '';
     html += '<div class="rsvp-field">';
@@ -786,6 +797,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Collect supplemental questions
     var nutRadio = document.querySelector('input[name="nut_' + mid + '"]:checked');
     var dietary  = document.getElementById('dietary_' + mid);
+    var song     = document.getElementById('song_' + mid);
     var email    = document.getElementById('email_' + mid);
     var phone    = document.getElementById('phone_' + mid);
 
@@ -836,6 +848,7 @@ document.addEventListener('DOMContentLoaded', function () {
         rsvp: rsvp,
         nutAllergy: nutRadio ? nutRadio.value : '',
         dietaryRestrictions: dietary ? dietary.value.trim() : '',
+        songRequests: song ? song.value.trim() : '',
         email: email ? email.value.trim() : '',
         phone: phone ? phone.value.trim() : ''
       }]
@@ -859,6 +872,7 @@ document.addEventListener('DOMContentLoaded', function () {
         currentMember.rsvp = rsvp;
         if (nutRadio) currentMember.nutAllergy = nutRadio.value;
         if (dietary) currentMember.dietaryRestrictions = dietary.value.trim();
+        if (song) currentMember.songRequests = song.value.trim();
         if (email) currentMember.email = email.value.trim();
         if (phone) currentMember.phone = phone.value.trim();
 

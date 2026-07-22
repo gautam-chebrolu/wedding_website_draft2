@@ -167,6 +167,15 @@
     // Custom zoom control (bottom right, away from content)
     L.control.zoom({ position: 'bottomright' }).addTo(map);
 
+    // ── Read guest event access from session (written by schedule.js) ──
+    // Returns the set of event names the guest is invited to, or null
+    // if they haven't been through the schedule page yet.
+    var guestEvents = null;
+    try {
+      var raw = sessionStorage.getItem('pg_guest_events');
+      if (raw) guestEvents = JSON.parse(raw);
+    } catch (e) {}
+
     // ── Build markers ───────────────────────────────────────────
     var layerGroups = {
       venue:      L.layerGroup(),
@@ -179,9 +188,21 @@
 
     if (typeof TRAVEL_LOCATIONS !== 'undefined') {
       TRAVEL_LOCATIONS.forEach(function (loc) {
+
+        // ── Access gate ─────────────────────────────────────────
+        // If a location has eventKeys, only show it when the guest's
+        // session includes at least one of those event names.
+        // Locations with no eventKeys are always visible (public pins).
+        if (loc.eventKeys && loc.eventKeys.length > 0) {
+          if (!guestEvents) return;   // No session yet — skip restricted pin
+          var hasAccess = loc.eventKeys.some(function (key) {
+            return guestEvents.indexOf(key) !== -1;
+          });
+          if (!hasAccess) return;     // Not invited to any matching event
+        }
+
         var cfg   = CAT_CONFIG[loc.category] || CAT_CONFIG.venue;
         var icon  = ICONS[loc.category] || ICONS.venue;
-        var color = cfg.color;
 
         // Custom div icon
         var divIcon = L.divIcon({
@@ -225,6 +246,7 @@
         allLatLngs.push([loc.lat, loc.lng]);
       });
     }
+
 
     // Add all layer groups to the map
     Object.values(layerGroups).forEach(function (lg) { lg.addTo(map); });

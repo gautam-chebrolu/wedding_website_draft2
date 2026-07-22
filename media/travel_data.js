@@ -17,7 +17,7 @@ const TRAVEL_LOCATIONS = [
     address: '3001 Cameron Blvd, Durham, NC 27705',
     lat: 36.0010,
     lng: -78.9274,
-    note: 'Our primary venue and the recommended hotel for the wedding weekend.',
+    note: 'Our primary venue for Wedding and Reception and the recommended hotel for the wedding weekend.',
     mapsUrl: 'https://maps.app.goo.gl/Z63vBuTvGSHRSrmQ8'
   },
   {
@@ -27,8 +27,9 @@ const TRAVEL_LOCATIONS = [
     address: '9400 Club Hill Dr, Raleigh, NC 27617',
     lat: 35.8963,
     lng: -78.7601,
-    note: 'Country club near Gupta family home..',
-    mapsUrl: 'https://maps.app.goo.gl/6pFxXeqZ9exSPwhj9'
+    note: 'Sangeet Venue. Round-trip shuttle available to/from Washington Duke Inn.',
+    mapsUrl: 'https://maps.app.goo.gl/6pFxXeqZ9exSPwhj9',
+    eventKeys: ['Sangeet']   // Only shown if guest is invited to Sangeet
   },
   {
     id: 'gupta-home',
@@ -37,8 +38,9 @@ const TRAVEL_LOCATIONS = [
     address: '10809 Ashland Mill Ct, Raleigh, NC 27617',
     lat: 35.8788,
     lng: -78.7468,
-    note: 'The Gupta Family Home',
-    mapsUrl: 'https://maps.app.goo.gl/YyQiM6BrSnzfmkYj8'
+    note: 'Haldi Venue. Host home for our traditional ceremonies throughout the weekend.',
+    mapsUrl: 'https://maps.app.goo.gl/YyQiM6BrSnzfmkYj8',
+    eventKeys: ['Haldi', 'Ganesh Puja', 'Satyanarayana Puja']   // Any of these grants access
   },
 
   // ── Airport ────────────────────────────────────────────────────

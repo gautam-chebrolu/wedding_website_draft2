@@ -431,6 +431,11 @@ document.addEventListener('DOMContentLoaded', function () {
       var card = buildMemberRosterCard(member, isParty, true);
       partyRoster.appendChild(card);
     });
+
+    // Persist every event name across all party members so the
+    // Travel page can show only the relevant venue pins, even
+    // if the guest navigates to it from a different tab.
+    saveGuestEventsToSession(members);
   }
 
   // Fallback when API is unavailable — single-member roster from local data
@@ -452,6 +457,26 @@ document.addEventListener('DOMContentLoaded', function () {
     partyRoster.innerHTML = '';
     var card = buildMemberRosterCard(fakeMember, false, false);
     partyRoster.appendChild(card);
+
+    saveGuestEventsToSession([fakeMember]);
+  }
+
+  // Collect the union of all event names across a party and write to
+  // sessionStorage so the Travel page map can filter venue pins.
+  function saveGuestEventsToSession(members) {
+    try {
+      var eventSet = {};
+      members.forEach(function (m) {
+        if (Array.isArray(m.events)) {
+          m.events.forEach(function (ev) {
+            if (ev) eventSet[ev.trim()] = true;
+          });
+        }
+      });
+      sessionStorage.setItem('pg_guest_events', JSON.stringify(Object.keys(eventSet)));
+    } catch (e) {
+      // sessionStorage unavailable — travel map will fall back to public-only pins
+    }
   }
 
   function buildMemberRosterCard(member, showLastName, apiAvailable) {

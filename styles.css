@@ -2009,3 +2009,345 @@ footer.site-footer {
     padding: 16px 20px;
   }
 }
+
+
+/* ═══════════════════════════════════════════════════════════════
+   TRAVEL PAGE — Interactive Map
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Section wrapper ──────────────────────────────────────────── */
+.travel-map-section {
+  margin-top: 48px;
+}
+
+.travel-map-header {
+  margin-bottom: 24px;
+}
+
+.travel-map-title {
+  font-size: clamp(22px, 4vw, 28px);
+  font-weight: 600;
+  color: var(--clr-cream, #f5f0ea);
+  letter-spacing: 0.02em;
+  margin: 0 0 6px;
+}
+
+.travel-map-subtitle {
+  font-size: 15px;
+  color: rgba(245, 240, 234, 0.5);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ── Filter tabs ──────────────────────────────────────────────── */
+.map-filter-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.map-filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 16px;
+  border-radius: 100px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(245, 240, 234, 0.55);
+  font-size: 13px;
+  font-family: inherit;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.map-filter-btn:hover {
+  border-color: rgba(201, 169, 110, 0.35);
+  color: rgba(245, 240, 234, 0.8);
+  background: rgba(201, 169, 110, 0.07);
+}
+
+.map-filter-btn.active {
+  border-color: rgba(201, 169, 110, 0.5);
+  background: rgba(201, 169, 110, 0.12);
+  color: #c9a96e;
+}
+
+.filter-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.filter-dot--venue      { background: #c9a96e; }
+.filter-dot--airport    { background: #7ab8c9; }
+.filter-dot--restaurant { background: #c97a7a; }
+.filter-dot--hotel      { background: #8fbc8f; }
+
+/* ── Map container ────────────────────────────────────────────── */
+.travel-map-wrap {
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.45);
+}
+
+#travel-map {
+  height: 520px;
+  width: 100%;
+  background: #0e0e0e;
+}
+
+/* Strip Leaflet's branded default div-icon background */
+.leaflet-div-icon {
+  background: none !important;
+  border: none !important;
+}
+
+/* ── Custom map markers ───────────────────────────────────────── */
+.travel-marker-wrap {
+  /* Leaflet outer wrapper — keep clean */
+}
+
+.t-marker {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5), 0 0 0 4px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.2s ease;
+}
+
+.t-marker:hover {
+  transform: scale(1.2);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6), 0 0 0 6px rgba(0, 0, 0, 0.15);
+}
+
+.t-marker--venue {
+  background: rgba(201, 169, 110, 0.22);
+  border-color: rgba(201, 169, 110, 0.75);
+  color: #c9a96e;
+}
+
+.t-marker--airport {
+  background: rgba(122, 184, 201, 0.22);
+  border-color: rgba(122, 184, 201, 0.75);
+  color: #7ab8c9;
+}
+
+.t-marker--restaurant {
+  background: rgba(201, 122, 122, 0.22);
+  border-color: rgba(201, 122, 122, 0.75);
+  color: #c97a7a;
+}
+
+.t-marker--hotel {
+  background: rgba(143, 188, 143, 0.22);
+  border-color: rgba(143, 188, 143, 0.75);
+  color: #8fbc8f;
+}
+
+/* ── Popup overrides ──────────────────────────────────────────── */
+.travel-popup .leaflet-popup-content-wrapper {
+  background: rgba(12, 10, 8, 0.96) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(201, 169, 110, 0.2) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.7) !important;
+  padding: 0 !important;
+  color: #f5f0ea;
+}
+
+.travel-popup .leaflet-popup-tip-container {
+  margin-top: -1px;
+}
+
+.travel-popup .leaflet-popup-tip {
+  background: rgba(12, 10, 8, 0.96) !important;
+  box-shadow: none !important;
+}
+
+.travel-popup .leaflet-popup-content {
+  margin: 0 !important;
+  width: auto !important;
+  font-family: inherit;
+}
+
+.travel-popup .leaflet-popup-close-button {
+  color: rgba(245, 240, 234, 0.4) !important;
+  font-size: 18px !important;
+  top: 10px !important;
+  right: 12px !important;
+  padding: 0 !important;
+  transition: color 0.15s ease;
+}
+
+.travel-popup .leaflet-popup-close-button:hover {
+  color: rgba(245, 240, 234, 0.85) !important;
+}
+
+/* Override Leaflet attribution to blend with dark map */
+.leaflet-control-attribution {
+  background: rgba(0, 0, 0, 0.55) !important;
+  color: rgba(255, 255, 255, 0.4) !important;
+  font-size: 10px !important;
+}
+
+.leaflet-control-attribution a {
+  color: rgba(201, 169, 110, 0.7) !important;
+}
+
+/* Zoom control styling */
+.leaflet-control-zoom a {
+  background: rgba(15, 12, 10, 0.9) !important;
+  color: rgba(245, 240, 234, 0.7) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.leaflet-control-zoom a:hover {
+  background: rgba(30, 25, 20, 0.95) !important;
+  color: #c9a96e !important;
+}
+
+/* ── Popup inner content ──────────────────────────────────────── */
+.popup-inner {
+  padding: 18px 20px 16px;
+  min-width: 220px;
+}
+
+.popup-cat {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  opacity: 0.85;
+}
+
+.popup-cat--venue      { color: #c9a96e; }
+.popup-cat--airport    { color: #7ab8c9; }
+.popup-cat--restaurant { color: #c97a7a; }
+.popup-cat--hotel      { color: #8fbc8f; }
+
+.popup-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #f5f0ea;
+  line-height: 1.3;
+  margin-bottom: 3px;
+}
+
+.popup-subtitle {
+  font-size: 13px;
+  color: rgba(245, 240, 234, 0.55);
+  margin-bottom: 10px;
+  font-style: italic;
+}
+
+.popup-address {
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
+  font-size: 12px;
+  color: rgba(245, 240, 234, 0.45);
+  line-height: 1.45;
+  margin-bottom: 8px;
+}
+
+.popup-note {
+  font-size: 12.5px;
+  color: rgba(245, 240, 234, 0.6);
+  line-height: 1.5;
+  margin-bottom: 14px;
+  padding-top: 2px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 10px;
+}
+
+.popup-directions {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #c9a96e;
+  text-decoration: none;
+  letter-spacing: 0.03em;
+  transition: gap 0.15s ease, opacity 0.15s ease;
+}
+
+.popup-directions:hover {
+  gap: 8px;
+  opacity: 0.85;
+}
+
+/* ── Legend ───────────────────────────────────────────────────── */
+.map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 24px;
+  margin-top: 16px;
+  padding: 14px 18px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: rgba(245, 240, 234, 0.55);
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid;
+  flex-shrink: 0;
+}
+
+.legend-dot--venue      { background: rgba(201, 169, 110, 0.22); border-color: rgba(201, 169, 110, 0.75); }
+.legend-dot--airport    { background: rgba(122, 184, 201, 0.22); border-color: rgba(122, 184, 201, 0.75); }
+.legend-dot--restaurant { background: rgba(201, 122, 122, 0.22); border-color: rgba(201, 122, 122, 0.75); }
+.legend-dot--hotel      { background: rgba(143, 188, 143, 0.22); border-color: rgba(143, 188, 143, 0.75); }
+
+/* ── Responsive ───────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  #travel-map {
+    height: 380px;
+  }
+
+  .map-filter-tabs {
+    gap: 6px;
+  }
+
+  .map-filter-btn {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+
+  .popup-inner {
+    padding: 14px 16px 12px;
+    min-width: 180px;
+  }
+
+  .popup-name {
+    font-size: 14px;
+  }
+}

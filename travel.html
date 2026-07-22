@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Travel — Priya &amp; Gautam</title>
+  <meta name="description" content="Hotels, directions, and an interactive map of wedding venues and local favorites for Priya and Gautam's wedding in Durham, NC." />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" type="image/x-icon" href="media/wedding_logo.svg">
+
+  <!-- Leaflet CSS (no npm install needed) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
+</head>
+
+<body>
+
+  <!-- ── Navigation ─────────────────────────────────────────── -->
+  <nav class="site-nav scrolled" aria-label="Main navigation">
+    <a href="index.html" class="nav-logo" aria-label="Home">
+      <img src="media/wedding_logo.svg" alt="Priya &amp; Gautam" />
+    </a>
+    <ul>
+      <li><a href="schedule.html">Schedule / RSVP</a></li>
+      <li><a href="travel.html" class="active">Travel</a></li>
+      <li><a href="funds.html">Gifts</a></li>
+      <li><a href="pictures.html">Pictures</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-wrapper">
+    <div class="page-header" aria-hidden="true"></div>
+
+    <header class="page-hero">
+      <h1>Travel</h1>
+      <p class="page-subtitle">Getting Here &amp; Around</p>
+    </header>
+
+    <main class="page-content">
+
+      <!-- ── Hotel Card ────────────────────────────────────── -->
+      <div class="info-card">
+        <h2>Washington Duke Inn &amp; Golf Club</h2>
+        <p>
+          We've reserved a room block for our wedding guests at the Washington Duke Inn &amp; Golf Club. Guests can use our
+          discounted wedding rate by booking through the link below. We recommend reserving early, as availability is
+          limited.
+        </p>
+        <a href="https://reservations.travelclick.com/11999?groupID=4972379" class="btn" target="_blank"
+          rel="noopener noreferrer">Book Room</a>
+        <p>Standard booking is November 20 - 22, but if you want an extended stay, you can request a shoulder room at
+          the same rate by calling the hotel directly at +1-919-490-0999 and referencing the Priya Gupta
+          &amp; Gautam Chebrolu Wedding Block (Group ID: 1168688).</p>
+      </div>
+
+      <!-- ── Interactive Map ──────────────────────────────── -->
+      <section class="travel-map-section" aria-label="Interactive wedding venue map">
+
+        <div class="travel-map-header">
+          <h2 class="travel-map-title">Find Your Way</h2>
+          <p class="travel-map-subtitle">Venues, hotels, and local favorites across the Durham–Raleigh area</p>
+        </div>
+
+        <!-- Filter tabs -->
+        <div class="map-filter-tabs" role="tablist" aria-label="Filter map locations">
+          <button class="map-filter-btn active" data-filter="all" id="filter-all" role="tab" aria-selected="true">
+            All
+          </button>
+          <button class="map-filter-btn" data-filter="venue" id="filter-venue" role="tab" aria-selected="false">
+            <span class="filter-dot filter-dot--venue"></span>Venues
+          </button>
+          <button class="map-filter-btn" data-filter="airport" id="filter-airport" role="tab" aria-selected="false">
+            <span class="filter-dot filter-dot--airport"></span>Airport
+          </button>
+          <button class="map-filter-btn" data-filter="restaurant" id="filter-restaurant" role="tab" aria-selected="false">
+            <span class="filter-dot filter-dot--restaurant"></span>Restaurants
+          </button>
+        </div>
+
+        <!-- Map container -->
+        <div class="travel-map-wrap">
+          <div id="travel-map" aria-label="Map of wedding venues and local favorites"></div>
+        </div>
+
+        <!-- Legend -->
+        <div class="map-legend" aria-label="Map legend">
+          <div class="legend-item">
+            <span class="legend-dot legend-dot--venue"></span>
+            <span>Wedding Venues</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot legend-dot--airport"></span>
+            <span>Airport</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot legend-dot--restaurant"></span>
+            <span>Restaurants &amp; Spots</span>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+    <div class="contact-strip">
+      Need to reach us? E-mail us at
+      <a href="mailto:priyagupta0829@gmail.com,varpra1@gmail.com?subject=Wedding%20Question">priyagupta0829@gmail.com
+        and varpra1@gmail.com</a>
+      or call&nbsp;/&nbsp;text us at
+      <a href="tel:+19197575166">919-757-5166</a> or <a href="tel:+17066629655">706-662-9655</a>.
+    </div>
+
+    <footer class="site-footer">
+      Priya &amp; Gautam &nbsp;·&nbsp; 2026
+    </footer>
+  </div>
+
+  <script src="main.js"></script>
+  <script src="media/travel_data.js"></script>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV/XN/WLs=" crossorigin=""></script>
+
+  <script>
+  (function () {
+    // ── SVG icons for each category ─────────────────────────────
+    var ICONS = {
+      venue: '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>',
+      airport: '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>',
+      restaurant: '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg>',
+      hotel: '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 13c1.66 0 3-1.34 3-3S8.66 7 7 7s-3 1.34-3 3 1.34 3 3 3zm12-6h-8v7H3V5H1v15h2v-3h18v3h2v-9c0-2.21-1.79-4-4-4z"/></svg>'
+    };
+
+    // ── Category config ─────────────────────────────────────────
+    var CAT_CONFIG = {
+      venue:      { color: '#c9a96e', label: 'Wedding Venue' },
+      airport:    { color: '#7ab8c9', label: 'Airport' },
+      restaurant: { color: '#c97a7a', label: 'Restaurant & Spot' },
+      hotel:      { color: '#8fbc8f', label: 'Hotel' }
+    };
+
+    // ── Initialise map ──────────────────────────────────────────
+    var map = L.map('travel-map', {
+      zoomControl: false,
+      attributionControl: true,
+      scrollWheelZoom: false   // prevent accidental scroll-hijack; re-enable on click
+    });
+
+    // Enable scroll-wheel zoom once user has interacted with the map
+    map.once('focus', function () { map.scrollWheelZoom.enable(); });
+    document.getElementById('travel-map').addEventListener('click', function () {
+      map.scrollWheelZoom.enable();
+    });
+
+    // CartoDB Dark Matter tiles — dark aesthetic, no API key required
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>',
+      subdomains: 'abcd',
+      maxZoom: 19
+    }).addTo(map);
+
+    // Custom zoom control (bottom right, away from content)
+    L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+    // ── Build markers ───────────────────────────────────────────
+    var layerGroups = {
+      venue:      L.layerGroup(),
+      airport:    L.layerGroup(),
+      restaurant: L.layerGroup(),
+      hotel:      L.layerGroup()
+    };
+
+    var allLatLngs = [];
+
+    if (typeof TRAVEL_LOCATIONS !== 'undefined') {
+      TRAVEL_LOCATIONS.forEach(function (loc) {
+        var cfg   = CAT_CONFIG[loc.category] || CAT_CONFIG.venue;
+        var icon  = ICONS[loc.category] || ICONS.venue;
+        var color = cfg.color;
+
+        // Custom div icon
+        var divIcon = L.divIcon({
+          className: 'travel-marker-wrap',
+          html: '<div class="t-marker t-marker--' + loc.category + '" title="' + loc.name + '">'
+              + icon
+              + '</div>',
+          iconSize:    [40, 40],
+          iconAnchor:  [20, 20],
+          popupAnchor: [0, -24]
+        });
+
+        // Popup content
+        var popupHtml = '<div class="popup-inner">'
+          + '<div class="popup-cat popup-cat--' + loc.category + '">' + cfg.label + '</div>'
+          + '<div class="popup-name">' + loc.name + '</div>'
+          + (loc.subtitle ? '<div class="popup-subtitle">' + loc.subtitle + '</div>' : '')
+          + '<div class="popup-address">'
+          +   '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0;opacity:.6;margin-top:1px" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>'
+          +   loc.address
+          + '</div>'
+          + (loc.note ? '<div class="popup-note">' + loc.note + '</div>' : '')
+          + '<a href="' + loc.mapsUrl + '" class="popup-directions" target="_blank" rel="noopener noreferrer">'
+          +   'Get Directions'
+          +   '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>'
+          + '</a>'
+          + '</div>';
+
+        var popup = L.popup({
+          className:    'travel-popup',
+          maxWidth:     290,
+          closeButton:  true,
+          autoPanPadding: [20, 20]
+        }).setContent(popupHtml);
+
+        var marker = L.marker([loc.lat, loc.lng], { icon: divIcon })
+          .bindPopup(popup);
+
+        var lg = layerGroups[loc.category];
+        if (lg) lg.addLayer(marker);
+
+        allLatLngs.push([loc.lat, loc.lng]);
+      });
+    }
+
+    // Add all layer groups to the map
+    Object.values(layerGroups).forEach(function (lg) { lg.addTo(map); });
+
+    // Fit map to all markers with padding
+    if (allLatLngs.length > 0) {
+      map.fitBounds(allLatLngs, { padding: [48, 48] });
+    } else {
+      // Default view — Durham / Raleigh area
+      map.setView([35.94, -78.83], 11);
+    }
+
+    // ── Filter tabs ─────────────────────────────────────────────
+    document.querySelectorAll('.map-filter-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        document.querySelectorAll('.map-filter-btn').forEach(function (b) {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+
+        var filter = btn.dataset.filter;
+
+        Object.entries(layerGroups).forEach(function (entry) {
+          var cat = entry[0];
+          var lg  = entry[1];
+          if (filter === 'all' || filter === cat) {
+            map.addLayer(lg);
+          } else {
+            map.removeLayer(lg);
+          }
+        });
+      });
+    });
+
+  })();
+  </script>
+
+  <img src="media/dahlia.svg" class="dahlia-corner" aria-hidden="true" alt="" />
+</body>
+
+</html>

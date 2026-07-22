@@ -1128,6 +1128,12 @@ footer.site-footer {
   background: rgba(201, 169, 110, 0.1);
 }
 
+.roster-badge.not-attending {
+  color: #c97a7a;
+  border-color: rgba(201, 122, 122, 0.35);
+  background: rgba(201, 122, 122, 0.08);
+}
+
 .roster-badge.declined {
   color: rgba(245, 240, 234, 0.4);
   border-color: rgba(255, 255, 255, 0.1);
@@ -1234,6 +1240,12 @@ footer.site-footer {
   color: #c9a96e;
   border-color: rgba(201, 169, 110, 0.35);
   background: rgba(201, 169, 110, 0.1);
+}
+
+.member-rsvp-badge.not-attending {
+  color: #c97a7a;
+  border-color: rgba(201, 122, 122, 0.35);
+  background: rgba(201, 122, 122, 0.08);
 }
 
 .member-rsvp-badge.declined {

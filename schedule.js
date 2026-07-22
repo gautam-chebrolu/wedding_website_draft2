@@ -470,6 +470,9 @@ document.addEventListener('DOMContentLoaded', function () {
     } else if (answeredCount < totalEvents) {
       // Some events still unanswered
       badgeHtml = '<span class="roster-badge partial">Partially Responded</span>';
+    } else if (declinedCount === answeredCount) {
+      // All answered, all declined
+      badgeHtml = '<span class="roster-badge not-attending">Not Attending</span>';
     } else if (declinedCount > 0) {
       // All answered, at least one decline
       badgeHtml = '<span class="roster-badge attending-some">Attending Some</span>';
@@ -1047,6 +1050,8 @@ document.addEventListener('DOMContentLoaded', function () {
       return { cls: 'pending', label: 'RSVP Pending' };
     } else if (answeredCount < totalEvents) {
       return { cls: 'partial', label: 'Partially Responded' };
+    } else if (declinedCount === answeredCount) {
+      return { cls: 'not-attending', label: 'Not Attending' };
     } else if (declinedCount > 0) {
       return { cls: 'attending-some', label: 'Attending Some' };
     } else {

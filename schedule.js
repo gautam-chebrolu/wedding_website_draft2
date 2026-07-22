@@ -482,7 +482,13 @@ document.addEventListener('DOMContentLoaded', function () {
   function buildMemberRosterCard(member, showLastName, apiAvailable) {
     var rsvpEntries = Object.keys(member.rsvp || {});
     var totalEvents = member.events ? member.events.length : 0;
-    var answeredCount = rsvpEntries.length;
+    // Only count entries with an explicit 'accepted' or 'declined' value.
+    // Keys with null/empty/undefined values (e.g. from unclicking a toggle)
+    // must not be treated as answered.
+    var answeredCount = rsvpEntries.filter(function (k) {
+      var v = member.rsvp[k];
+      return v === 'accepted' || v === 'declined';
+    }).length;
     var declinedCount = 0;
     rsvpEntries.forEach(function (k) {
       if (member.rsvp[k] === 'declined') declinedCount++;
@@ -1065,7 +1071,12 @@ document.addEventListener('DOMContentLoaded', function () {
   // Shared badge-state logic: returns { cls, label } based on answered vs total events
   function getBadgeState(rsvp, totalEvents) {
     var rsvpEntries = Object.keys(rsvp || {});
-    var answeredCount = rsvpEntries.length;
+    // Only count entries with an explicit 'accepted' or 'declined' value.
+    // Keys with null/empty/undefined values must not be treated as answered.
+    var answeredCount = rsvpEntries.filter(function (k) {
+      var v = rsvp[k];
+      return v === 'accepted' || v === 'declined';
+    }).length;
     var declinedCount = 0;
     rsvpEntries.forEach(function (k) {
       if (rsvp[k] === 'declined') declinedCount++;

@@ -14,7 +14,6 @@ const TRAVEL_LOCATIONS = [
     id: 'washington-duke',
     category: 'venue',
     name: 'Washington Duke Inn & Golf Club',
-    subtitle: 'Wedding, Reception & Hotel',
     address: '3001 Cameron Blvd, Durham, NC 27705',
     lat: 36.0010,
     lng: -78.9274,
@@ -25,22 +24,20 @@ const TRAVEL_LOCATIONS = [
     id: 'brier-creek',
     category: 'venue',
     name: 'Brier Creek Country Club',
-    subtitle: 'Sangeet — November 20',
     address: '9400 Club Hill Dr, Raleigh, NC 27617',
     lat: 35.8963,
     lng: -78.7601,
-    note: 'Venue for our Sangeet. Round-trip shuttle available to/from Washington Duke Inn.',
+    note: 'Country club near Gupta family home..',
     mapsUrl: 'https://maps.app.goo.gl/6pFxXeqZ9exSPwhj9'
   },
   {
     id: 'gupta-home',
     category: 'venue',
     name: 'Gupta Home',
-    subtitle: 'Ganesh Puja, Haldi & Satyanārāyaṇa Puja',
     address: '10809 Ashland Mill Ct, Raleigh, NC 27617',
     lat: 35.8788,
     lng: -78.7468,
-    note: 'Host home for our traditional ceremonies throughout the weekend.',
+    note: 'The Gupta Family Home',
     mapsUrl: 'https://maps.app.goo.gl/YyQiM6BrSnzfmkYj8'
   },
 
@@ -49,7 +46,6 @@ const TRAVEL_LOCATIONS = [
     id: 'rdu',
     category: 'airport',
     name: 'RDU International Airport',
-    subtitle: 'Raleigh-Durham International Airport',
     address: '2400 W Terminal Blvd, Morrisville, NC 27560',
     lat: 35.8776,
     lng: -78.7875,
@@ -64,7 +60,6 @@ const TRAVEL_LOCATIONS = [
   //   id: 'unique-id',          // lowercase, no spaces
   //   category: 'restaurant',
   //   name: 'Restaurant Name',
-  //   subtitle: 'Cuisine type or brief tagline',
   //   address: 'Full street address',
   //   lat: 36.0000,             // decimal latitude
   //   lng: -78.9000,            // decimal longitude (negative for USA)

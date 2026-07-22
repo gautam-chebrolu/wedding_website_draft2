@@ -10,8 +10,7 @@
   <link rel="icon" type="image/x-icon" href="media/wedding_logo.svg">
 
   <!-- Leaflet CSS (no npm install needed) -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <script>
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
@@ -125,8 +124,7 @@
   <script src="media/travel_data.js"></script>
 
   <!-- Leaflet JS -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV/XN/WLs=" crossorigin=""></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <script>
   (function () {
@@ -200,7 +198,6 @@
         var popupHtml = '<div class="popup-inner">'
           + '<div class="popup-cat popup-cat--' + loc.category + '">' + cfg.label + '</div>'
           + '<div class="popup-name">' + loc.name + '</div>'
-          + (loc.subtitle ? '<div class="popup-subtitle">' + loc.subtitle + '</div>' : '')
           + '<div class="popup-address">'
           +   '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink:0;opacity:.6;margin-top:1px" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>'
           +   loc.address

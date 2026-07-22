@@ -1868,6 +1868,26 @@ footer.site-footer {
    STICKY SAVE BAR
    ═══════════════════════════════════════════════════════════════ */
 
+/* ── Full-page saving overlay ─────────────────────────────────── */
+/* Blocks all interaction while RSVP is submitting. Sits just     */
+/* below the save bar (z-index 499 vs 500) so the saving label   */
+/* is still visible but nothing else is clickable.               */
+.rsvp-saving-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 499;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  cursor: wait;
+  transition: opacity 0.2s ease;
+}
+
+.rsvp-saving-overlay.active {
+  display: block;
+}
+
 .rsvp-save-bar {
   position: fixed;
   bottom: 0;

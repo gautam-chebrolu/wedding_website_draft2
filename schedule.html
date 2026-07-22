@@ -186,6 +186,11 @@
     </div>
   </div>
 
+  <!-- ── Full-page saving overlay ─────────────────────────────── -->
+  <!-- Blocks ALL interaction while RSVP is submitting to prevent  -->
+  <!-- race conditions from toggling buttons during the save.      -->
+  <div id="rsvp-saving-overlay" class="rsvp-saving-overlay" aria-hidden="true"></div>
+
   <!-- Firebase SDK (compat/v8 — works without a bundler) -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>

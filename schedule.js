@@ -107,6 +107,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const rsvpErrorBanner = document.getElementById('rsvp-error-banner');
   const rsvpQuestionsEl = document.getElementById('rsvp-questions-section');
   const rsvpSaveBar = document.getElementById('rsvp-save-bar');
+  const rsvpSavingOverlay = document.getElementById('rsvp-saving-overlay');
   const submitRsvpBtn = document.getElementById('submit-rsvp-btn');
   const updateRsvpBtn = document.getElementById('update-rsvp-btn');
   const rsvpSuccessEl = document.getElementById('rsvp-success');
@@ -894,8 +895,10 @@ document.addEventListener('DOMContentLoaded', function () {
     var activeBtn = hasExisting ? document.getElementById('update-rsvp-btn') : document.getElementById('submit-rsvp-btn');
     var originalLabel = hasExisting ? 'Update RSVP' : 'Save RSVP';
 
-    // Turn the entire save bar into a loading indicator
+    // Turn the entire save bar into a loading indicator and
+    // block all page interaction with the saving overlay.
     rsvpSaveBar.classList.add('loading');
+    if (rsvpSavingOverlay) rsvpSavingOverlay.classList.add('active');
     activeBtn.disabled = true;
 
     try {
@@ -922,8 +925,9 @@ document.addEventListener('DOMContentLoaded', function () {
         updateRosterCard(currentMember);
         updateMemberBadge(currentMember);
 
-        // Hide save bar — changes are now saved
+        // Hide save bar and overlay — changes are now saved
         rsvpSaveBar.classList.remove('loading');
+        if (rsvpSavingOverlay) rsvpSavingOverlay.classList.remove('active');
         hideSaveBar();
 
         // Best-effort Firestore backup (non-blocking, never surfaces errors)
@@ -948,6 +952,7 @@ document.addEventListener('DOMContentLoaded', function () {
       } else {
         showToast('Something went wrong: ' + (result.error || 'Please try again.'));
         rsvpSaveBar.classList.remove('loading');
+        if (rsvpSavingOverlay) rsvpSavingOverlay.classList.remove('active');
         activeBtn.textContent = originalLabel;
         activeBtn.disabled = false;
       }
@@ -955,6 +960,7 @@ document.addEventListener('DOMContentLoaded', function () {
       console.error('Submit error:', err);
       showToast('Network error. Please check your connection and try again.');
       rsvpSaveBar.classList.remove('loading');
+      if (rsvpSavingOverlay) rsvpSavingOverlay.classList.remove('active');
       activeBtn.textContent = originalLabel;
       activeBtn.disabled = false;
     }

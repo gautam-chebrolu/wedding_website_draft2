@@ -1894,8 +1894,8 @@ footer.site-footer {
   left: 0;
   right: 0;
   z-index: 500;
-  background: rgba(20, 18, 16, 0.92);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(120, 85, 20, 0.55);   /* transparent gold tint — invites action */
+  border-top: 1px solid rgba(201, 169, 110, 0.45);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   padding: 14px 24px;

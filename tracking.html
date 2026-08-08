@@ -540,6 +540,295 @@
       text-overflow: ellipsis;
     }
 
+    /* ── PERSON SEARCH ──────────────────────────────────────── */
+    .search-section {
+      margin-bottom: 36px;
+    }
+
+    .search-input-wrap {
+      position: relative;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      pointer-events: none;
+      width: 16px;
+      height: 16px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 14px 18px 14px 44px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--bg-card);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--text);
+      letter-spacing: 0.04em;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: var(--shadow);
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(196, 169, 106, 0.12), var(--shadow);
+    }
+
+    .search-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .search-results {
+      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .person-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px 24px;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .person-card-party-label {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      background: rgba(196, 169, 106, 0.1);
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 999px;
+      margin-bottom: 16px;
+    }
+
+    /* Horizontal scroll wrapper (mobile) */
+    .attendance-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(0,0,0,0.12) transparent;
+    }
+    .attendance-scroll::-webkit-scrollbar { height: 4px; }
+    .attendance-scroll::-webkit-scrollbar-track { background: transparent; }
+    .attendance-scroll::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 2px; }
+
+    /* The grid table itself */
+    .attendance-table {
+      border-collapse: collapse;
+      width: 100%;
+      min-width: 360px; /* forces scroll on very narrow screens */
+    }
+
+    /* Event name column (left) */
+    .att-event-cell {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--text-mid);
+      letter-spacing: 0.03em;
+      padding: 7px 14px 7px 0;
+      white-space: nowrap;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      min-width: 130px;
+    }
+    .att-event-cell.last-row { border-bottom: none; }
+
+    /* Member name column headers */
+    .att-name-header {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--green);
+      letter-spacing: 0.03em;
+      padding: 0 16px 12px;
+      text-align: center;
+      white-space: nowrap;
+      border-bottom: 2px solid rgba(196,169,106,0.25);
+    }
+
+    /* Status icon cells */
+    .att-cell {
+      text-align: center;
+      padding: 7px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .att-cell.last-row { border-bottom: none; }
+
+    /* SVG icons inside cells */
+    .att-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .att-icon.accepted { background: rgba(61,139,95,0.12); }
+    .att-icon.declined { background: rgba(196,92,92,0.12); }
+    .att-icon.awaiting { background: rgba(212,168,67,0.1); }
+    .att-icon.not-invited { background: rgba(0,0,0,0.04); }
+
+    .search-no-results {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      font-weight: 300;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+      text-align: center;
+      padding: 20px 0 8px;
+    }
+
+    /* ── SORT BUTTONS ──────────────────────────────────────────── */
+    .sort-controls {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 10px;
+      margin-bottom: 2px;
+    }
+
+    .sort-label {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    .sort-btn {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 3px 10px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+      white-space: nowrap;
+    }
+
+    .sort-btn:hover {
+      background: rgba(0,0,0,0.04);
+      color: var(--text);
+    }
+
+    .sort-btn.active {
+      background: var(--green);
+      color: #fff;
+      border-color: var(--green);
+    }
+
+    /* ── ALLERGY SECTION ─────────────────────────────────────── */
+    .allergy-section {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .allergy-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .allergy-header-label {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .allergy-count-tag {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(196,92,92,0.1);
+      color: var(--declined);
+    }
+
+    .allergy-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .allergy-row {
+      display: flex;
+      gap: 12px;
+      align-items: baseline;
+      padding: 3px 0;
+    }
+
+    .allergy-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--text);
+      white-space: nowrap;
+      min-width: 140px;
+    }
+
+    .allergy-details {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--text-mid);
+      letter-spacing: 0.03em;
+      line-height: 1.5;
+    }
+
+    .allergy-tag {
+      display: inline-block;
+      background: rgba(196,92,92,0.1);
+      color: var(--declined);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 999px;
+      margin-right: 4px;
+    }
+
+    .allergy-none {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      font-weight: 300;
+      font-style: italic;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+      padding: 4px 2px;
+    }
+
     /* ── RESPONSIVE ─────────────────────────────────────────── */
     @media (max-width: 600px) {
       #dashboard {
@@ -573,6 +862,10 @@
 
       .thermo-seg-label {
         font-size: 10px;
+      }
+
+      .person-events-grid {
+        grid-template-columns: 1fr 1fr;
       }
     }
   </style>
@@ -625,6 +918,24 @@
       <p class="dash-subtitle">Priya &amp; Gautam's Wedding</p>
       <p class="dash-last-updated" id="last-updated"></p>
     </header>
+    <!-- ── Person Search ───────────────────────────────────── -->
+    <section class="search-section" id="search-section" style="display:none">
+      <div class="search-input-wrap">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input
+          type="search"
+          id="person-search"
+          class="search-input"
+          placeholder="Search for a guest…"
+          autocomplete="off"
+          spellcheck="false"
+        />
+      </div>
+      <div class="search-results" id="search-results"></div>
+    </section>
+
     <div id="cards-container"></div>
   </div>
 
@@ -709,38 +1020,77 @@
     }
 
     // ── Aggregate Data ──────────────────────────────────────
+    // Each list now holds rich objects: { name, status, idx }
+    // status = 'accepted' | 'declined' | 'awaiting'
+    // idx    = original position in allGuests (= sheet order)
+
+    // Case-insensitive field finder — exact first, then substring fallback
+    function getField(guest, ...candidates) {
+      const keys = Object.keys(guest);
+      // Pass 1: exact normalized match
+      for (const key of keys) {
+        const norm = key.toLowerCase().replace(/[^a-z0-9]/g, '');
+        for (const c of candidates) {
+          if (norm === c.toLowerCase().replace(/[^a-z0-9]/g, '')) return (guest[key] || '').trim();
+        }
+      }
+      // Pass 2: substring match (catches columns like "Allergy?", "Has Nut Allergy", etc.)
+      for (const key of keys) {
+        const norm = key.toLowerCase();
+        for (const c of candidates) {
+          if (norm.includes(c.toLowerCase().split(' ')[0])) {
+            const val = (guest[key] || '').trim();
+            if (val) return val;
+          }
+        }
+      }
+      return '';
+    }
+
     function aggregateEvent(guests, event) {
-      const invited = [];
+      const invited  = [];
       const accepted = [];
       const declined = [];
       const awaiting = [];
+      const allergies = []; // attendees with allergy/dietary info
 
-      for (const g of guests) {
+      for (let i = 0; i < guests.length; i++) {
+        const g   = guests[i];
         const inv = g[event.inviteCol];
         const res = g[event.responseCol];
         const name = g['display name'] || 'Unknown';
 
-        // Not invited to this event
         if (inv !== '1') continue;
 
-        invited.push(name);
+        let status;
+        if (res === '-') continue;
+        if (res === '1')      status = 'accepted';
+        else if (res === '0') status = 'declined';
+        else                  status = 'awaiting';
 
-        if (res === '-') continue; // dash = not invited (shouldn't happen if inv=1, but safety)
-        if (res === '1') {
-          accepted.push(name);
-        } else if (res === '0') {
-          declined.push(name);
-        } else {
-          // blank or space = awaiting
-          awaiting.push(name);
-        }
+        const item = { name, status, idx: i };
+        invited.push(item);
+        if (status === 'accepted') {
+          accepted.push(item);
+          // Collect allergy info — push every accepted guest; empty strings = no known issues
+          const nutAllergy = getField(g, 'nut allergy', 'nutallergy', 'nut allergy?');
+          const dietary    = getField(g, 'dietary restrictions', 'dietary', 'dietaryrestrictions', 'food');
+          allergies.push({ name, nutAllergy, dietary });
+        } else if (status === 'declined') declined.push(item);
+        else awaiting.push(item);
       }
 
-      return { invited, accepted, declined, awaiting };
+      return { invited, accepted, declined, awaiting, allergies };
     }
+
+    // ── Global guest store (for search) ───────────────────
+    let allGuests = [];
 
     // ── Render Dashboard ────────────────────────────────────
     function renderDashboard(guests) {
+      // Store guests globally for search
+      allGuests = guests;
+
       // Set last updated timestamp
       document.getElementById('last-updated').textContent =
         'Last refreshed: ' + new Date().toLocaleString();
@@ -757,7 +1107,7 @@
       // Render per-event cards
       for (const { event, agg } of eventData) {
         const totals = {
-          invited: agg.invited.length,
+          invited:  agg.invited.length,
           accepted: agg.accepted.length,
           declined: agg.declined.length,
           awaiting: agg.awaiting.length,
@@ -767,8 +1117,12 @@
 
       cardsContainer.innerHTML = html;
 
+      // Show search bar
+      document.getElementById('search-section').style.display = 'block';
+
       // Attach click handlers
       attachInteractions();
+      attachSearch();
     }
 
     // ── Build Card HTML ─────────────────────────────────────
@@ -828,23 +1182,174 @@
           </div>
 
           <!-- Name lists (hidden until clicked) -->
-          ${buildNameList(idPrefix, 'invited', 'Invited', names.invited, 'var(--text-mid)')}
-          ${buildNameList(idPrefix, 'accepted', 'Accepted', names.accepted, 'var(--accepted)')}
-          ${buildNameList(idPrefix, 'declined', 'Declined', names.declined, 'var(--declined)')}
+          ${buildNameList(idPrefix, 'invited',  'Invited',           names.invited,  'var(--text-mid)')}
+          ${buildNameList(idPrefix, 'accepted', 'Accepted',          names.accepted, 'var(--accepted)')}
+          ${buildNameList(idPrefix, 'declined', 'Declined',          names.declined, 'var(--declined)')}
           ${buildNameList(idPrefix, 'awaiting', 'Awaiting Response', names.awaiting, 'var(--awaiting)')}
+          ${buildAllergySection(names.allergies)}
         </div>
       `;
     }
 
-    function buildNameList(cardId, type, label, names, dotColor) {
-      if (!names || names.length === 0) return '';
-      const sortedNames = [...names].sort((a, b) => a.localeCompare(b));
-      const tags = sortedNames.map(n => `<span class="name-tag">${n}</span>`).join('');
+    // ── Allergy Section ───────────────────────────────────────
+    // "No" filter: exact whole-string match only (so "no dairy" still shows)
+    const DIET_IGNORE = new Set(['no', 'none', 'n/a', 'na', 'nope', '-']);
+    function isDietIgnored(val) {
+      return DIET_IGNORE.has((val || '').trim().toLowerCase());
+    }
+
+    function buildAllergySection(allergies) {
+      // Nut allergy: only "yes" responses
+      const nutGuests = (allergies || []).filter(a =>
+        (a.nutAllergy || '').trim().toLowerCase() === 'yes'
+      );
+
+      // Dietary: non-empty AND not a "none/no/n/a" dismissal
+      const dietGuests = (allergies || []).filter(a => {
+        const v = (a.dietary || '').trim();
+        return v.length > 0 && !isDietIgnored(v);
+      });
+
+      // Vegetarian count (case-insensitive substring)
+      const vegCount = dietGuests.filter(a =>
+        (a.dietary || '').toLowerCase().includes('vegetarian')
+      ).length;
+
+      // ── Nut Allergy sub-section ──
+      let nutBody;
+      if (nutGuests.length === 0) {
+        nutBody = `<p class="allergy-none">No nut allergies among confirmed attendees.</p>`;
+      } else {
+        nutBody = `<div class="allergy-list">${
+          nutGuests.map(a => `
+            <div class="allergy-row">
+              <span class="allergy-name">${escapeHtml(a.name)}</span>
+              <span class="allergy-details"><span class="allergy-tag">Nut Allergy</span></span>
+            </div>`).join('')
+        }</div>`;
+      }
+
+      // ── Dietary Restrictions sub-section ──
+      let dietBody;
+      if (dietGuests.length === 0) {
+        dietBody = `<p class="allergy-none">No dietary restrictions listed for confirmed attendees.</p>`;
+      } else {
+        const vegNote = vegCount > 0
+          ? `<span class="allergy-count-tag" style="background:rgba(61,139,95,0.1);color:var(--accepted);margin-left:6px;">
+              ${vegCount} vegetarian${vegCount !== 1 ? 's' : ''}
+             </span>`
+          : '';
+        dietBody = `
+          <div class="allergy-list">${
+            dietGuests.map(a => `
+              <div class="allergy-row">
+                <span class="allergy-name">${escapeHtml(a.name)}</span>
+                <span class="allergy-details">${escapeHtml(a.dietary)}</span>
+              </div>`).join('')
+          }</div>`;
+        // attach veg note to the diet header (returned inline below)
+        return `
+          <div class="allergy-section">
+            <div class="allergy-subsection">
+              <div class="allergy-header">
+                <span class="allergy-header-label">Nut Allergies</span>
+                ${nutGuests.length > 0 ? `<span class="allergy-count-tag">${nutGuests.length} guest${nutGuests.length !== 1 ? 's' : ''}</span>` : ''}
+              </div>
+              ${nutBody}
+            </div>
+            <div class="allergy-subsection" style="margin-top:16px;">
+              <div class="allergy-header">
+                <span class="allergy-header-label">Dietary Restrictions</span>
+                <span class="allergy-count-tag" style="background:rgba(212,168,67,0.12);color:var(--awaiting);">${dietGuests.length} guest${dietGuests.length !== 1 ? 's' : ''}</span>
+                ${vegNote}
+              </div>
+              ${dietBody}
+            </div>
+          </div>`;
+      }
+
+      // No diet guests path — still render both sections
       return `
-        <div class="name-list-wrap" id="list-${cardId}-${type}">
+        <div class="allergy-section">
+          <div class="allergy-subsection">
+            <div class="allergy-header">
+              <span class="allergy-header-label">Nut Allergies</span>
+              ${nutGuests.length > 0 ? `<span class="allergy-count-tag">${nutGuests.length} guest${nutGuests.length !== 1 ? 's' : ''}</span>` : ''}
+            </div>
+            ${nutBody}
+          </div>
+          <div class="allergy-subsection" style="margin-top:16px;">
+            <div class="allergy-header">
+              <span class="allergy-header-label">Dietary Restrictions</span>
+            </div>
+            ${dietBody}
+          </div>
+        </div>
+      `;
+    }
+
+    // ── Name list data store & sort state ──────────────────
+    // key = `${cardId}-${type}`, value = [{name,status,idx}]
+    const nameListStore = {};
+    const sortState     = {}; // key → 'first' | 'last' | 'party'
+
+    function nameStyle(status) {
+      if (status === 'accepted') return 'color:var(--accepted);font-weight:400;';
+      if (status === 'declined') return 'color:var(--declined);font-weight:400;';
+      if (status === 'awaiting') return 'color:var(--awaiting);font-weight:600;';
+      return '';
+    }
+
+    function lastName(displayName) {
+      const parts = displayName.trim().split(/\s+/);
+      return parts[parts.length - 1];
+    }
+
+    function renderSortedNames(key) {
+      const items  = nameListStore[key] || [];
+      const sort   = sortState[key] || 'first';
+      const sorted = [...items];
+
+      if (sort === 'first') {
+        sorted.sort((a, b) => a.name.localeCompare(b.name));
+      } else if (sort === 'last') {
+        sorted.sort((a, b) => lastName(a.name).localeCompare(lastName(b.name)));
+      } else {
+        // 'party' = preserve original sheet order (idx)
+        sorted.sort((a, b) => a.idx - b.idx);
+      }
+
+      const listEl = document.querySelector(`#list-${key} .name-list`);
+      if (!listEl) return;
+      listEl.innerHTML = sorted.map(item =>
+        `<span class="name-tag" style="${nameStyle(item.status)}">${item.name}</span>`
+      ).join('');
+    }
+
+    function buildNameList(cardId, type, label, items, dotColor) {
+      if (!items || items.length === 0) return '';
+
+      const key = `${cardId}-${type}`;
+      nameListStore[key] = items;
+      sortState[key] = 'first';
+
+      // Default: sort by first name
+      const sorted = [...items].sort((a, b) => a.name.localeCompare(b.name));
+      const tags = sorted.map(item =>
+        `<span class="name-tag" style="${nameStyle(item.status)}">${item.name}</span>`
+      ).join('');
+
+      return `
+        <div class="name-list-wrap" id="list-${key}">
           <div class="name-list-header" style="color: ${dotColor}">
             <span class="header-dot" style="background: ${dotColor}"></span>
-            ${label} (${names.length})
+            ${label} (${items.length})
+          </div>
+          <div class="sort-controls">
+            <span class="sort-label">Sort:</span>
+            <button class="sort-btn active" data-list-key="${key}" data-sort="first">First Name</button>
+            <button class="sort-btn" data-list-key="${key}" data-sort="last">Last Name</button>
+            <button class="sort-btn" data-list-key="${key}" data-sort="party">Party Order</button>
           </div>
           <div class="name-list">${tags}</div>
         </div>
@@ -856,9 +1361,10 @@
       // Stat chips and thermometer segments toggle name lists
       document.querySelectorAll('.stat-chip, .thermo-seg').forEach(el => {
         const handler = () => {
-          const cardId = el.dataset.card;
+          const cardId   = el.dataset.card;
           const listType = el.dataset.list;
-          const listWrap = document.getElementById(`list-${cardId}-${listType}`);
+          const listKey  = `${cardId}-${listType}`;
+          const listWrap = document.getElementById(`list-${listKey}`);
           if (!listWrap) return;
 
           const isOpen = listWrap.classList.contains('open');
@@ -872,7 +1378,6 @@
           if (!isOpen) {
             listWrap.classList.add('open');
             el.classList.add('active');
-            // Also activate matching stat chip / segment
             card.querySelectorAll(`[data-list="${listType}"][data-card="${cardId}"]`).forEach(s => {
               s.classList.add('active');
             });
@@ -887,6 +1392,134 @@
           }
         });
       });
+
+      // Sort buttons
+      document.querySelectorAll('.sort-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation(); // don't close the list
+          const key  = btn.dataset.listKey;
+          const sort = btn.dataset.sort;
+          sortState[key] = sort;
+
+          // Update active state on sibling buttons
+          btn.closest('.sort-controls').querySelectorAll('.sort-btn').forEach(b => {
+            b.classList.toggle('active', b === btn);
+          });
+
+          renderSortedNames(key);
+        });
+      });
+    }
+
+    // ── Person Search ────────────────────────────────────────
+    function attachSearch() {
+      const input = document.getElementById('person-search');
+      const resultsEl = document.getElementById('search-results');
+
+      input.addEventListener('input', () => {
+        const query = input.value.trim().toLowerCase();
+        resultsEl.innerHTML = '';
+        if (!query) return;
+
+        // Find all guests whose display name matches
+        const matches = allGuests.filter(g =>
+          (g['display name'] || '').toLowerCase().includes(query)
+        );
+
+        if (matches.length === 0) {
+          resultsEl.innerHTML = `<p class="search-no-results">No guests found matching "${escapeHtml(input.value.trim())}"</p>`;
+          return;
+        }
+
+        // Group matched guests + their party members by party
+        const seenParties = new Set();
+        matches.forEach(g => {
+          const party = g['Party'] || g['party'] || '';
+          if (seenParties.has(party)) return;
+          seenParties.add(party);
+
+          // Collect all guests in the same party
+          const partyMembers = party
+            ? allGuests.filter(p => (p['Party'] || p['party'] || '') === party)
+            : [g];  // no party field — just show the single guest
+
+          resultsEl.appendChild(buildPartyCard(partyMembers, party));
+        });
+      });
+    }
+
+    function buildPartyCard(members, partyName) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'person-card';
+
+      // Party label
+      let html = '';
+      if (partyName) {
+        html += `<div class="person-card-party-label">${escapeHtml(partyName)}</div>`;
+      }
+
+      // Resolve display names
+      const names = members.map(g =>
+        g['display name'] || `${g['First Name'] || ''} ${g['Last Name'] || ''}`.trim() || 'Unknown'
+      );
+
+      // Build attendance table
+      // Columns: event label | one column per member
+      html += '<div class="attendance-scroll"><table class="attendance-table"><thead><tr>';
+      html += '<th style="border-bottom:2px solid rgba(196,169,106,0.25);padding-bottom:12px;"></th>'; // empty corner
+      names.forEach(n => {
+        html += `<th class="att-name-header">${escapeHtml(n)}</th>`;
+      });
+      html += '</tr></thead><tbody>';
+
+      EVENTS.forEach((ev, evIdx) => {
+        const isLast = evIdx === EVENTS.length - 1;
+        const rowClass = isLast ? 'last-row' : '';
+        html += '<tr>';
+        html += `<td class="att-event-cell ${rowClass}">${escapeHtml(ev.name)}</td>`;
+
+        members.forEach(guest => {
+          const inv = guest[ev.inviteCol];
+          const res = guest[ev.responseCol];
+
+          let iconClass, iconSvg;
+          if (inv !== '1') {
+            // Not invited — em dash
+            iconClass = 'not-invited';
+            iconSvg = `<svg width="10" height="2" viewBox="0 0 10 2" fill="none">
+              <rect width="10" height="2" rx="1" fill="rgba(0,0,0,0.25)"/></svg>`;
+          } else if (res === '1') {
+            // Attending — checkmark
+            iconClass = 'accepted';
+            iconSvg = `<svg width="12" height="10" viewBox="0 0 12 10" fill="none">
+              <polyline points="1,5 4.5,9 11,1" stroke="var(--accepted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+          } else if (res === '0') {
+            // Declined — X
+            iconClass = 'declined';
+            iconSvg = `<svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+              <line x1="1" y1="1" x2="9" y2="9" stroke="var(--declined)" stroke-width="2" stroke-linecap="round"/>
+              <line x1="9" y1="1" x2="1" y2="9" stroke="var(--declined)" stroke-width="2" stroke-linecap="round"/></svg>`;
+          } else {
+            // Awaiting — question-mark dot (hourglass feel)
+            iconClass = 'awaiting';
+            iconSvg = `<svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+              <circle cx="5" cy="5" r="3" stroke="var(--awaiting)" stroke-width="1.8"/>
+              <circle cx="5" cy="5" r="1" fill="var(--awaiting)"/></svg>`;
+          }
+
+          html += `<td class="att-cell ${rowClass}"><span class="att-icon ${iconClass}">${iconSvg}</span></td>`;
+        });
+
+        html += '</tr>';
+      });
+
+      html += '</tbody></table></div>';
+      wrapper.innerHTML = html;
+      return wrapper;
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
   </script>
 

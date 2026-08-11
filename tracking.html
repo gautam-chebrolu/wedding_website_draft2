@@ -740,6 +740,193 @@
       border-color: var(--green);
     }
 
+    /* ── VIEW TAB BAR ───────────────────────────────────────── */
+    #view-tab-bar {
+      display: none;
+      margin-bottom: 28px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0;
+    }
+
+    .view-tab-btn {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      padding: 10px 20px;
+      margin-bottom: -1px;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .view-tab-btn:hover { color: var(--text); }
+
+    .view-tab-btn.active {
+      color: var(--green);
+      border-bottom-color: var(--green);
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── ACCOMMODATIONS PANEL ───────────────────────────── */
+    .accom-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px 28px;
+      margin-bottom: 16px;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .accom-card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      font-size: 22px;
+      color: var(--text);
+      letter-spacing: 0.04em;
+      margin-bottom: 18px;
+    }
+
+    /* Song Requests */
+    .song-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px 28px;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .song-section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      font-size: 22px;
+      color: var(--gold);
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+    }
+
+    .song-section-subtitle {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 18px;
+    }
+
+    .song-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .song-row {
+      display: flex;
+      gap: 14px;
+      align-items: baseline;
+      padding: 4px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .song-row:last-child { border-bottom: none; }
+
+    .song-guest-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--text);
+      min-width: 160px;
+      white-space: nowrap;
+    }
+
+    .song-request-text {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      font-weight: 400;
+      color: var(--text-mid);
+      letter-spacing: 0.03em;
+      line-height: 1.5;
+    }
+
+    /* ── GROUP FILTER BAR ─────────────────────────────────────── */
+    #group-filter-bar {
+      display: none; /* shown after data loads */
+      margin-bottom: 28px;
+    }
+
+    .gf-label {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .gf-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .gf-pill {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      color: var(--text-mid);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 5px 14px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, border-color 0.2s, opacity 0.2s;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .gf-pill:hover { background: rgba(0,0,0,0.04); }
+
+    .gf-pill.active {
+      background: var(--green);
+      color: #fff;
+      border-color: var(--green);
+    }
+
+    .gf-pill.gf-all {
+      font-weight: 500;
+      border-style: dashed;
+    }
+
+    /* ── GROUP HEADER inside name lists ────────────────────── */
+    .group-header {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      padding-top: 10px;
+      padding-bottom: 2px;
+      margin-bottom: 4px;
+      border-bottom: 1px solid rgba(196,169,106,0.2);
+      break-inside: avoid;
+      break-after: avoid;
+      column-span: all;   /* spans all columns — always pinned to the left edge */
+      display: block;
+    }
+    .group-header:first-child { padding-top: 0; }
+
     /* ── ALLERGY SECTION ─────────────────────────────────────── */
     .allergy-section {
       margin-top: 24px;
@@ -936,7 +1123,25 @@
       <div class="search-results" id="search-results"></div>
     </section>
 
-    <div id="cards-container"></div>
+    <!-- ── Group Filter Bar ──────────────────────────────── -->
+    <div id="group-filter-bar"></div>
+
+    <!-- ── View Tab Bar ─────────────────────────────────── -->
+    <div id="view-tab-bar">
+      <button class="view-tab-btn active" data-view="rsvp">RSVP Responses</button>
+      <button class="view-tab-btn" data-view="accommodations">Accommodations</button>
+    </div>
+
+    <!-- RSVP tab -->
+    <div id="rsvp-panel" class="tab-panel active">
+      <div id="cards-container"></div>
+    </div>
+
+    <!-- Accommodations tab -->
+    <div id="accommodations-panel" class="tab-panel">
+      <div id="accommodations-container"></div>
+    </div>
+
   </div>
 
   <script>
@@ -1052,13 +1257,14 @@
       const accepted = [];
       const declined = [];
       const awaiting = [];
-      const allergies = []; // attendees with allergy/dietary info
+      const allergies = [];
 
       for (let i = 0; i < guests.length; i++) {
-        const g   = guests[i];
-        const inv = g[event.inviteCol];
-        const res = g[event.responseCol];
+        const g    = guests[i];
+        const inv  = g[event.inviteCol];
+        const res  = g[event.responseCol];
         const name = g['display name'] || 'Unknown';
+        const group = getField(g, 'group') || 'Uncategorized';
 
         if (inv !== '1') continue;
 
@@ -1068,11 +1274,10 @@
         else if (res === '0') status = 'declined';
         else                  status = 'awaiting';
 
-        const item = { name, status, idx: i };
+        const item = { name, status, idx: i, group };
         invited.push(item);
         if (status === 'accepted') {
           accepted.push(item);
-          // Collect allergy info — push every accepted guest; empty strings = no known issues
           const nutAllergy = getField(g, 'nut allergy', 'nutallergy', 'nut allergy?');
           const dietary    = getField(g, 'dietary restrictions', 'dietary', 'dietaryrestrictions', 'food');
           allergies.push({ name, nutAllergy, dietary });
@@ -1083,46 +1288,173 @@
       return { invited, accepted, declined, awaiting, allergies };
     }
 
-    // ── Global guest store (for search) ───────────────────
-    let allGuests = [];
+    // ── Global state ────────────────────────────────────────
+    let allGuests    = [];
+    let allGroups    = [];      // sorted list of unique group names
+    let activeGroups = new Set(); // groups currently visible
 
-    // ── Render Dashboard ────────────────────────────────────
+    // ── Render Dashboard (called once after data fetch) ─────
     function renderDashboard(guests) {
-      // Store guests globally for search
       allGuests = guests;
 
-      // Set last updated timestamp
       document.getElementById('last-updated').textContent =
         'Last refreshed: ' + new Date().toLocaleString();
 
-      const eventData = [];
-
-      for (const event of EVENTS) {
-        const agg = aggregateEvent(guests, event);
-        eventData.push({ event, agg });
+      // Extract all unique groups (preserve sheet order, then de-dupe)
+      const seen = new Set();
+      allGroups = [];
+      for (const g of guests) {
+        const grp = getField(g, 'group') || 'Uncategorized';
+        if (!seen.has(grp)) { seen.add(grp); allGroups.push(grp); }
       }
+      activeGroups = new Set(allGroups); // all on by default
 
-      let html = '';
+      buildGroupFilter();
+      renderCards();
 
-      // Render per-event cards
-      for (const { event, agg } of eventData) {
+      // Show tab bar and wire tab buttons (once)
+      const tabBar = document.getElementById('view-tab-bar');
+      tabBar.style.display = 'block';
+      tabBar.querySelectorAll('.view-tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          tabBar.querySelectorAll('.view-tab-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const view = btn.dataset.view;
+          document.getElementById('rsvp-panel').classList.toggle('active', view === 'rsvp');
+          document.getElementById('accommodations-panel').classList.toggle('active', view === 'accommodations');
+        });
+      });
+
+      document.getElementById('search-section').style.display = 'block';
+      attachSearch();
+    }
+
+    // ── Build Group Filter Bar ────────────────────────────────
+    function buildGroupFilter() {
+      const bar = document.getElementById('group-filter-bar');
+      if (allGroups.length === 0) { bar.style.display = 'none'; return; }
+      bar.style.display = 'block';
+
+      const pills = allGroups.map(grp => {
+        const active = activeGroups.has(grp) ? 'active' : '';
+        return `<button class="gf-pill ${active}" data-group="${escapeHtml(grp)}">${escapeHtml(grp)}</button>`;
+      }).join('');
+
+      bar.innerHTML = `
+        <div class="gf-label">Filter by Group</div>
+        <div class="gf-pills">
+          <button class="gf-pill gf-all active" id="gf-all">All Groups</button>
+          ${pills}
+        </div>`;
+
+      // Wire up pill clicks
+      bar.querySelectorAll('.gf-pill[data-group]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const grp = btn.dataset.group;
+          if (activeGroups.has(grp)) {
+            activeGroups.delete(grp);
+            btn.classList.remove('active');
+          } else {
+            activeGroups.add(grp);
+            btn.classList.add('active');
+          }
+          // Update "All Groups" pill
+          const allBtn = document.getElementById('gf-all');
+          allBtn.classList.toggle('active', activeGroups.size === allGroups.length);
+          renderCards();
+        });
+      });
+
+      document.getElementById('gf-all').addEventListener('click', () => {
+        const allOn = activeGroups.size === allGroups.length;
+        if (allOn) {
+          // Turn all off (keep at least one)
+          activeGroups.clear();
+        } else {
+          allGroups.forEach(g => activeGroups.add(g));
+        }
+        bar.querySelectorAll('.gf-pill').forEach(b => {
+          b.classList.toggle('active', activeGroups.size === allGroups.length);
+        });
+        bar.querySelectorAll('.gf-pill[data-group]').forEach(b => {
+          b.classList.toggle('active', activeGroups.has(b.dataset.group));
+        });
+        renderCards();
+      });
+    }
+
+    // ── Render Cards (called whenever filter changes) ────────
+    function renderCards() {
+      const filtered = allGuests.filter(g => {
+        const grp = getField(g, 'group') || 'Uncategorized';
+        return activeGroups.has(grp);
+      });
+
+      // ── RSVP tab ──
+      let rsvpHtml = '';
+      for (const event of EVENTS) {
+        const agg = aggregateEvent(filtered, event);
         const totals = {
           invited:  agg.invited.length,
           accepted: agg.accepted.length,
           declined: agg.declined.length,
           awaiting: agg.awaiting.length,
         };
-        html += buildCard(event.name, null, totals, agg, event.name.replace(/\s/g, '-'));
+        rsvpHtml += buildCard(event.name, null, totals, agg, event.name.replace(/\s/g, '-'));
+      }
+      document.getElementById('cards-container').innerHTML = rsvpHtml;
+      attachInteractions();
+
+      // ── Accommodations tab ──
+      let accomHtml = '';
+      for (const event of EVENTS) {
+        const agg = aggregateEvent(filtered, event);
+        accomHtml += `
+          <div class="accom-card">
+            <div class="accom-card-title">${escapeHtml(event.name)}</div>
+            ${buildAllergySection(agg.allergies)}
+          </div>`;
+      }
+      accomHtml += buildSongRequestsSection(filtered);
+      document.getElementById('accommodations-container').innerHTML = accomHtml;
+    }
+
+    // ── Song Requests Section ────────────────────────────────
+    const SONG_IGNORE = new Set(['no', 'none', 'n/a', 'na', '-', '']);
+    function buildSongRequestsSection(guests) {
+      const requests = [];
+      for (const g of guests) {
+        const song = getField(g, 'song request', 'song requests', 'song', 'music request');
+        if (!song || SONG_IGNORE.has(song.trim().toLowerCase())) continue;
+        const name = g['display name'] || 'Unknown';
+        const group = getField(g, 'group') || 'Uncategorized';
+        requests.push({ name, song, group });
       }
 
-      cardsContainer.innerHTML = html;
+      let body;
+      if (requests.length === 0) {
+        body = `<p class="allergy-none">No song requests submitted.</p>`;
+      } else {
+        // Sort by group then last name
+        requests.sort((a, b) => {
+          const gc = a.group.localeCompare(b.group);
+          if (gc !== 0) return gc;
+          return lastName(a.name).localeCompare(lastName(b.name));
+        });
+        const rows = requests.map(r => `
+          <div class="song-row">
+            <span class="song-guest-name">${escapeHtml(r.name)}</span>
+            <span class="song-request-text">${escapeHtml(r.song)}</span>
+          </div>`).join('');
+        body = `<div class="song-list">${rows}</div>`;
+      }
 
-      // Show search bar
-      document.getElementById('search-section').style.display = 'block';
-
-      // Attach click handlers
-      attachInteractions();
-      attachSearch();
+      return `
+        <div class="song-section" style="margin-top:16px;">
+          <div class="song-section-title">Song Requests</div>
+          <div class="song-section-subtitle">${requests.length} request${requests.length !== 1 ? 's' : ''} • combined across all events</div>
+          ${body}
+        </div>`;
     }
 
     // ── Build Card HTML ─────────────────────────────────────
@@ -1186,7 +1518,6 @@
           ${buildNameList(idPrefix, 'accepted', 'Accepted',          names.accepted, 'var(--accepted)')}
           ${buildNameList(idPrefix, 'declined', 'Declined',          names.declined, 'var(--declined)')}
           ${buildNameList(idPrefix, 'awaiting', 'Awaiting Response', names.awaiting, 'var(--awaiting)')}
-          ${buildAllergySection(names.allergies)}
         </div>
       `;
     }
@@ -1289,7 +1620,7 @@
     }
 
     // ── Name list data store & sort state ──────────────────
-    // key = `${cardId}-${type}`, value = [{name,status,idx}]
+    // key = `${cardId}-${type}`, value = [{name,status,idx,group}]
     const nameListStore = {};
     const sortState     = {}; // key → 'first' | 'last' | 'party'
 
@@ -1305,25 +1636,43 @@
       return parts[parts.length - 1];
     }
 
-    function renderSortedNames(key) {
-      const items  = nameListStore[key] || [];
-      const sort   = sortState[key] || 'first';
+    // Render names grouped by group, sorted within each group
+    function renderGroupedNames(items, sort) {
+      // Sort within each future group
       const sorted = [...items];
-
       if (sort === 'first') {
         sorted.sort((a, b) => a.name.localeCompare(b.name));
       } else if (sort === 'last') {
         sorted.sort((a, b) => lastName(a.name).localeCompare(lastName(b.name)));
       } else {
-        // 'party' = preserve original sheet order (idx)
         sorted.sort((a, b) => a.idx - b.idx);
       }
 
+      // Group preserving sorted order
+      const groups = [];
+      const groupMap = new Map();
+      for (const item of sorted) {
+        const g = item.group || 'Uncategorized';
+        if (!groupMap.has(g)) { groupMap.set(g, []); groups.push(g); }
+        groupMap.get(g).push(item);
+      }
+
+      let html = '';
+      for (const grp of groups) {
+        html += `<span class="group-header">${escapeHtml(grp)}</span>`;
+        for (const item of groupMap.get(grp)) {
+          html += `<span class="name-tag" style="${nameStyle(item.status)}">${item.name}</span>`;
+        }
+      }
+      return html;
+    }
+
+    function renderSortedNames(key) {
+      const items = nameListStore[key] || [];
+      const sort  = sortState[key] || 'last';
       const listEl = document.querySelector(`#list-${key} .name-list`);
       if (!listEl) return;
-      listEl.innerHTML = sorted.map(item =>
-        `<span class="name-tag" style="${nameStyle(item.status)}">${item.name}</span>`
-      ).join('');
+      listEl.innerHTML = renderGroupedNames(items, sort);
     }
 
     function buildNameList(cardId, type, label, items, dotColor) {
@@ -1331,13 +1680,9 @@
 
       const key = `${cardId}-${type}`;
       nameListStore[key] = items;
-      sortState[key] = 'first';
+      sortState[key] = 'last'; // default: last name
 
-      // Default: sort by first name
-      const sorted = [...items].sort((a, b) => a.name.localeCompare(b.name));
-      const tags = sorted.map(item =>
-        `<span class="name-tag" style="${nameStyle(item.status)}">${item.name}</span>`
-      ).join('');
+      const tags = renderGroupedNames(items, 'last');
 
       return `
         <div class="name-list-wrap" id="list-${key}">
@@ -1347,8 +1692,8 @@
           </div>
           <div class="sort-controls">
             <span class="sort-label">Sort:</span>
-            <button class="sort-btn active" data-list-key="${key}" data-sort="first">First Name</button>
-            <button class="sort-btn" data-list-key="${key}" data-sort="last">Last Name</button>
+            <button class="sort-btn" data-list-key="${key}" data-sort="first">First Name</button>
+            <button class="sort-btn active" data-list-key="${key}" data-sort="last">Last Name</button>
             <button class="sort-btn" data-list-key="${key}" data-sort="party">Party Order</button>
           </div>
           <div class="name-list">${tags}</div>

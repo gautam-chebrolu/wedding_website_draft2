@@ -1659,8 +1659,9 @@
 
       let html = '';
       for (const grp of groups) {
-        html += `<span class="group-header">${escapeHtml(grp)}</span>`;
-        for (const item of groupMap.get(grp)) {
+        const members = groupMap.get(grp);
+        html += `<span class="group-header">${escapeHtml(grp)} (${members.length})</span>`;
+        for (const item of members) {
           html += `<span class="name-tag" style="${nameStyle(item.status)}">${item.name}</span>`;
         }
       }

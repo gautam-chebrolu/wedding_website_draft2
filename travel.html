@@ -157,10 +157,11 @@
       map.scrollWheelZoom.enable();
     });
 
-    // OpenFreeMap dark tiles — dark aesthetic, no API key required, no usage limits
-    L.tileLayer('https://tiles.openfreemap.org/styles/dark/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors &copy; <a href="https://openfreemap.org" target="_blank" rel="noopener">OpenFreeMap</a>',
-      maxZoom: 20
+    // CartoDB Dark Matter tiles with API key
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=cb1_2r29_1_c9906cdd2ddfbaadb9e573da', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>',
+      subdomains: 'abcd',
+      maxZoom: 19
     }).addTo(map);
 
     // Custom zoom control (bottom right, away from content)

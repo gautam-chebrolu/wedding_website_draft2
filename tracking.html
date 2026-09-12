@@ -1190,7 +1190,7 @@
         if (!data.success) {
           throw new Error(data.error || 'Failed to load data');
         }
-        renderDashboard(data.guests);
+        renderDashboard(data.guests, data.atlRsvps || []);
         loadingOverlay.classList.remove('show');
         dashboard.classList.add('show');
       } catch (err) {
@@ -1290,12 +1290,14 @@
 
     // ── Global state ────────────────────────────────────────
     let allGuests    = [];
+    let atlRsvps     = [];      // ATL RSVPs (Atlanta Reception separate sign-ups)
     let allGroups    = [];      // sorted list of unique group names
     let activeGroups = new Set(); // groups currently visible
 
     // ── Render Dashboard (called once after data fetch) ─────
-    function renderDashboard(guests) {
+    function renderDashboard(guests, atlRsvpData) {
       allGuests = guests;
+      atlRsvps  = atlRsvpData || [];
 
       document.getElementById('last-updated').textContent =
         'Last refreshed: ' + new Date().toLocaleString();
@@ -1306,6 +1308,11 @@
       for (const g of guests) {
         const grp = getField(g, 'group') || 'Uncategorized';
         if (!seen.has(grp)) { seen.add(grp); allGroups.push(grp); }
+      }
+      // Ensure "Chebrolu Friends" exists for ATL RSVPs
+      if (atlRsvps.length > 0 && !seen.has('Chebrolu Friends')) {
+        seen.add('Chebrolu Friends');
+        allGroups.push('Chebrolu Friends');
       }
       activeGroups = new Set(allGroups); // all on by default
 
@@ -1390,13 +1397,40 @@
         return activeGroups.has(grp);
       });
 
+      // Should ATL RSVPs be included? They belong to "Chebrolu Friends"
+      const includeAtl = activeGroups.has('Chebrolu Friends');
+
       // ── RSVP tab ──
       let rsvpHtml = '';
       for (const event of EVENTS) {
         const agg = aggregateEvent(filtered, event);
+
+        // For Balaji Kalyanam, merge in ATL RSVPs
+        if (event.name === 'Balaji Kalyanam' && includeAtl && atlRsvps.length > 0) {
+          let atlTotalGuests = 0;
+          for (const atl of atlRsvps) {
+            const guestCount = atl.guests || 1;
+            atlTotalGuests += guestCount;
+            const displayName = guestCount > 1
+              ? `${atl.name} (${guestCount})`
+              : atl.name;
+            const item = {
+              name: displayName,
+              status: 'accepted',
+              idx: 9000 + atlRsvps.indexOf(atl), // high index to sort at end in party order
+              group: 'Chebrolu Friends'
+            };
+            agg.invited.push(item);
+            agg.accepted.push(item);
+          }
+          // Store the extra guest count so totals reflect actual people, not just rows
+          agg._atlExtraGuests = atlTotalGuests - atlRsvps.length;
+        }
+
+        const atlExtra = agg._atlExtraGuests || 0;
         const totals = {
-          invited:  agg.invited.length,
-          accepted: agg.accepted.length,
+          invited:  agg.invited.length  + atlExtra,
+          accepted: agg.accepted.length + atlExtra,
           declined: agg.declined.length,
           awaiting: agg.awaiting.length,
         };

@@ -1864,6 +1864,66 @@ footer.site-footer {
 }
 
 
+/* ── Read-only RSVP status labels (RSVPs closed) ─────────────── */
+
+.rsvp-status-label {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.rsvp-status-accepted {
+  background: rgba(80, 180, 100, 0.15);
+  color: rgba(120, 220, 140, 0.95);
+  border: 1px solid rgba(80, 180, 100, 0.3);
+}
+
+.rsvp-status-declined {
+  background: rgba(200, 70, 70, 0.15);
+  color: rgba(240, 160, 160, 0.9);
+  border: 1px solid rgba(200, 70, 70, 0.3);
+}
+
+.rsvp-status-pending {
+  background: rgba(180, 160, 120, 0.12);
+  color: rgba(200, 180, 140, 0.8);
+  border: 1px solid rgba(180, 160, 120, 0.25);
+}
+
+/* ── RSVP Closed Notice Banner ───────────────────────────────── */
+
+.rsvp-closed-notice {
+  background: rgba(180, 140, 80, 0.1);
+  border: 1px solid rgba(180, 140, 80, 0.25);
+  border-radius: 12px;
+  padding: 14px 20px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.rsvp-closed-notice p {
+  margin: 0;
+  font-size: 0.92rem;
+  color: rgba(220, 200, 160, 0.9);
+  line-height: 1.5;
+}
+
+.rsvp-closed-notice a {
+  color: var(--gold);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.rsvp-closed-notice a:hover {
+  color: var(--gold-light, #e8d5a0);
+}
+
+
 /* ═══════════════════════════════════════════════════════════════
    STICKY SAVE BAR
    ═══════════════════════════════════════════════════════════════ */

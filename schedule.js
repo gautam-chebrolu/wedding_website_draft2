@@ -566,14 +566,9 @@ document.addEventListener('DOMContentLoaded', function () {
     rsvpSuccessEl.style.display = 'none';
     hideSaveBar();
 
-    // Correct save bar buttons for this member
-    var hasExistingRsvp = member.rsvp && Object.keys(member.rsvp).length > 0;
-    submitRsvpBtn.style.display = hasExistingRsvp ? 'none' : 'inline-block';
-    updateRsvpBtn.style.display = hasExistingRsvp ? 'inline-block' : 'none';
-    submitRsvpBtn.textContent = 'Save RSVP';
-    updateRsvpBtn.textContent = 'Update RSVP';
-    submitRsvpBtn.disabled = false;
-    updateRsvpBtn.disabled = false;
+    // RSVPs are closed — hide save bar buttons entirely
+    submitRsvpBtn.style.display = 'none';
+    updateRsvpBtn.style.display = 'none';
 
     // Switch views
     stepParty.style.display = 'none';
@@ -598,19 +593,7 @@ document.addEventListener('DOMContentLoaded', function () {
       return;
     }
 
-    if (apiAvailable) {
-      renderSupplementalQuestions(member);
-
-      // Bind submit buttons (remove old listeners first by cloning)
-      var newSubmit = submitRsvpBtn.cloneNode(true);
-      var newUpdate = updateRsvpBtn.cloneNode(true);
-      submitRsvpBtn.parentNode.replaceChild(newSubmit, submitRsvpBtn);
-      updateRsvpBtn.parentNode.replaceChild(newUpdate, updateRsvpBtn);
-
-      // Re-reference after clone
-      document.getElementById('submit-rsvp-btn').addEventListener('click', handleRSVPSubmit);
-      document.getElementById('update-rsvp-btn').addEventListener('click', handleRSVPSubmit);
-    }
+    // Supplemental questions and RSVP submission disabled — RSVPs are closed
   }
 
 
@@ -639,19 +622,26 @@ document.addEventListener('DOMContentLoaded', function () {
       '</div>'
       : '';
 
-    // RSVP toggles column (only when API available) — vertical stack on the right
+    // RSVP status column (read-only — RSVPs are now closed)
     var rsvpHtml = '';
     if (apiAvailable) {
       var currentRsvp = (member.rsvp && member.rsvp[tagKey]) ? member.rsvp[tagKey] : '';
-      var acceptClass = currentRsvp === 'accepted' ? ' selected' : '';
-      var declineClass = currentRsvp === 'declined' ? ' selected' : '';
+      var statusLabel = '';
+      var statusClass = '';
+      if (currentRsvp === 'accepted') {
+        statusLabel = '✓ Attending';
+        statusClass = 'rsvp-status-accepted';
+      } else if (currentRsvp === 'declined') {
+        statusLabel = '✗ Declined';
+        statusClass = 'rsvp-status-declined';
+      } else {
+        statusLabel = '— No Response';
+        statusClass = 'rsvp-status-pending';
+      }
 
       rsvpHtml =
         '<div class="card-rsvp-col">' +
-        '<button type="button" class="rsvp-toggle accept' + acceptClass + '" ' +
-        'data-event="' + tagKey + '" data-value="accepted">Joyfully Accept</button>' +
-        '<button type="button" class="rsvp-toggle decline' + declineClass + '" ' +
-        'data-event="' + tagKey + '" data-value="declined">Regretfully Decline</button>' +
+        '<span class="rsvp-status-label ' + statusClass + '">' + statusLabel + '</span>' +
         '</div>';
     }
 
@@ -681,23 +671,7 @@ document.addEventListener('DOMContentLoaded', function () {
       rsvpHtml +
       '</div>';
 
-    // Bind toggle clicks — clicking an already-selected button deselects it
-    if (apiAvailable) {
-      card.querySelectorAll('.rsvp-toggle').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-          var wasSelected = btn.classList.contains('selected');
-          btn.closest('.card-rsvp-col').querySelectorAll('.rsvp-toggle').forEach(function (b) {
-            b.classList.remove('selected');
-          });
-          if (!wasSelected) btn.classList.add('selected');
-
-          // Mark dirty and show the save bar
-          isDirty = true;
-          showSaveBar();
-          rsvpSuccessEl.style.display = 'none';
-        });
-      });
-    }
+    // RSVP toggle clicks removed — RSVPs are now closed (read-only)
 
     return card;
   }

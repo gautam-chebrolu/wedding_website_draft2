@@ -566,7 +566,7 @@ document.addEventListener('DOMContentLoaded', function () {
     rsvpSuccessEl.style.display = 'none';
     hideSaveBar();
 
-    // RSVPs are closed — hide save bar buttons entirely
+    // RSVPs are closed — hide save bar buttons but keep Update Info for supplemental fields
     submitRsvpBtn.style.display = 'none';
     updateRsvpBtn.style.display = 'none';
 
@@ -575,25 +575,68 @@ document.addEventListener('DOMContentLoaded', function () {
     stepSchedule.style.display = 'block';
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    // Render events
+    // Determine RSVP status — hide schedule for pending or declined-all guests
     var memberEvents = member.events || [];
+    var totalEvents = memberEvents.length;
+    var badgeState = getBadgeState(member.rsvp, totalEvents);
+    var hideSchedule = (badgeState.cls === 'pending' || badgeState.cls === 'not-attending');
 
-    for (var tagKey in EVENTS) {
-      if (memberEvents.indexOf(tagKey) === -1) continue;
+    if (hideSchedule) {
+      // Don't show event cards — show a message instead
+      var msg = badgeState.cls === 'pending'
+        ? 'Your RSVP is pending. If you would like to attend, please contact us.'
+        : 'You have declined all events. If this has changed, please contact us.';
+      scheduleContainer.innerHTML =
+        '<div class="rsvp-closed-notice" style="margin-top: 0;">' +
+        '<p>' + msg + '</p>' +
+        '<p>Email <a href="mailto:varpra1@gmail.com">varpra1@gmail.com</a> or ' +
+        '<a href="mailto:priyagupta0829@gmail.com">priyagupta0829@gmail.com</a>.</p>' +
+        '</div>';
+      calendarBtn.style.display = 'none';
+    } else {
+      // Render event cards
+      calendarBtn.style.display = '';
+      for (var tagKey in EVENTS) {
+        if (memberEvents.indexOf(tagKey) === -1) continue;
 
-      var eventDetails = EVENTS[tagKey];
-      currentGuestEvents.push(eventDetails);
+        var eventDetails = EVENTS[tagKey];
+        currentGuestEvents.push(eventDetails);
 
-      var card = createEventCard(eventDetails, tagKey, member, apiAvailable);
-      scheduleContainer.appendChild(card);
+        var card = createEventCard(eventDetails, tagKey, member, apiAvailable);
+        scheduleContainer.appendChild(card);
+      }
+
+      if (currentGuestEvents.length === 0) {
+        scheduleContainer.innerHTML = '<p class="no-events-msg">No events found. Please contact Priya or Gautam.</p>';
+        calendarBtn.style.display = 'none';
+      }
     }
 
-    if (currentGuestEvents.length === 0) {
-      scheduleContainer.innerHTML = '<p class="no-events-msg">No events found. Please contact Priya or Gautam.</p>';
-      return;
-    }
+    // Supplemental questions remain editable even though RSVPs are closed
+    if (apiAvailable) {
+      renderSupplementalQuestions(member);
 
-    // Supplemental questions and RSVP submission disabled — RSVPs are closed
+      // Bind submit buttons (remove old listeners first by cloning)
+      var newSubmit = submitRsvpBtn.cloneNode(true);
+      var newUpdate = updateRsvpBtn.cloneNode(true);
+      submitRsvpBtn.parentNode.replaceChild(newSubmit, submitRsvpBtn);
+      updateRsvpBtn.parentNode.replaceChild(newUpdate, updateRsvpBtn);
+
+      // Show "Update Info" button so supplemental fields can be saved
+      var updateBtn = document.getElementById('update-rsvp-btn');
+      updateBtn.textContent = 'Update Info';
+      updateBtn.style.display = 'inline-block';
+      document.getElementById('submit-rsvp-btn').style.display = 'none';
+
+      // Re-reference after clone
+      document.getElementById('submit-rsvp-btn').addEventListener('click', handleRSVPSubmit);
+      updateBtn.addEventListener('click', handleRSVPSubmit);
+
+      // Update the save bar hint and show it
+      var hintEl = rsvpSaveBar.querySelector('.rsvp-save-bar-hint');
+      if (hintEl) hintEl.innerHTML = hintEl.innerHTML.replace('You have unsaved changes', 'Update your information below');
+      showSaveBar();
+    }
   }
 
 
@@ -791,16 +834,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     var mid = memberKey(currentMember);
 
-    // Collect per-event RSVP — include ALL member events, even unclicked ones ('' = clear cell)
+    // RSVPs are closed — preserve existing RSVP values (don't overwrite)
     var rsvp = {};
     var memberEvents = currentMember.events || [];
     memberEvents.forEach(function (tagKey) {
-      // Default to empty (no selection / cleared)
-      rsvp[tagKey] = '';
-    });
-    // Overwrite with any buttons that are currently selected
-    scheduleContainer.querySelectorAll('.rsvp-toggle.selected').forEach(function (btn) {
-      rsvp[btn.dataset.event] = btn.dataset.value;
+      rsvp[tagKey] = (currentMember.rsvp && currentMember.rsvp[tagKey]) ? currentMember.rsvp[tagKey] : '';
     });
 
     // Collect supplemental questions

@@ -632,10 +632,24 @@ document.addEventListener('DOMContentLoaded', function () {
       document.getElementById('submit-rsvp-btn').addEventListener('click', handleRSVPSubmit);
       updateBtn.addEventListener('click', handleRSVPSubmit);
 
-      // Update the save bar hint and show it
+      // Update the save bar hint
       var hintEl = rsvpSaveBar.querySelector('.rsvp-save-bar-hint');
       if (hintEl) hintEl.innerHTML = hintEl.innerHTML.replace('You have unsaved changes', 'Update your information below');
-      showSaveBar();
+      
+      // Show the save bar only when user edits any of the supplemental fields
+      var formInputs = rsvpQuestionsEl.querySelectorAll('input');
+      formInputs.forEach(function (input) {
+        input.addEventListener('input', function () {
+          isDirty = true;
+          showSaveBar();
+          rsvpSuccessEl.style.display = 'none';
+        });
+        input.addEventListener('change', function () {
+          isDirty = true;
+          showSaveBar();
+          rsvpSuccessEl.style.display = 'none';
+        });
+      });
     }
   }
 

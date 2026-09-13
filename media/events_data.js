@@ -26,7 +26,7 @@ const EVENTS = {
     description: [
       "Join Priya and Gautam as their families and friends come together to apply turmeric paste to the bride and groom for good luck, health, and a wedding-ready glow.",
       "If you are staying at the Washington Duke Inn, you can request a shoulder room at the same block rate by calling the hotel at +1-919-490-0999 (Group ID: 1168688)",
-      "Dinner will be provided after the ceremony",
+      "Appetizers will be served, with dinner to follow after the ceremony",
       "Attire: Pastel Colors (think soft yellow, mint green, powder blue, peach, lilac, etc.)"
     ]
   },

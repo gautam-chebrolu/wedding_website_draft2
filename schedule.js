@@ -616,21 +616,17 @@ document.addEventListener('DOMContentLoaded', function () {
     if (apiAvailable) {
       renderSupplementalQuestions(member);
 
-      // Bind submit buttons (remove old listeners first by cloning)
-      var newSubmit = submitRsvpBtn.cloneNode(true);
-      var newUpdate = updateRsvpBtn.cloneNode(true);
-      submitRsvpBtn.parentNode.replaceChild(newSubmit, submitRsvpBtn);
-      updateRsvpBtn.parentNode.replaceChild(newUpdate, updateRsvpBtn);
-
       // Show "Update Info" button so supplemental fields can be saved
       var updateBtn = document.getElementById('update-rsvp-btn');
+      var submitBtn = document.getElementById('submit-rsvp-btn');
+      
       updateBtn.textContent = 'Update Info';
       updateBtn.style.display = 'inline-block';
-      document.getElementById('submit-rsvp-btn').style.display = 'none';
+      submitBtn.style.display = 'none';
 
-      // Re-reference after clone
-      document.getElementById('submit-rsvp-btn').addEventListener('click', handleRSVPSubmit);
-      updateBtn.addEventListener('click', handleRSVPSubmit);
+      // Override any existing listeners easily by using onclick
+      submitBtn.onclick = handleRSVPSubmit;
+      updateBtn.onclick = handleRSVPSubmit;
 
       // Update the save bar hint
       var hintEl = rsvpSaveBar.querySelector('.rsvp-save-bar-hint');

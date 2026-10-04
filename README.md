@@ -12,7 +12,21 @@ The website uses **Firebase Firestore** as its primary database. Google Sheets i
 
 ## Managing the Guest List
 
-Guests are now managed directly in **Firebase Console** — no CSV editing or script running needed.
+Guests can be managed through the password-protected **Guest List Manager** at
+`/guests`, or directly in **Firebase Console**. The manager supports editing all
+guest details, duplicating a selected person to quickly add a party member, manual
+RSVP updates, and document-ID changes for spelling corrections.
+
+The manager uses the same browser-to-Firebase approach as the RSVP pages, with no
+Vercel environment variables. Its password is currently `password`; change it in
+`guests.html` if desired. Changing a Document ID moves the record and preserves
+other existing fields.
+
+Deploy the revised Firestore rules before using the manager:
+
+```bash
+firebase deploy --only firestore:rules --project wedding-website-backend-5a8df
+```
 
 **Firebase Console:** https://console.firebase.google.com/project/wedding-website-backend-5a8df/firestore
 

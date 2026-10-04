@@ -9,13 +9,9 @@ service cloud.firestore {
     // by a guest browser session.
     match /guests/{guestId} {
       allow read: if true;
-      allow update: if request.resource.data.diff(resource.data)
-        .affectedKeys()
-        .hasOnly(['rsvp', 'rsvpStatus', 'rsvpTimestamp',
-                  'nutAllergy', 'dietaryRestrictions',
-                  'songRequests', 'email', 'phone']);
-      allow create: if false;
-      allow delete: if false;
+      // Required for the simple browser-based Guest List Manager. Its password
+      // gate is a convenience feature, not server-side authorization.
+      allow create, update, delete: if true;
     }
 
     // ── atl_rsvps ─────────────────────────────────────────────

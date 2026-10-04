@@ -1126,6 +1126,10 @@
 
   </div><!-- /.invitation-container -->
 
+  <!-- Firebase SDK (compat/v8) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
   <script>
     /* ============================================================
        ATL INVITATION — inline JS
@@ -1142,7 +1146,19 @@
 
       let musicPlaying = false;
       let isAtlSubmitting = false;
-      const ATL_RSVP_API_URL = 'https://script.google.com/macros/s/AKfycbwJJOaKdTIcPv9ZdqX44sgSbYeUPF4Lu6OuOPM28Kfva7LJZ_eLjj-yrlROV2h0dniv/exec';
+      const ATL_APPS_SCRIPT_BACKUP_URL = 'https://script.google.com/macros/s/AKfycbwJJOaKdTIcPv9ZdqX44sgSbYeUPF4Lu6OuOPM28Kfva7LJZ_eLjj-yrlROV2h0dniv/exec';
+
+      // Firestore init (shared config)
+      const ATL_FIREBASE_CONFIG = {
+        apiKey: "AIzaSyD6gi-yVGhFNFaUVdj783_nrnWInfooGas",
+        authDomain: "wedding-website-backend-5a8df.firebaseapp.com",
+        projectId: "wedding-website-backend-5a8df",
+        storageBucket: "wedding-website-backend-5a8df.firebasestorage.app",
+        messagingSenderId: "110097299269",
+        appId: "1:110097299269:web:f412e7eaac9188639ef02c",
+      };
+      if (!firebase.apps.length) firebase.initializeApp(ATL_FIREBASE_CONFIG);
+      const _atlDb = firebase.firestore();
 
       /* ── Open Invitation ────────────────────────────────────── */
       openBtn.addEventListener('click', () => {
@@ -1287,30 +1303,22 @@
           const payload = { action: 'atl_submit', pwd: 'pg2026', name, guests, phone, email };
 
           try {
-            let result;
+            // Write directly to Firestore (primary)
+            const timestamp = new Date().toISOString();
+            await _atlDb.collection('atl_rsvps').add({ name, guests, phone, email, timestamp });
+
+            // Best-effort backup to Google Sheet via Apps Script (non-blocking)
             try {
-              // Prefer POST
-              const resp = await fetch(ATL_RSVP_API_URL, {
+              fetch(ATL_APPS_SCRIPT_BACKUP_URL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify(payload),
+                body: JSON.stringify({ action: 'atl_submit', pwd: 'pg2026', name, guests, phone, email }),
                 redirect: 'follow'
-              });
-              result = await resp.json();
-            } catch (_) {
-              // GET fallback for CORS environments
-              const url = ATL_RSVP_API_URL + '?action=atl_submit&pwd=pg2026&data=' +
-                encodeURIComponent(JSON.stringify(payload));
-              const resp = await fetch(url, { redirect: 'follow' });
-              result = await resp.json();
-            }
+              }).catch(() => {});
+            } catch (_) {}
 
-            if (result && result.success) {
-              atlForm.style.display = 'none';
-              atlSuccess.style.display = 'block';
-            } else {
-              throw new Error((result && result.error) || 'Submission failed');
-            }
+            atlForm.style.display = 'none';
+            atlSuccess.style.display = 'block';
           } catch (err) {
             atlErrBanner.textContent = 'Something went wrong. Please try again or contact us directly.';
             atlErrBanner.style.display = 'block';

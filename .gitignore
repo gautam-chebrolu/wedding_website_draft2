@@ -7,3 +7,6 @@ node_modules/
 
 # ── Apps Script config (contains Sheet IDs / API keys) ──────────
 apps-script/
+
+# ── Firebase service account key (NEVER commit) ────────────────
+service-account-key.json

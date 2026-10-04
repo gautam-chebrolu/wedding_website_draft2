@@ -1144,23 +1144,44 @@
 
   </div>
 
+  <!-- Firebase SDK (compat/v8) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
   <script>
     /* ============================================================
        TRACKING DASHBOARD — Inline JS
        ============================================================ */
 
-    const API_URL = 'https://script.google.com/macros/s/AKfycbwJJOaKdTIcPv9ZdqX44sgSbYeUPF4Lu6OuOPM28Kfva7LJZ_eLjj-yrlROV2h0dniv/exec';
+    const FIREBASE_CONFIG = {
+      apiKey: "AIzaSyD6gi-yVGhFNFaUVdj783_nrnWInfooGas",
+      authDomain: "wedding-website-backend-5a8df.firebaseapp.com",
+      projectId: "wedding-website-backend-5a8df",
+      storageBucket: "wedding-website-backend-5a8df.firebasestorage.app",
+      messagingSenderId: "110097299269",
+      appId: "1:110097299269:web:f412e7eaac9188639ef02c",
+      measurementId: "G-FCHBTGM4PX"
+    };
 
-    // Event definitions: CSV column prefix → display name
-    const EVENTS = [
-      { inviteCol: 'Ganesh Puja Invite', responseCol: 'Ganesh Puja Response', name: 'Ganesh Puja' },
-      { inviteCol: 'Haldi Invite', responseCol: 'Haldi Response', name: 'Haldi' },
-      { inviteCol: 'Sangeet Invite', responseCol: 'Sangeet Response', name: 'Sangeet' },
-      { inviteCol: 'Wedding Invite', responseCol: 'Wedding Response', name: 'Wedding' },
-      { inviteCol: 'Reception Invite', responseCol: 'Reception Response', name: 'Reception' },
-      { inviteCol: 'Satya Puja Invite', responseCol: 'Satya Puja Response', name: 'Satyanārāyaṇa Puja' },
-      { inviteCol: 'Balaji Kalyanam Invite', responseCol: 'Balaji Kalyanam Response', name: 'Balaji Kalyanam' },
-    ];
+    if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+    const _db = firebase.firestore();
+
+    // Event tag names used in guests.events array → display names
+    const EVENT_TAG_MAP = {
+      'Ganesh Puja': 'Ganesh Puja',
+      'Haldi': 'Haldi',
+      'Sangeet': 'Sangeet',
+      'Wedding': 'Wedding',
+      'Reception': 'Reception',
+      'Satyanarayana Puja': 'Satyanārāyaṇa Puja',
+      'Atlanta Reception': 'Balaji Kalyanam',
+    };
+
+    // Event definitions for the dashboard (matches the keys in EVENT_TAG_MAP)
+    const EVENTS = Object.entries(EVENT_TAG_MAP).map(([tag, name]) => ({
+      tag: tag,    // key in guests.events array and guests.rsvp map
+      name: name,  // display name
+    }));
 
     // ── Password Gate ───────────────────────────────────────
     const gateEl = document.getElementById('password-gate');
@@ -1181,15 +1202,22 @@
         return;
       }
 
+      // Client-side password check
+      if (pwd !== 'password') {
+        gatePwd.classList.add('error');
+        gateError.textContent = 'Incorrect password. Please try again.';
+        setTimeout(() => gatePwd.classList.remove('error'), 400);
+        gatePwd.value = '';
+        gatePwd.focus();
+        return;
+      }
+
       // Hide gate, show loading
       gateEl.classList.add('hidden');
       loadingOverlay.classList.add('show');
 
       try {
-        const data = await fetchTrackingData(pwd);
-        if (!data.success) {
-          throw new Error(data.error || 'Failed to load data');
-        }
+        const data = await fetchTrackingData();
         renderDashboard(data.guests, data.atlRsvps || []);
         loadingOverlay.classList.remove('show');
         dashboard.classList.add('show');
@@ -1197,31 +1225,74 @@
         loadingOverlay.classList.remove('show');
         gateEl.classList.remove('hidden');
         gatePwd.classList.add('error');
-        gateError.textContent = err.message === 'Invalid password'
-          ? 'Incorrect password. Please try again.'
-          : 'Error loading data. Please try again.';
+        gateError.textContent = 'Error loading data. Please try again.';
         setTimeout(() => gatePwd.classList.remove('error'), 400);
         gatePwd.value = '';
         gatePwd.focus();
       }
     });
 
-    // ── Fetch Data ──────────────────────────────────────────
-    async function fetchTrackingData(pwd) {
-      // Try POST first, fall back to GET for CORS
+    // ── Fetch Data (Firestore) ──────────────────────────────
+    async function fetchTrackingData() {
+      // Fetch all guests
+      const guestsSnap = await _db.collection('guests').get();
+      const guests = [];
+      guestsSnap.forEach(doc => {
+        const d = doc.data();
+        // Build a flat object compatible with the existing aggregation logic
+        const flat = {
+          'display name': (d.firstName || '') + ' ' + (d.lastName || ''),
+          'party': d.party || '',
+          'group': d.party || 'Uncategorized',
+          'nut allergy': d.nutAllergy || '',
+          'dietary restrictions': d.dietaryRestrictions || '',
+          'song requests': d.songRequests || '',
+          'email': d.email || '',
+          'phone': d.phone || '',
+        };
+
+        // Map events array to invite columns (1 = invited, 0 = not invited)
+        const eventsArr = d.events || [];
+        const rsvpMap = d.rsvp || {};
+
+        for (const [tag] of Object.entries(EVENT_TAG_MAP)) {
+          const isInvited = eventsArr.includes(tag);
+          flat[tag + ' Invite'] = isInvited ? '1' : '0';
+
+          // Map rsvp values to response format
+          if (!isInvited) {
+            flat[tag + ' Response'] = '-';  // not invited
+          } else if (rsvpMap[tag] === 'accepted') {
+            flat[tag + ' Response'] = '1';
+          } else if (rsvpMap[tag] === 'declined') {
+            flat[tag + ' Response'] = '0';
+          } else {
+            flat[tag + ' Response'] = '';   // awaiting
+          }
+        }
+
+        guests.push(flat);
+      });
+
+      // Fetch ATL RSVPs
+      let atlRsvps = [];
       try {
-        const resp = await fetch(API_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify({ action: 'tracking', pwd }),
-          redirect: 'follow'
+        const atlSnap = await _db.collection('atl_rsvps').get();
+        atlSnap.forEach(doc => {
+          const d = doc.data();
+          atlRsvps.push({
+            name: d.name || '',
+            guests: d.guests || 1,
+            phone: d.phone || '',
+            email: d.email || '',
+            timestamp: d.timestamp || '',
+          });
         });
-        return await resp.json();
-      } catch (_) {
-        const url = `${API_URL}?action=tracking&pwd=${encodeURIComponent(pwd)}`;
-        const resp = await fetch(url, { redirect: 'follow' });
-        return await resp.json();
+      } catch (e) {
+        console.warn('Could not read atl_rsvps:', e);
       }
+
+      return { success: true, guests, atlRsvps };
     }
 
     // ── Aggregate Data ──────────────────────────────────────
@@ -1259,12 +1330,15 @@
       const awaiting = [];
       const allergies = [];
 
+      const inviteKey = event.tag + ' Invite';
+      const responseKey = event.tag + ' Response';
+
       for (let i = 0; i < guests.length; i++) {
         const g    = guests[i];
-        const inv  = g[event.inviteCol];
-        const res  = g[event.responseCol];
+        const inv  = g[inviteKey];
+        const res  = g[responseKey];
         const name = g['display name'] || 'Unknown';
-        const group = getField(g, 'group') || 'Uncategorized';
+        const group = g['group'] || 'Uncategorized';
 
         if (inv !== '1') continue;
 
@@ -1278,8 +1352,8 @@
         invited.push(item);
         if (status === 'accepted') {
           accepted.push(item);
-          const nutAllergy = getField(g, 'nut allergy', 'nutallergy', 'nut allergy?');
-          const dietary    = getField(g, 'dietary restrictions', 'dietary', 'dietaryrestrictions', 'food');
+          const nutAllergy = g['nut allergy'] || '';
+          const dietary    = g['dietary restrictions'] || '';
           allergies.push({ name, nutAllergy, dietary });
         } else if (status === 'declined') declined.push(item);
         else awaiting.push(item);

@@ -1,18 +1,14 @@
 /* ============================================================
    WEDDING WEBSITE — schedule.js
-   Handles: password validation, client-side decryption,
+   Handles: password validation, Firestore guest lookup,
             party roster, individual schedule + RSVP
    ============================================================ */
 
 // ── Configuration ───────────────────────────────────────────
-// After deploying the Google Apps Script web app, paste the
-// deployment URL here.  Leave empty to run in schedule-only mode.
-const RSVP_API_URL = 'https://script.google.com/macros/s/AKfycbwJJOaKdTIcPv9ZdqX44sgSbYeUPF4Lu6OuOPM28Kfva7LJZ_eLjj-yrlROV2h0dniv/exec';
+// Firestore is the primary database.  Apps Script is kept as a
+// best-effort backup for Google Sheet sync.
+const APPS_SCRIPT_BACKUP_URL = 'https://script.google.com/macros/s/AKfycbwJJOaKdTIcPv9ZdqX44sgSbYeUPF4Lu6OuOPM28Kfva7LJZ_eLjj-yrlROV2h0dniv/exec';
 
-// ── Firebase / Firestore (backup write) ─────────────────────
-// The website writes directly to Firestore after each successful
-// RSVP submission.  This is purely a backup — Google Sheets
-// remains the source of truth.
 const FIREBASE_CONFIG = {
   apiKey: "AIzaSyD6gi-yVGhFNFaUVdj783_nrnWInfooGas",
   authDomain: "wedding-website-backend-5a8df.firebaseapp.com",
@@ -35,43 +31,86 @@ function getFirestore() {
   return _db;
 }
 
-// Best-effort Firestore write — never blocks or throws to the caller
-async function writeToFirestore(payload, timestamp) {
+// ── Firestore: lookup a guest and return full party ──────────
+async function firestoreLookup(fname, lname) {
+  var db = getFirestore();
+  if (!db) throw new Error('Firestore not available');
+
+  var docId = (fname + '_' + lname).toLowerCase().replace(/\s+/g, '_');
+  var doc = await db.collection('guests').doc(docId).get();
+
+  if (!doc.exists) throw new Error('Guest not found');
+
+  var guest = doc.data();
+  var party = guest.party;
+
+  // Fetch all party members
+  var members = [];
+  var displayName = null;
+
+  if (party) {
+    var partySnap = await db.collection('guests')
+      .where('party', '==', party).get();
+    partySnap.forEach(function (d) {
+      var m = d.data();
+      members.push(m);
+      if (!displayName && m.displayName) displayName = m.displayName;
+    });
+  } else {
+    // No party — single guest
+    members.push(guest);
+  }
+
+  return {
+    success: true,
+    party: party,
+    displayName: displayName || party,
+    members: members
+  };
+}
+
+// ── Firestore: write RSVP data (primary) ─────────────────────
+async function submitRSVPToFirestore(payload) {
+  var db = getFirestore();
+  if (!db) throw new Error('Firestore not available');
+
+  var timestamp = new Date().toISOString();
+  var members = payload.members || [];
+
+  for (var i = 0; i < members.length; i++) {
+    var m = members[i];
+    var docId = (m.firstName + '_' + m.lastName).toLowerCase().replace(/\s+/g, '_');
+
+    var updateData = {
+      rsvp: m.rsvp || {},
+      rsvpStatus: 'submitted',
+      rsvpTimestamp: timestamp,
+    };
+    if (m.nutAllergy !== undefined) updateData.nutAllergy = m.nutAllergy;
+    if (m.dietaryRestrictions !== undefined) updateData.dietaryRestrictions = m.dietaryRestrictions;
+    if (m.songRequests !== undefined) updateData.songRequests = m.songRequests;
+    if (m.email !== undefined) updateData.email = m.email;
+    if (m.phone !== undefined) updateData.phone = m.phone;
+
+    await db.collection('guests').doc(docId).update(updateData);
+    console.log('Firestore write OK:', docId);
+  }
+
+  return { success: true, timestamp: timestamp };
+}
+
+// ── Apps Script: best-effort backup to Google Sheet ──────────
+function backupToAppsScript(payload) {
+  if (!APPS_SCRIPT_BACKUP_URL) return;
   try {
-    var db = getFirestore();
-    if (!db) { console.warn('Firestore SDK not loaded'); return; }
-
-    var members = payload.members || [];
-    var party = payload.party || '';
-
-    for (var i = 0; i < members.length; i++) {
-      var m = members[i];
-      var docId = (m.firstName + '_' + m.lastName).toLowerCase().replace(/\s+/g, '_');
-
-      // Build the rsvp sub-map (mirrors what Apps Script used to write)
-      var rsvpMap = {};
-      if (m.rsvp) {
-        Object.keys(m.rsvp).forEach(function (k) { rsvpMap[k] = m.rsvp[k]; });
-      }
-
-      await db.collection('rsvp_guests').doc(docId).set({
-        firstName: m.firstName || '',
-        lastName: m.lastName || '',
-        party: party,
-        nutAllergy: m.nutAllergy || '',
-        dietaryRestrictions: m.dietaryRestrictions || '',
-        songRequests: m.songRequests || '',
-        email: m.email || '',
-        phone: m.phone || '',
-        rsvpTimestamp: timestamp || new Date().toISOString(),
-        rsvp: rsvpMap
-      }, { merge: true });   // merge:true so a partial update never wipes other fields
-
-      console.log('Firestore write OK:', docId);
-    }
-  } catch (err) {
-    // Non-fatal — log but don't surface to the user
-    console.warn('Firestore backup write failed:', err.message || err);
+    fetch(APPS_SCRIPT_BACKUP_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload),
+      redirect: 'follow'
+    }).catch(function () { /* ignore — this is purely backup */ });
+  } catch (e) {
+    // Non-fatal
   }
 }
 
@@ -215,7 +254,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
-  // ── Step 2: Name Lookup ───────────────────────────────────
+  // ── Step 2: Name Lookup (Firestore) ───────────────────────
   nameForm.addEventListener('submit', async function (e) {
     e.preventDefault();
     var fname = fnameInput.value.trim().toLowerCase();
@@ -226,83 +265,61 @@ document.addEventListener('DOMContentLoaded', function () {
       return;
     }
 
-    if (typeof GUEST_DATA_SECURE === 'undefined') {
-      showNameError('Guest data is not loaded yet.');
-      return;
-    }
-
-    var normalizedName = fname + ' ' + lname;
-    var nameHash = hashString(normalizedName);
-    var encryptedTags = GUEST_DATA_SECURE[nameHash];
-
-    if (!encryptedTags) {
-      showNameError("That name doesn't exist.");
-      return;
-    }
-
     nameError.style.display = 'none';
-    var key = normalizedName + CORRECT_PASSWORD;
-    var decryptedStr = decrypt(encryptedTags, key);
 
-    var realFirstName = fname;
-    if (decryptedStr.includes('|')) {
-      realFirstName = decryptedStr.split('|')[0];
-    }
-
-    // Show party step
+    // Show party step with loading state
     stepName.style.display = 'none';
     stepParty.style.display = 'block';
+    rsvpLoadingEl.style.display = 'flex';
 
-    var formattedName = capitalize(realFirstName);
-    guestGreeting.textContent = 'Welcome, ' + formattedName + '!';
-
-    if (RSVP_API_URL) {
-      rsvpLoadingEl.style.display = 'flex';
-
-      // ── Optimistic cache render ──────────────────────────────
-      // Check if any party member has a fresh cache entry.  If so,
-      // build a lightweight skeleton from the local data so the
-      // roster appears immediately — the API fetch runs in
-      // parallel and will refresh the view once it resolves.
-      var tagsStr = decryptedStr.includes('|') ? decryptedStr.split('|').slice(1).join('|') : decryptedStr;
-      var cachedOptimisticKey = RSVP_CACHE_PREFIX +
-        (realFirstName.toLowerCase() + '_' + lname.toLowerCase()).replace(/\s+/g, '_');
-      var optimisticCache = null;
-      try { optimisticCache = localStorage.getItem(cachedOptimisticKey); } catch(e) {}
-      if (optimisticCache) {
-        try {
-          var parsed = JSON.parse(optimisticCache);
-          if (parsed && parsed.timestamp && (Date.now() - parsed.timestamp) < RSVP_CACHE_TTL_MS) {
-            // Show the roster immediately from cache while API loads
-            renderPartyRosterFallback(realFirstName, fname, lname, tagsStr);
-            // Patch the cached member's RSVP into the fallback member
-            if (currentPartyData && currentPartyData.members && currentPartyData.members[0]) {
-              applyCacheToMember(currentPartyData.members[0], null);
-              renderPartyRoster(currentPartyData);
-            }
-          }
-        } catch(e) {}
-      }
-      // ── End optimistic render ───────────────────────────────
-
+    // ── Optimistic cache render ──────────────────────────────
+    var cachedOptimisticKey = RSVP_CACHE_PREFIX +
+      (fname + '_' + lname).replace(/\s+/g, '_');
+    var optimisticCache = null;
+    try { optimisticCache = localStorage.getItem(cachedOptimisticKey); } catch(e) {}
+    if (optimisticCache) {
       try {
-        var partyData = await fetchRSVPData(fname, lname);
-        currentPartyData = partyData;
-        rsvpLoadingEl.style.display = 'none';
-        renderPartyRoster(partyData);
-      } catch (err) {
-        console.error('RSVP API error:', err);
-        rsvpLoadingEl.style.display = 'none';
-        rsvpErrorBanner.style.display = 'block';
-        // Fall back: create a single-member roster from the encrypted local data
-        if (!currentPartyData) {
-          renderPartyRosterFallback(realFirstName, fname, lname, tagsStr);
+        var parsed = JSON.parse(optimisticCache);
+        if (parsed && parsed.timestamp && (Date.now() - parsed.timestamp) < RSVP_CACHE_TTL_MS) {
+          // Show cached data while Firestore loads
+          if (currentPartyData && currentPartyData.members && currentPartyData.members[0]) {
+            applyCacheToMember(currentPartyData.members[0], null);
+            renderPartyRoster(currentPartyData);
+          }
         }
+      } catch(e) {}
+    }
+    // ── End optimistic render ────────────────────────────────
+
+    try {
+      var partyData = await firestoreLookup(fname, lname);
+      currentPartyData = partyData;
+
+      // Merge cached RSVP data
+      if (partyData.members && Array.isArray(partyData.members)) {
+        partyData.members.forEach(function (m) {
+          applyCacheToMember(m, null);
+        });
       }
-    } else {
-      // No API — schedule-only fallback
-      var tagsStr = decryptedStr.includes('|') ? decryptedStr.split('|').slice(1).join('|') : decryptedStr;
-      renderPartyRosterFallback(realFirstName, fname, lname, tagsStr);
+
+      rsvpLoadingEl.style.display = 'none';
+
+      var formattedName = capitalize(partyData.members[0].firstName || fname);
+      guestGreeting.textContent = 'Welcome, ' + formattedName + '!';
+
+      renderPartyRoster(partyData);
+    } catch (err) {
+      console.error('Firestore lookup error:', err);
+      rsvpLoadingEl.style.display = 'none';
+
+      if (err.message === 'Guest not found') {
+        // Go back to name step with error
+        stepParty.style.display = 'none';
+        stepName.style.display = 'block';
+        showNameError("We couldn't find that name. Please check the spelling and try again.");
+      } else {
+        rsvpErrorBanner.style.display = 'block';
+      }
     }
   });
 
@@ -366,53 +383,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
   // ════════════════════════════════════════════════════════════
-  //  API
+  //  API (Firestore primary, Apps Script backup)
   // ════════════════════════════════════════════════════════════
 
-  async function fetchRSVPData(fname, lname) {
-    var url = RSVP_API_URL +
-      '?action=lookup' +
-      '&fname=' + encodeURIComponent(fname) +
-      '&lname=' + encodeURIComponent(lname) +
-      '&pwd=' + encodeURIComponent(CORRECT_PASSWORD);
-
-    var response = await fetch(url, { redirect: 'follow' });
-    var data = await response.json();
-
-    if (!data.success) throw new Error(data.error || 'Lookup failed');
-
-    // Merge any locally-cached RSVP data that is newer than what
-    // the API returned (guards against the 3-5 s propagation window).
-    var apiTimestamp = data.timestamp || null;
-    if (data.members && Array.isArray(data.members)) {
-      data.members.forEach(function (m) {
-        applyCacheToMember(m, apiTimestamp);
-      });
-    }
-
-    return data;
-  }
-
-  async function submitRSVPToAPI(payload) {
-    try {
-      var response = await fetch(RSVP_API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(payload),
-        redirect: 'follow'
-      });
-      return await response.json();
-    } catch (postErr) {
-      console.warn('POST failed, trying GET fallback:', postErr);
-      var encodedData = encodeURIComponent(JSON.stringify(payload));
-      var url = RSVP_API_URL +
-        '?action=submit' +
-        '&pwd=' + encodeURIComponent(CORRECT_PASSWORD) +
-        '&data=' + encodedData;
-      var response = await fetch(url, { redirect: 'follow' });
-      return await response.json();
-    }
-  }
+  // firestoreLookup and submitRSVPToFirestore are defined at the top
+  // of this file (outside the DOMContentLoaded handler).
 
 
   // ════════════════════════════════════════════════════════════
@@ -924,7 +899,7 @@ document.addEventListener('DOMContentLoaded', function () {
     activeBtn.disabled = true;
 
     try {
-      var result = await submitRSVPToAPI(payload);
+      var result = await submitRSVPToFirestore(payload);
 
       if (result.success) {
         // Update local member state
@@ -936,10 +911,6 @@ document.addEventListener('DOMContentLoaded', function () {
         if (phone) currentMember.phone = phone.value.trim();
 
         // ── Persist to local cache ────────────────────────────
-        // Write the just-submitted values to localStorage so that
-        // if the user navigates away and returns before the database
-        // fully propagates (3-5 s window), we show the correct data
-        // instead of the stale API response.
         saveRsvpToCache(currentMember);
         // ── End cache persist ─────────────────────────────────
 
@@ -952,9 +923,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (rsvpSavingOverlay) rsvpSavingOverlay.classList.remove('active');
         hideSaveBar();
 
-        // Best-effort Firestore backup (non-blocking, never surfaces errors)
-        var firestoreTimestamp = result.timestamp || new Date().toISOString();
-        writeToFirestore(payload, firestoreTimestamp);
+        // Best-effort backup to Google Sheet via Apps Script
+        backupToAppsScript(payload);
 
         // Gold glitter if at least one event was accepted
         var anyAccepted = Object.values(rsvp).some(function (v) { return v === 'accepted'; });
@@ -1189,21 +1159,7 @@ document.addEventListener('DOMContentLoaded', function () {
     location.reload();
   };
 
-  function hashString(str) {
-    var hash = 5381;
-    for (var i = 0; i < str.length; i++) {
-      hash = ((hash << 5) + hash) ^ str.charCodeAt(i);
-    }
-    return (hash >>> 0).toString(16);
-  }
-
-  function decrypt(base64text, key) {
-    var text = atob(base64text);
-    var result = '';
-    for (var i = 0; i < text.length; i++) {
-      result += String.fromCharCode(text.charCodeAt(i) ^ key.charCodeAt(i % key.length));
-    }
-    return result;
-  }
+  // hashString and decrypt functions removed — no longer needed
+  // with Firestore as the primary database (plain-text lookups).
 
 });

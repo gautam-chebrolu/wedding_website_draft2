@@ -1,0 +1,38 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── guests ────────────────────────────────────────────────
+    // Any visitor can read (password checked client-side).
+    // Only RSVP-related fields can be written — static fields
+    // like firstName, lastName, party, tags can never be changed
+    // by a guest browser session.
+    match /guests/{guestId} {
+      allow read: if true;
+      allow update: if request.resource.data.diff(resource.data)
+        .affectedKeys()
+        .hasOnly(['rsvp', 'rsvpStatus', 'rsvpTimestamp',
+                  'nutAllergy', 'dietaryRestrictions',
+                  'songRequests', 'email', 'phone']);
+      allow create: if false;
+      allow delete: if false;
+    }
+
+    // ── atl_rsvps ─────────────────────────────────────────────
+    // Anyone can submit a new ATL walk-in RSVP; nobody can read
+    // from the browser (tracking dashboard uses admin SDK).
+    match /atl_rsvps/{docId} {
+      allow read:   if false;
+      allow create: if true;
+      allow update: if false;
+      allow delete: if false;
+    }
+
+    // ── metadata ──────────────────────────────────────────────
+    // Read-only public config; written only by admin scripts.
+    match /metadata/{docId} {
+      allow read:  if true;
+      allow write: if false;
+    }
+  }
+}

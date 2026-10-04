@@ -1243,7 +1243,10 @@
         const flat = {
           'display name': (d.firstName || '') + ' ' + (d.lastName || ''),
           'party': d.party || '',
-          'group': d.party || 'Uncategorized',
+          // High-level grouping comes from the Sheet's "GroupLookup" tab
+          // (synced into Firestore by sync_from_sheet.js); fall back to the
+          // party name only for guests that have no group assigned yet.
+          'group': d.groupName || d.party || 'Uncategorized',
           'nut allergy': d.nutAllergy || '',
           'dietary restrictions': d.dietaryRestrictions || '',
           'song requests': d.songRequests || '',
@@ -1376,18 +1379,27 @@
       document.getElementById('last-updated').textContent =
         'Last refreshed: ' + new Date().toLocaleString();
 
-      // Extract all unique groups (preserve sheet order, then de-dupe)
+      // Extract all unique groups. Firestore returns documents in document-id
+      // order, so sort into a fixed, meaningful order rather than whatever
+      // order the guests happen to arrive in.
       const seen = new Set();
-      allGroups = [];
       for (const g of guests) {
-        const grp = getField(g, 'group') || 'Uncategorized';
-        if (!seen.has(grp)) { seen.add(grp); allGroups.push(grp); }
+        seen.add(getField(g, 'group') || 'Uncategorized');
       }
       // Ensure "Chebrolu Friends" exists for ATL RSVPs
-      if (atlRsvps.length > 0 && !seen.has('Chebrolu Friends')) {
-        seen.add('Chebrolu Friends');
-        allGroups.push('Chebrolu Friends');
-      }
+      if (atlRsvps.length > 0) seen.add('Chebrolu Friends');
+
+      const GROUP_ORDER = [
+        'Gupta Family', 'Gupta Friends',
+        'Chebrolu Family', 'Chebrolu Friends',
+        'Priya Friends', 'Gautam Friends',
+      ];
+      const rank = grp => {
+        const i = GROUP_ORDER.indexOf(grp);
+        if (i !== -1) return i;
+        return grp === 'Uncategorized' ? 999 : 500;
+      };
+      allGroups = [...seen].sort((a, b) => rank(a) - rank(b) || a.localeCompare(b));
       activeGroups = new Set(allGroups); // all on by default
 
       buildGroupFilter();
@@ -1756,14 +1768,15 @@
         sorted.sort((a, b) => a.idx - b.idx);
       }
 
-      // Group preserving sorted order
-      const groups = [];
+      // Bucket by group, then emit groups in the same order as the filter pills
       const groupMap = new Map();
       for (const item of sorted) {
         const g = item.group || 'Uncategorized';
-        if (!groupMap.has(g)) { groupMap.set(g, []); groups.push(g); }
+        if (!groupMap.has(g)) groupMap.set(g, []);
         groupMap.get(g).push(item);
       }
+      const groups = allGroups.filter(g => groupMap.has(g))
+        .concat([...groupMap.keys()].filter(g => !allGroups.includes(g)));
 
       let html = '';
       for (const grp of groups) {

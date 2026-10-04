@@ -1946,8 +1946,10 @@
         html += `<td class="att-event-cell ${rowClass}">${escapeHtml(ev.name)}</td>`;
 
         members.forEach(guest => {
-          const inv = guest[ev.inviteCol];
-          const res = guest[ev.responseCol];
+          // fetchTrackingData stores RSVP values as e.g. "Wedding Invite"
+          // and "Wedding Response". The event object itself only has tag/name.
+          const inv = guest[ev.tag + ' Invite'];
+          const res = guest[ev.tag + ' Response'];
 
           let iconClass, iconSvg;
           if (inv !== '1') {

@@ -1,1 +1,304 @@
-<!doctype html><html><head><meta name="viewport" content="width=device-width"><title>Guest List Manager</title><style>body{max-width:1100px;margin:30px auto;padding:0 18px;font:15px Arial;color:#29251f;background:#fffaf2}input,textarea,select,button{font:inherit;padding:8px;margin:4px;border:1px solid #d8cdbc;border-radius:5px}input,textarea,select{width:100%;box-sizing:border-box}button{background:#8d4c39;color:white;cursor:pointer}.hide{display:none}#list button{display:block;width:100%;text-align:left;background:white;color:#29251f}.grid{display:grid;grid-template-columns:330px 1fr;gap:25px}.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}.full{grid-column:1/-1}label{font-size:12px;color:#655}#msg{color:#276446}@media(max-width:700px){.grid,.two{grid-template-columns:1fr}}</style></head><body><section id="gate"><h1>Guest List Manager</h1><form id="login">Password <input id="pwd" type="password" required><button>Sign in</button><span id="err"></span></form></section><main id="app" class="hide"><h1>Guest List Manager</h1><input id="search" placeholder="Search guests, party, or email"><button id="add">Add guest</button><button id="duplicate">Duplicate selected</button><button onclick="location.reload()">Sign out</button><div class="grid"><aside><h2>Guests <span id="count"></span></h2><div id="list"></div></aside><section><h2 id="title">Select a guest</h2><p>Changing Document ID moves the record, preserving other fields.</p><form id="form" class="hide"><div class="two"><label>First name<input name="firstName" required></label><label>Last name<input name="lastName" required></label><label class="full">Document ID<input name="id" required pattern="[A-Za-z0-9_-]+"></label><label>Party<input name="party"></label><label>Group name<input name="groupName"></label><label>Envelope name<input name="envelopeName"></label><label>Display name<input name="displayName"></label><label>Email<input name="email"></label><label>Phone<input name="phone"></label><label class="full">Events <div id="events"></div></label><label class="full">RSVPs <div id="rsvps"></div></label><label>RSVP status<select name="rsvpStatus"><option value="">Not submitted</option><option value="submitted">Submitted</option></select></label><label>RSVP timestamp<input name="rsvpTimestamp"></label><label>Nut allergy<input name="nutAllergy"></label><label>Dietary restrictions<input name="dietaryRestrictions"></label><label class="full">Song requests<textarea name="songRequests"></textarea></label></div><button>Save guest</button><span id="msg"></span></form></section></div></main><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script><script>const C={apiKey:'AIzaSyD6gi-yVGhFNFaUVdj783_nrnWInfooGas',authDomain:'wedding-website-backend-5a8df.firebaseapp.com',projectId:'wedding-website-backend-5a8df',appId:'1:110097299269:web:f412e7eaac9188639ef02c'};firebase.initializeApp(C);const db=firebase.firestore(),E=['Ganesh Puja','Haldi','Sangeet','Wedding','Reception','Satyanarayana Puja','Atlanta Reception'],f=document.querySelector('#form'),$=x=>document.querySelector(x);let guests=[],selected,oldId;async function load(){let s=await db.collection('guests').get();guests=s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>((a.lastName||'')+(a.firstName||'')).localeCompare((b.lastName||'')+(b.firstName||'')));render()}function render(){let q=$('#search').value.toLowerCase(),m=guests.filter(g=>Object.values(g).join(' ').toLowerCase().includes(q));$('#count').textContent='('+m.length+')';$('#list').innerHTML=m.map(g=>`<button data-id="${g.id}">${g.firstName||''} ${g.lastName||''}<small> — ${g.party||'No party'}</small></button>`).join('');document.querySelectorAll('#list button').forEach(b=>b.onclick=()=>open(guests.find(g=>g.id===b.dataset.id),false))}function open(g,isNew){selected=g;oldId=isNew?null:g.id;$('#title').textContent=isNew?'Add guest':g.firstName+' '+g.lastName;f.classList.remove('hide');for(let k of ['firstName','lastName','id','party','groupName','envelopeName','displayName','email','phone','rsvpStatus','rsvpTimestamp','nutAllergy','dietaryRestrictions','songRequests'])f.elements[k].value=g[k]||'';let yes=new Set(g.events||[]),r=g.rsvp||{};$('#events').innerHTML=E.map(e=>`<label><input type=checkbox value="${e}" ${yes.has(e)?'checked':''}>${e}</label>`).join('');$('#rsvps').innerHTML=E.map(e=>`${e} <select data-event="${e}"><option value="">Awaiting</option><option value="accepted" ${r[e]==='accepted'?'selected':''}>Accepted</option><option value="declined" ${r[e]==='declined'?'selected':''}>Declined</option></select>`).join('<br>')}function blank(){return{id:'',firstName:'',lastName:'',party:'',groupName:'',envelopeName:'',displayName:'',email:'',phone:'',events:[],rsvp:{}}}$('#login').onsubmit=async e=>{e.preventDefault();if($('#pwd').value.trim().toLowerCase()!=='password')return $('#err').textContent='Incorrect password';$('#gate').classList.add('hide');$('#app').classList.remove('hide');await load()};$('#search').oninput=render;$('#add').onclick=()=>open(blank(),true);$('#duplicate').onclick=()=>{if(!selected)return;let g={...selected,id:'',firstName:'',lastName:'',displayName:'',envelopeName:'',email:'',phone:'',rsvp:{},rsvpStatus:'',rsvpTimestamp:''};open(g,true)};f.onsubmit=async e=>{e.preventDefault();let data=new FormData(f),id=data.get('id').trim(),g={...selected,...Object.fromEntries(data)};delete g.id;g.events=[...document.querySelectorAll('#events input:checked')].map(x=>x.value);g.tags=g.events.join(', ');g.rsvp={};document.querySelectorAll('#rsvps select').forEach(s=>{if(s.value)g.rsvp[s.dataset.event]=s.value});try{let b=db.batch();b.set(db.collection('guests').doc(id),g);if(oldId&&oldId!==id)b.delete(db.collection('guests').doc(oldId));await b.commit();$('#msg').textContent='Saved.';await load();open(guests.find(x=>x.id===id),false)}catch(x){$('#msg').textContent=x.message}}</script></body></html>
+<!doctype html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Guest List Manager</title>
+    <style>
+      body {
+        max-width: 1100px;
+        margin: 30px auto;
+        padding: 0 18px;
+        font: 15px Arial;
+        color: #29251f;
+        background: #fffaf2;
+      }
+      input,
+      textarea,
+      select,
+      button {
+        font: inherit;
+        padding: 8px;
+        margin: 4px;
+        border: 1px solid #d8cdbc;
+        border-radius: 5px;
+      }
+      input,
+      textarea,
+      select {
+        width: 100%;
+        box-sizing: border-box;
+      }
+      button {
+        background: #8d4c39;
+        color: white;
+        cursor: pointer;
+      }
+      .hide {
+        display: none;
+      }
+      #list button {
+        display: block;
+        width: 100%;
+        text-align: left;
+        background: white;
+        color: #29251f;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 330px 1fr;
+        gap: 25px;
+      }
+      .two {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+      .full {
+        grid-column: 1/-1;
+      }
+      label {
+        font-size: 12px;
+        color: #655;
+      }
+      #msg {
+        color: #276446;
+      }
+      @media (max-width: 700px) {
+        .grid,
+        .two {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <section id="gate">
+      <h1>Guest List Manager</h1>
+      <form id="login">
+        Password <input id="pwd" type="password" required /><button>
+          Sign in</button
+        ><span id="err"></span>
+      </form>
+    </section>
+    <main id="app" class="hide">
+      <h1>Guest List Manager</h1>
+      <input id="search" placeholder="Search guests, party, or email" /><button
+        id="add"
+      >
+        Add guest</button
+      ><button id="duplicate">Duplicate selected</button
+      ><button onclick="location.reload()">Sign out</button>
+      <div class="grid">
+        <aside>
+          <h2>Guests <span id="count"></span></h2>
+          <div id="list"></div>
+        </aside>
+        <section>
+          <h2 id="title">Select a guest</h2>
+          <p>Changing Document ID moves the record, preserving other fields.</p>
+          <form id="form" class="hide">
+            <div class="two">
+              <label>First name<input name="firstName" required /></label
+              ><label>Last name<input name="lastName" required /></label
+              ><label class="full"
+                >Document ID<input
+                  name="id"
+                  required
+                  pattern="[A-Za-z0-9_-]+" /></label
+              ><label>Party<input name="party" /></label
+              ><label>Group name<input name="groupName" /></label
+              ><label>Envelope name<input name="envelopeName" /></label
+              ><label>Display name<input name="displayName" /></label
+              ><label>Email<input name="email" /></label
+              ><label>Phone<input name="phone" /></label
+              ><label class="full"
+                >Events
+                <div id="events"></div></label
+              ><label class="full"
+                >RSVPs
+                <div id="rsvps"></div></label
+              ><label
+                >RSVP status<select name="rsvpStatus">
+                  <option value="">Not submitted</option>
+                  <option value="submitted">Submitted</option>
+                </select></label
+              ><label>RSVP timestamp<input name="rsvpTimestamp" /></label
+              ><label>Nut allergy<input name="nutAllergy" /></label
+              ><label
+                >Dietary restrictions<input name="dietaryRestrictions" /></label
+              ><label class="full"
+                >Song requests<textarea name="songRequests"></textarea>
+              </label>
+            </div>
+            <button>Save guest</button><span id="msg"></span>
+          </form>
+        </section>
+      </div>
+    </main>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script>
+      const C = {
+        apiKey: "AIzaSyD6gi-yVGhFNFaUVdj783_nrnWInfooGas",
+        authDomain: "wedding-website-backend-5a8df.firebaseapp.com",
+        projectId: "wedding-website-backend-5a8df",
+        appId: "1:110097299269:web:f412e7eaac9188639ef02c",
+      };
+      firebase.initializeApp(C);
+      const db = firebase.firestore(),
+        E = [
+          "Ganesh Puja",
+          "Haldi",
+          "Sangeet",
+          "Wedding",
+          "Reception",
+          "Satyanarayana Puja",
+          "Atlanta Reception",
+        ],
+        f = document.querySelector("#form"),
+        $ = (x) => document.querySelector(x);
+      let guests = [],
+        selected,
+        oldId;
+      async function load() {
+        let s = await db.collection("guests").get();
+        guests = s.docs
+          .map((d) => ({ id: d.id, ...d.data() }))
+          .sort((a, b) =>
+            ((a.lastName || "") + (a.firstName || "")).localeCompare(
+              (b.lastName || "") + (b.firstName || ""),
+            ),
+          );
+        render();
+      }
+      function render() {
+        let q = $("#search").value.toLowerCase(),
+          m = guests.filter((g) =>
+            Object.values(g).join(" ").toLowerCase().includes(q),
+          );
+        $("#count").textContent = "(" + m.length + ")";
+        $("#list").innerHTML = m
+          .map(
+            (g) =>
+              `<button data-id="${g.id}">${g.firstName || ""} ${g.lastName || ""}<small> — ${g.party || "No party"}</small></button>`,
+          )
+          .join("");
+        document.querySelectorAll("#list button").forEach(
+          (b) =>
+            (b.onclick = () =>
+              open(
+                guests.find((g) => g.id === b.dataset.id),
+                false,
+              )),
+        );
+      }
+      function open(g, isNew) {
+        selected = g;
+        oldId = isNew ? null : g.id;
+        $("#title").textContent = isNew
+          ? "Add guest"
+          : g.firstName + " " + g.lastName;
+        f.classList.remove("hide");
+        for (let k of [
+          "firstName",
+          "lastName",
+          "id",
+          "party",
+          "groupName",
+          "envelopeName",
+          "displayName",
+          "email",
+          "phone",
+          "rsvpStatus",
+          "rsvpTimestamp",
+          "nutAllergy",
+          "dietaryRestrictions",
+          "songRequests",
+        ])
+          f.elements[k].value = g[k] || "";
+        let yes = new Set(g.events || []),
+          r = g.rsvp || {};
+        $("#events").innerHTML = E.map(
+          (e) =>
+            `<label><input type=checkbox value="${e}" ${yes.has(e) ? "checked" : ""}>${e}</label>`,
+        ).join("");
+        $("#rsvps").innerHTML = E.map(
+          (e) =>
+            `${e} <select data-event="${e}"><option value="">Awaiting</option><option value="accepted" ${r[e] === "accepted" ? "selected" : ""}>Accepted</option><option value="declined" ${r[e] === "declined" ? "selected" : ""}>Declined</option></select>`,
+        ).join("<br>");
+      }
+      function blank() {
+        return {
+          id: "",
+          firstName: "",
+          lastName: "",
+          party: "",
+          groupName: "",
+          envelopeName: "",
+          displayName: "",
+          email: "",
+          phone: "",
+          events: [],
+          rsvp: {},
+        };
+      }
+      $("#login").onsubmit = async (e) => {
+        e.preventDefault();
+        if ($("#pwd").value.trim().toLowerCase() !== "password")
+          return ($("#err").textContent = "Incorrect password");
+        $("#gate").classList.add("hide");
+        $("#app").classList.remove("hide");
+        await load();
+      };
+      $("#search").oninput = render;
+      $("#add").onclick = () => open(blank(), true);
+      $("#duplicate").onclick = () => {
+        if (!selected) return;
+        let g = {
+          ...selected,
+          id: "",
+          firstName: "",
+          lastName: "",
+          displayName: "",
+          envelopeName: "",
+          email: "",
+          phone: "",
+          rsvp: {},
+          rsvpStatus: "",
+          rsvpTimestamp: "",
+        };
+        open(g, true);
+      };
+      f.onsubmit = async (e) => {
+        e.preventDefault();
+        let data = new FormData(f),
+          id = data.get("id").trim(),
+          g = { ...selected, ...Object.fromEntries(data) };
+        delete g.id;
+        g.events = [...document.querySelectorAll("#events input:checked")].map(
+          (x) => x.value,
+        );
+        g.tags = g.events.join(", ");
+        g.rsvp = {};
+        document.querySelectorAll("#rsvps select").forEach((s) => {
+          if (s.value) g.rsvp[s.dataset.event] = s.value;
+        });
+        try {
+          let b = db.batch();
+          b.set(db.collection("guests").doc(id), g);
+          if (oldId && oldId !== id)
+            b.delete(db.collection("guests").doc(oldId));
+          await b.commit();
+          $("#msg").textContent = "Saved.";
+          await load();
+          open(
+            guests.find((x) => x.id === id),
+            false,
+          );
+        } catch (x) {
+          $("#msg").textContent = x.message;
+        }
+      };
+    </script>
+  </body>
+</html>

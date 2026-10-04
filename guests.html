@@ -43,6 +43,12 @@
         background: white;
         color: #29251f;
       }
+      #list button.selected {
+        background: #f1dfc6;
+        border-color: #8d4c39;
+        box-shadow: inset 4px 0 #8d4c39;
+        font-weight: bold;
+      }
       .grid {
         display: grid;
         grid-template-columns: 330px 1fr;
@@ -63,6 +69,12 @@
       #msg {
         color: #276446;
       }
+      .event-table { width: 100%; border-collapse: collapse; margin-top: 5px; }
+      .event-table th, .event-table td { padding: 7px 8px; border-bottom: 1px solid #e7ddd0; text-align: left; }
+      .event-table th { font-size: 12px; color: #655; }
+      .event-table input { width: auto; margin: 0 6px 0 0; }
+      .event-table select { margin: 0; }
+      .event-table tr.not-invited { opacity: .45; background: #f4f0e9; }
       @media (max-width: 700px) {
         .grid,
         .two {
@@ -111,12 +123,7 @@
               ><label>Display name<input name="displayName" /></label
               ><label>Email<input name="email" /></label
               ><label>Phone<input name="phone" /></label
-              ><label class="full"
-                >Events
-                <div id="events"></div></label
-              ><label class="full"
-                >RSVPs
-                <div id="rsvps"></div></label
+              ><div class="full"><label>Event invitations and RSVPs</label><div id="event-table"></div></div
               ><label
                 >RSVP status<select name="rsvpStatus">
                   <option value="">Not submitted</option>
@@ -183,14 +190,10 @@
               `<button data-id="${g.id}">${g.firstName || ""} ${g.lastName || ""}<small> — ${g.party || "No party"}</small></button>`,
           )
           .join("");
-        document.querySelectorAll("#list button").forEach(
-          (b) =>
-            (b.onclick = () =>
-              open(
-                guests.find((g) => g.id === b.dataset.id),
-                false,
-              )),
-        );
+        document.querySelectorAll("#list button").forEach((b) => {
+          b.classList.toggle("selected", b.dataset.id === selected?.id);
+          b.onclick = () => open(guests.find((g) => g.id === b.dataset.id), false);
+        });
       }
       function open(g, isNew) {
         selected = g;
@@ -218,14 +221,18 @@
           f.elements[k].value = g[k] || "";
         let yes = new Set(g.events || []),
           r = g.rsvp || {};
-        $("#events").innerHTML = E.map(
-          (e) =>
-            `<label><input type=checkbox value="${e}" ${yes.has(e) ? "checked" : ""}>${e}</label>`,
-        ).join("");
-        $("#rsvps").innerHTML = E.map(
-          (e) =>
-            `${e} <select data-event="${e}"><option value="">Awaiting</option><option value="accepted" ${r[e] === "accepted" ? "selected" : ""}>Accepted</option><option value="declined" ${r[e] === "declined" ? "selected" : ""}>Declined</option></select>`,
-        ).join("<br>");
+        $("#event-table").innerHTML = `<table class="event-table"><thead><tr><th>Event</th><th>Invited?</th><th>RSVP response</th></tr></thead><tbody>${E.map(
+          (e) => `<tr class="${yes.has(e) ? "" : "not-invited"}"><td>${e}</td><td><label><input class="event-invite" type="checkbox" value="${e}" ${yes.has(e) ? "checked" : ""}>Invited</label></td><td><select class="event-rsvp" data-event="${e}" ${yes.has(e) ? "" : "disabled"}><option value="">Awaiting</option><option value="accepted" ${r[e] === "accepted" ? "selected" : ""}>Accepted</option><option value="declined" ${r[e] === "declined" ? "selected" : ""}>Declined</option></select></td></tr>`,
+        ).join("")}</tbody></table>`;
+        document.querySelectorAll(".event-invite").forEach((box) => {
+          box.onchange = () => {
+            const row = box.closest("tr"), response = row.querySelector(".event-rsvp");
+            response.disabled = !box.checked;
+            row.classList.toggle("not-invited", !box.checked);
+            if (!box.checked) response.value = "";
+          };
+        });
+        render();
       }
       function blank() {
         return {
@@ -275,14 +282,17 @@
           id = data.get("id").trim(),
           g = { ...selected, ...Object.fromEntries(data) };
         delete g.id;
-        g.events = [...document.querySelectorAll("#events input:checked")].map(
+        g.events = [...document.querySelectorAll(".event-invite:checked")].map(
           (x) => x.value,
         );
         g.tags = g.events.join(", ");
         g.rsvp = {};
-        document.querySelectorAll("#rsvps select").forEach((s) => {
+        document.querySelectorAll(".event-rsvp:not(:disabled)").forEach((s) => {
           if (s.value) g.rsvp[s.dataset.event] = s.value;
         });
+        const saveButton = f.querySelector('button[type="submit"], button:not([type])');
+        saveButton.disabled = true;
+        $("#msg").textContent = "Submitting changes…";
         try {
           let b = db.batch();
           b.set(db.collection("guests").doc(id), g);
@@ -297,6 +307,8 @@
           );
         } catch (x) {
           $("#msg").textContent = x.message;
+        } finally {
+          saveButton.disabled = false;
         }
       };
     </script>

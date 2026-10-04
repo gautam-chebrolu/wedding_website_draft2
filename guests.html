@@ -75,6 +75,8 @@
       .event-table input { width: auto; margin: 0 6px 0 0; }
       .event-table select { margin: 0; }
       .event-table tr.not-invited { opacity: .45; background: #f4f0e9; }
+      .event-rsvp.accepted { color: #276446; font-weight: bold; }
+      .event-rsvp.declined { color: #a52e2e; font-weight: bold; }
       @media (max-width: 700px) {
         .grid,
         .two {
@@ -222,7 +224,7 @@
         let yes = new Set(g.events || []),
           r = g.rsvp || {};
         $("#event-table").innerHTML = `<table class="event-table"><thead><tr><th>Event</th><th>Invited?</th><th>RSVP response</th></tr></thead><tbody>${E.map(
-          (e) => `<tr class="${yes.has(e) ? "" : "not-invited"}"><td>${e}</td><td><label><input class="event-invite" type="checkbox" value="${e}" ${yes.has(e) ? "checked" : ""}>Invited</label></td><td><select class="event-rsvp" data-event="${e}" ${yes.has(e) ? "" : "disabled"}><option value="">Awaiting</option><option value="accepted" ${r[e] === "accepted" ? "selected" : ""}>Accepted</option><option value="declined" ${r[e] === "declined" ? "selected" : ""}>Declined</option></select></td></tr>`,
+          (e) => `<tr class="${yes.has(e) ? "" : "not-invited"}"><td>${e}</td><td><label><input class="event-invite" type="checkbox" value="${e}" ${yes.has(e) ? "checked" : ""}>Invited</label></td><td><select class="event-rsvp ${r[e] || ""}" data-event="${e}" ${yes.has(e) ? "" : "disabled"}><option value="">Awaiting</option><option value="accepted" ${r[e] === "accepted" ? "selected" : ""}>Accepted</option><option value="declined" ${r[e] === "declined" ? "selected" : ""}>Declined</option></select></td></tr>`,
         ).join("")}</tbody></table>`;
         document.querySelectorAll(".event-invite").forEach((box) => {
           box.onchange = () => {
@@ -230,6 +232,13 @@
             response.disabled = !box.checked;
             row.classList.toggle("not-invited", !box.checked);
             if (!box.checked) response.value = "";
+            response.classList.remove("accepted", "declined");
+          };
+        });
+        document.querySelectorAll(".event-rsvp").forEach((response) => {
+          response.onchange = () => {
+            response.classList.toggle("accepted", response.value === "accepted");
+            response.classList.toggle("declined", response.value === "declined");
           };
         });
         render();

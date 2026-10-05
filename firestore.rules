@@ -15,10 +15,9 @@ service cloud.firestore {
     }
 
     // ── atl_rsvps ─────────────────────────────────────────────
-    // Anyone can submit a new ATL walk-in RSVP; nobody can read
-    // from the browser (tracking dashboard uses admin SDK).
+    // The tracking dashboard reads these directly from the browser.
     match /atl_rsvps/{docId} {
-      allow read:   if false;
+      allow read:   if true;
       allow create: if true;
       allow update: if false;
       allow delete: if false;

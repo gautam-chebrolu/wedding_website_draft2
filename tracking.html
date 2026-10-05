@@ -1504,7 +1504,9 @@
               name: displayName,
               status: 'accepted',
               idx: 9000 + atlRsvps.indexOf(atl), // high index to sort at end in party order
-              group: 'Chebrolu Friends'
+              group: 'Chebrolu Friends',
+              // One ATL RSVP document can represent several people.
+              attendeeCount: guestCount
             };
             agg.invited.push(item);
             agg.accepted.push(item);
@@ -1781,7 +1783,8 @@
       let html = '';
       for (const grp of groups) {
         const members = groupMap.get(grp);
-        html += `<span class="group-header">${escapeHtml(grp)} (${members.length})</span>`;
+        const groupCount = members.reduce((total, item) => total + (item.attendeeCount || 1), 0);
+        html += `<span class="group-header">${escapeHtml(grp)} (${groupCount})</span>`;
         for (const item of members) {
           html += `<span class="name-tag" style="${nameStyle(item.status)}">${item.name}</span>`;
         }
@@ -1806,11 +1809,12 @@
 
       const tags = renderGroupedNames(items, 'last');
 
+      const attendeeCount = items.reduce((total, item) => total + (item.attendeeCount || 1), 0);
       return `
         <div class="name-list-wrap" id="list-${key}">
           <div class="name-list-header" style="color: ${dotColor}">
             <span class="header-dot" style="background: ${dotColor}"></span>
-            ${label} (${items.length})
+            ${label} (${attendeeCount})
           </div>
           <div class="sort-controls">
             <span class="sort-label">Sort:</span>

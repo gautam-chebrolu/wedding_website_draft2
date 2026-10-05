@@ -1,6 +1,7 @@
 # ── Private guest data ──────────────────────────────────────────
 # Never commit raw guest lists — they contain personal information.
 media/*.csv
+guests_export.csv
 
 # Node modules (if ever installed locally)
 node_modules/

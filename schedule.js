@@ -91,6 +91,10 @@ async function submitRSVPToFirestore(payload) {
     if (m.songRequests !== undefined) updateData.songRequests = m.songRequests;
     if (m.email !== undefined) updateData.email = m.email;
     if (m.phone !== undefined) updateData.phone = m.phone;
+    if (m.smsTextOptIn !== undefined) {
+      updateData.smsTextOptIn = m.smsTextOptIn;
+      updateData.smsConsentUpdatedAt = timestamp;
+    }
 
     await db.collection('guests').doc(docId).update(updateData);
     console.log('Firestore write OK:', docId);
@@ -751,6 +755,18 @@ document.addEventListener('DOMContentLoaded', function () {
     html += '<span class="rsvp-field-error" id="phone_err_' + mid + '" aria-live="polite"></span>';
     html += '</div>';
 
+    // This remains separate from RSVP and is always unchecked. It applies only
+    // to this selected guest and the phone number immediately above.
+    html += '<fieldset class="sms-consent" aria-describedby="sms_consent_help_' + mid + '">';
+    html += '<legend>Wedding text updates <span class="rsvp-optional">(optional)</span></legend>';
+    html += '<label class="sms-consent-label" for="sms_consent_' + mid + '">';
+    html += '<input type="checkbox" id="sms_consent_' + mid + '">';
+    html += '<span>Yes, I agree to receive recurring automated text messages from Priya &amp; Gautam Wedding Updates at the mobile number I provided, including reminders, venue and transportation information, schedule changes, and replies to my wedding-related questions.</span>';
+    html += '</label>';
+    html += '<p id="sms_consent_help_' + mid + '" class="sms-consent-help">Message frequency varies. Message and data rates may apply. Reply <strong>STOP</strong> to opt out; reply <strong>HELP</strong> for help. Consent is optional and is not required to RSVP or attend. See our <a href="/sms-terms">SMS Terms &amp; Conditions</a> and <a href="/privacy">Privacy Policy</a>.</p>';
+    html += '<span class="rsvp-field-error" id="sms_consent_err_' + mid + '" aria-live="polite"></span>';
+    html += '</fieldset>';
+
     html += '</div></div>'; // .rsvp-member-questions / .rsvp-questions-container
 
     rsvpQuestionsEl.innerHTML = html;
@@ -832,6 +848,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var song     = document.getElementById('song_' + mid);
     var email    = document.getElementById('email_' + mid);
     var phone    = document.getElementById('phone_' + mid);
+    var smsConsent = document.getElementById('sms_consent_' + mid);
 
     // ── Pre-submit validation ─────────────────────────────────
     var emailVal = email ? email.value.trim() : '';
@@ -882,7 +899,8 @@ document.addEventListener('DOMContentLoaded', function () {
         dietaryRestrictions: dietary ? dietary.value.trim() : '',
         songRequests: song ? song.value.trim() : '',
         email: email ? email.value.trim() : '',
-        phone: phone ? phone.value.trim() : ''
+        phone: phone ? phone.value.trim() : '',
+        smsTextOptIn: !!(smsConsent && smsConsent.checked)
       }]
     };
 
@@ -931,6 +949,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (anyAccepted) launchGoldGlitter();
 
         // Show success
+        rsvpSuccessEl.querySelector('p').textContent = 'Your updated details have been saved.';
         rsvpSuccessEl.style.display = 'block';
         rsvpSuccessEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
 

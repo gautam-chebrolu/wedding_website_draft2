@@ -29,5 +29,21 @@ service cloud.firestore {
       allow read:  if true;
       allow write: if false;
     }
+
+    // ── seating ───────────────────────────────────────────────
+    // Reception seating chart for the /wedding "Find Your Seat" widget.
+    // Written only by import_seating.js (service account).
+    match /seating/{docId} {
+      allow read:  if true;
+      allow write: if false;
+    }
+
+    // ── live ──────────────────────────────────────────────────
+    // Live-page overrides (banner, delay, current act). Guests read them
+    // in real time; only /api/live-admin (service account) can write.
+    match /live/{docId} {
+      allow read:  if true;
+      allow write: if false;
+    }
   }
 }

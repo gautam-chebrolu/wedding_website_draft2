@@ -2,6 +2,7 @@
 # Never commit raw guest lists — they contain personal information.
 media/*.csv
 guests_export.csv
+balaji_kalyanam_rsvps.csv
 
 # Node modules (if ever installed locally)
 node_modules/
@@ -11,3 +12,11 @@ apps-script/
 
 # ── Firebase service account key (NEVER commit) ────────────────
 service-account-key.json
+
+# ── Secrets: OpenAI key, live-admin password, etc. (NEVER commit) ─
+.env
+.env.*
+!.env.example
+
+# ── Vercel CLI local project link ───────────────────────────────
+.vercel/

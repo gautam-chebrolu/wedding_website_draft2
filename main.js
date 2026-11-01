@@ -54,3 +54,22 @@
     }
   });
 })();
+
+
+// ── "● Live" nav pill (only during the Sangeet & wedding day) ──
+(function () {
+  var ul = document.querySelector('nav.site-nav ul');
+  if (!ul) return;
+  var now = Date.now();
+  var windows = [
+    { href: 'sangeet.html', from: '2026-11-20T12:00:00-05:00', to: '2026-11-21T03:00:00-05:00' },
+    { href: 'wedding.html', from: '2026-11-21T05:00:00-05:00', to: '2026-11-22T03:00:00-05:00' }
+  ];
+  var hit = windows.find(function (w) { return now >= Date.parse(w.from) && now < Date.parse(w.to); });
+  if (!hit) return;
+  var li = document.createElement('li');
+  li.innerHTML = '<a href="' + hit.href + '" class="nav-live" id="nav-live-link"><span class="nav-live-dot" aria-hidden="true"></span>Live</a>';
+  ul.insertBefore(li, ul.firstChild);
+  var page = window.location.pathname.split('/').pop();
+  if (page === hit.href || page + '.html' === hit.href) li.firstChild.classList.add('active');
+})();

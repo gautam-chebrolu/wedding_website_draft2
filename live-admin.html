@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Live Controls — Priya &amp; Gautam</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#0d0c0b" />
+  <link rel="icon" type="image/x-icon" href="media/wedding_logo.svg">
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="live.css" />
+  <style>
+    .admin { max-width: 560px; margin: 0 auto; padding: 28px 16px 80px; }
+    .admin h1 { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 34px; text-align: center; color: var(--cream); }
+    .admin-sub { text-align: center; font-family: var(--sans); font-size: 12px; color: var(--cream-60); margin: 6px 0 22px; }
+    .panel { background: var(--glass); border: 1px solid var(--line); border-radius: 18px; padding: 18px 16px; margin-bottom: 14px; }
+    .panel h2 { font-family: var(--sans); font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+    .panel p.hint { font-family: var(--sans); font-size: 12px; line-height: 1.6; color: var(--cream-60); margin-bottom: 12px; }
+    .now-val { font-family: var(--sans); font-size: 13px; color: var(--cream); background: rgba(0,0,0,.3); border-radius: 10px; padding: 10px 12px; margin-bottom: 12px; line-height: 1.5; }
+    .now-val em { color: var(--cream-35); font-style: normal; }
+    .a-input, .a-select, .a-text { width: 100%; font-family: var(--sans); font-size: 16px; color: var(--cream); background: rgba(0,0,0,.35); border: 1px solid rgba(255,255,255,.14); border-radius: 12px; padding: 12px 14px; outline: none; }
+    .a-text { min-height: 84px; resize: vertical; line-height: 1.5; }
+    .a-input:focus, .a-select:focus, .a-text:focus { border-color: var(--gold); }
+    .a-select option { background: #1a1712; }
+    .row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+    .a-btn { flex: 1; min-width: 0; font-family: var(--sans); font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; padding: 13px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--glass-2); color: var(--cream); cursor: pointer; transition: transform .15s, background .2s; }
+    .a-btn:active { transform: scale(.97); }
+    .a-btn.primary { background: linear-gradient(135deg, #f1dcab, #c9a96e); color: var(--ink); border-color: transparent; }
+    .a-btn.danger { color: #ffb4aa; border-color: rgba(255,111,97,.35); }
+    .a-btn.is-on { background: var(--cream); color: var(--ink); }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .chips button { font-family: var(--sans); font-size: 12px; color: var(--cream-60); background: transparent; border: 1px dashed rgba(255,255,255,.2); border-radius: 999px; padding: 7px 12px; cursor: pointer; text-align: left; }
+    .mins { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 10px; }
+    .acts { display: flex; flex-direction: column; gap: 6px; }
+    .act-btn { display: flex; gap: 10px; align-items: center; text-align: left; font-family: var(--sans); font-size: 14px; color: var(--cream); background: rgba(0,0,0,.25); border: 1px solid var(--line); border-radius: 12px; padding: 12px; cursor: pointer; }
+    .act-btn b { flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; border: 1px solid var(--line); }
+    .act-btn.is-on { border-color: var(--live); background: rgba(255,111,97,.15); }
+    .act-btn.is-on b { background: var(--live); border-color: var(--live); }
+    .toast { position: fixed; left: 50%; bottom: 20px; transform: translate(-50%, 150%); font-family: var(--sans); font-size: 13px; color: var(--ink); background: var(--gold-hi); padding: 12px 18px; border-radius: 12px; transition: transform .35s var(--ease); z-index: 90; box-shadow: 0 10px 30px rgba(0,0,0,.5); }
+    .toast.show { transform: translate(-50%, 0); }
+    .toast.err { background: #ff8a7a; }
+    .err-msg { font-family: var(--sans); font-size: 13px; color: #ff8a7a; margin-top: 10px; text-align: center; }
+    .seg { display: flex; padding: 4px; gap: 4px; border-radius: 999px; background: var(--glass); border: 1px solid var(--line); margin-bottom: 14px; }
+    .seg button { flex: 1; font-family: var(--sans); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; padding: 11px; border-radius: 999px; border: 0; background: transparent; color: var(--cream-60); cursor: pointer; }
+    .seg button.is-on { background: var(--cream); color: var(--ink); }
+    .preview-link { display: block; text-align: center; font-family: var(--sans); font-size: 12px; color: var(--gold-hi); margin-top: 8px; }
+  </style>
+</head>
+
+<body class="live-page">
+  <main class="admin">
+    <h1>Live Controls</h1>
+    <p class="admin-sub">Changes appear on every guest’s phone within seconds.</p>
+
+    <!-- Login -->
+    <section id="login" class="panel">
+      <h2>Sign in</h2>
+      <form id="login-form">
+        <label for="admin-pw" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);">Password</label>
+        <input id="admin-pw" class="a-input" type="password" placeholder="Admin password" autocomplete="current-password" required />
+        <div class="row"><button id="login-btn" class="a-btn primary" type="submit">Unlock</button></div>
+      </form>
+      <p id="login-err" class="err-msg" hidden></p>
+    </section>
+
+    <!-- Controls -->
+    <div id="controls" hidden>
+      <div class="seg" role="tablist" aria-label="Event">
+        <button type="button" id="ev-sangeet" data-ev="sangeet" class="is-on">Sangeet</button>
+        <button type="button" id="ev-wedding" data-ev="wedding">Wedding Day</button>
+      </div>
+      <a id="preview-link" class="preview-link" href="sangeet.html" target="_blank" rel="noopener">Open the guest page ↗</a>
+
+      <section class="panel" style="margin-top:14px">
+        <h2>Announcement</h2>
+        <div class="now-val" id="cur-banner"><em>No announcement showing</em></div>
+        <label for="banner-text" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);">Announcement text</label>
+        <textarea id="banner-text" class="a-text" maxlength="280" placeholder="e.g. Please take your seats — we’re about to begin!"></textarea>
+        <div class="chips" id="banner-presets">
+          <button type="button">Please take your seats — we’re about to begin!</button>
+          <button type="button">Shuttles back to the Washington Duke Inn are boarding now.</button>
+          <button type="button">The dance floor is open!</button>
+        </div>
+        <div class="row">
+          <button id="banner-send" class="a-btn primary" type="button">Show to guests</button>
+          <button id="banner-clear" class="a-btn danger" type="button">Clear</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Running late?</h2>
+        <p class="hint">Shift the schedule from one item onward. Guests see the updated times and a short notice.</p>
+        <div class="now-val" id="cur-delay"><em>On schedule</em></div>
+        <label for="delay-from" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);">Delay starting from</label>
+        <select id="delay-from" class="a-select"></select>
+        <div class="mins" id="delay-mins">
+          <button type="button" class="a-btn" data-m="5">+5</button>
+          <button type="button" class="a-btn" data-m="10">+10</button>
+          <button type="button" class="a-btn" data-m="15">+15</button>
+          <button type="button" class="a-btn" data-m="20">+20</button>
+          <button type="button" class="a-btn" data-m="30">+30</button>
+          <button type="button" class="a-btn" data-m="45">+45</button>
+          <button type="button" class="a-btn" data-m="60">+60</button>
+          <button type="button" class="a-btn danger" data-m="0">Reset</button>
+        </div>
+      </section>
+
+      <section class="panel" id="acts-panel">
+        <h2>Now performing</h2>
+        <p class="hint">Tap the act on stage. Guests see “Now performing” and “Up next”.</p>
+        <div class="row" style="margin:0 0 10px">
+          <button id="act-prev" class="a-btn" type="button">← Prev</button>
+          <button id="act-next" class="a-btn primary" type="button">Next act →</button>
+          <button id="act-clear" class="a-btn danger" type="button">Clear</button>
+        </div>
+        <div class="acts" id="acts"></div>
+      </section>
+    </div>
+  </main>
+
+  <div id="toast" class="toast" role="status"></div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="firestore_data.js"></script>
+  <script src="media/live_schedule_data.js"></script>
+  <script>
+    (function () {
+      var $ = function (id) { return document.getElementById(id); };
+      var pw = sessionStorage.getItem('pg_live_admin') || '';
+      var evKey = 'sangeet';
+      var state = {};
+      var unsub = null;
+
+      function toast(msg, isErr) {
+        var t = $('toast');
+        t.textContent = msg;
+        t.classList.toggle('err', !!isErr);
+        t.classList.add('show');
+        clearTimeout(t._h);
+        t._h = setTimeout(function () { t.classList.remove('show'); }, 2200);
+      }
+
+      async function call(patch) {
+        var res = await fetch('/api/live-admin', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: pw, event: evKey, patch: patch || null })
+        });
+        var json = await res.json().catch(function () { return {}; });
+        if (!res.ok) throw new Error(json.error || ('Error ' + res.status));
+        return json;
+      }
+
+      async function save(patch, okMsg) {
+        try { await call(patch); toast(okMsg || 'Saved'); }
+        catch (e) { toast(e.message, true); if (/password/i.test(e.message)) logout(); }
+      }
+
+      function logout() {
+        sessionStorage.removeItem('pg_live_admin');
+        $('controls').hidden = true; $('login').hidden = false;
+      }
+
+      // ── Login ──
+      $('login-form').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        pw = $('admin-pw').value;
+        $('login-err').hidden = true;
+        try {
+          await call(null);
+          sessionStorage.setItem('pg_live_admin', pw);
+          showControls();
+        } catch (err) {
+          $('login-err').textContent = err.message;
+          $('login-err').hidden = false;
+        }
+      });
+
+      function items() {
+        return LIVE_SCHEDULE[evKey].blocks.reduce(function (a, b) { return a.concat(b.items); }, []);
+      }
+      function acts() {
+        var p = items().find(function (i) { return i.acts; });
+        return p ? p.acts : [];
+      }
+
+      function showControls() {
+        $('login').hidden = true;
+        $('controls').hidden = false;
+        selectEvent(evKey);
+      }
+
+      function selectEvent(key) {
+        evKey = key;
+        document.querySelectorAll('[data-ev]').forEach(function (b) { b.classList.toggle('is-on', b.dataset.ev === key); });
+        $('preview-link').href = key + '.html';
+        var fmt = new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', hour: 'numeric', minute: '2-digit' });
+        $('delay-from').innerHTML = items().map(function (i) {
+          return '<option value="' + i.id + '">From: ' + fmt.format(new Date(i.start)) + ' · ' + i.title + '</option>';
+        }).join('');
+        // Default to the next upcoming item
+        var nowMs = Date.now();
+        var next = items().find(function (i) { return Date.parse(i.start) > nowMs; });
+        if (next) $('delay-from').value = next.id;
+
+        var list = acts();
+        $('acts-panel').hidden = !list.length;
+        $('acts').innerHTML = list.map(function (a, i) {
+          return '<button type="button" class="act-btn" data-act="' + i + '"><b>' + (i + 1) + '</b><span>' +
+            a.who + (a.name ? ' — ' + a.name : '') + '</span></button>';
+        }).join('');
+
+        if (unsub) unsub();
+        unsub = WeddingData.getDb().collection('live').doc(key).onSnapshot(function (snap) {
+          state = snap.exists ? snap.data() : {};
+          render();
+        }, function (err) { toast('Live read failed: ' + err.message, true); });
+      }
+
+      function render() {
+        $('cur-banner').innerHTML = state.banner ? '“' + escapeHtml(state.banner) + '”' : '<em>No announcement showing</em>';
+        if (state.delayMinutes) {
+          var it = items().find(function (i) { return i.id === state.delayFromId; });
+          $('cur-delay').innerHTML = 'Running <b>' + state.delayMinutes + ' min</b> late from <b>' + (it ? escapeHtml(it.title) : '?') + '</b>';
+        } else {
+          $('cur-delay').innerHTML = '<em>On schedule</em>';
+        }
+        document.querySelectorAll('.act-btn').forEach(function (b) {
+          b.classList.toggle('is-on', +b.dataset.act === state.currentAct);
+        });
+      }
+
+      function escapeHtml(s) {
+        return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      }
+
+      document.querySelector('.seg').addEventListener('click', function (e) {
+        var b = e.target.closest('[data-ev]');
+        if (b) selectEvent(b.dataset.ev);
+      });
+
+      // ── Banner ──
+      $('banner-presets').addEventListener('click', function (e) {
+        if (e.target.tagName === 'BUTTON') $('banner-text').value = e.target.textContent;
+      });
+      $('banner-send').addEventListener('click', function () {
+        var text = $('banner-text').value.trim();
+        if (!text) return toast('Type a message first', true);
+        save({ banner: text }, 'Announcement is live');
+      });
+      $('banner-clear').addEventListener('click', function () {
+        save({ banner: '' }, 'Announcement cleared');
+        $('banner-text').value = '';
+      });
+
+      // ── Delay ──
+      $('delay-mins').addEventListener('click', function (e) {
+        var b = e.target.closest('[data-m]');
+        if (!b) return;
+        var m = +b.dataset.m;
+        if (m === 0) return save({ delayMinutes: 0, delayFromId: '' }, 'Back on schedule');
+        save({ delayMinutes: m, delayFromId: $('delay-from').value }, 'Running ' + m + ' min late');
+      });
+
+      // ── Acts ──
+      $('acts').addEventListener('click', function (e) {
+        var b = e.target.closest('.act-btn');
+        if (b) save({ currentAct: +b.dataset.act }, 'Now performing: #' + (+b.dataset.act + 1));
+      });
+      $('act-next').addEventListener('click', function () {
+        var cur = typeof state.currentAct === 'number' ? state.currentAct : -1;
+        var n = Math.min(acts().length - 1, cur + 1);
+        save({ currentAct: n }, 'Now performing: #' + (n + 1));
+      });
+      $('act-prev').addEventListener('click', function () {
+        var cur = typeof state.currentAct === 'number' ? state.currentAct : 0;
+        var n = Math.max(0, cur - 1);
+        save({ currentAct: n }, 'Now performing: #' + (n + 1));
+      });
+      $('act-clear').addEventListener('click', function () { save({ currentAct: null }, 'Cleared'); });
+
+      // Auto-unlock if already signed in this session
+      if (pw) call(null).then(showControls).catch(logout);
+    })();
+  </script>
+</body>
+
+</html>

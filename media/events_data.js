@@ -57,7 +57,7 @@ const EVENTS = {
     icsEnd: "20261121T190000Z",
     description: [
       "Groom's procession (baraat) will begin promptly at 8:45 AM at Washington Duke Inn.",
-      "Grab-and-go breakfast and pastries will be available at the venue from 7 - 8:30 am in the hospitality room. A refreshment will be available after the baraat. Lunch will be served after the wedding.",
+      "Grab-and-go breakfast and pastries will be available at the venue from 7:30 - 8:30 am in the hospitality room. A refreshment will be available after the baraat. Lunch will be served after the wedding.",
       "Attire: Western or Indian Formal; please avoid wearing pink"
     ]
   },
@@ -108,3 +108,6 @@ const EVENTS = {
     ]
   }
 };
+
+// Lets the chatbot (api/_lib/assistant.js) reuse this file in Node.
+if (typeof module !== 'undefined' && module.exports) module.exports = EVENTS;

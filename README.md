@@ -152,6 +152,75 @@ firebase deploy --only firestore:rules --project wedding-website-backend-5a8df
 
 ---
 
+## Live Event Pages (`/sangeet`, `/wedding`)
+
+Public pages that update in real time during the events: a countdown before
+things start, a highlighted **Live** card, faded upcoming items, collapsed past
+items, the Sangeet "Now Showing" food-station posters, and the reception
+seating search.
+
+| What to change | Where |
+|---|---|
+| Schedule times, titles, performance lineup, food stations | `media/live_schedule_data.js` |
+| Look & feel | `live.css` (posters: `.poster--<theme>`) |
+| Engine (states, countdown, seating search) | `live.js` |
+
+**Preview any moment:** add `?now=` (Eastern time) to the URL, e.g.
+`/sangeet?now=2026-11-20T19:40` or `/wedding?now=2026-11-21T17:15`. Add
+`&speed=60` to fast-forward one minute per second. A "Preview" badge shows
+while this is active.
+
+A pulsing **● Live** pill is added to the nav automatically, but only on
+Nov 20–21 (`main.js`).
+
+### Live controls (`/live-admin`)
+Password-protected page for your phone during the event:
+- **Announcement**: a banner on every guest's screen within seconds
+- **Running late**: shifts the schedule from a chosen item onward
+- **Now performing**: Sangeet act tracker ("Next act →")
+
+It writes to the Firestore `live/{sangeet|wedding}` docs through
+`/api/live-admin`. Browsers can only *read* those docs.
+
+### Seating chart
+```bash
+node import_seating.js --dry-run   # check the CSV
+node import_seating.js             # upload → Firestore seating/reception
+```
+Default CSV: `media/Reception Seating Chart - A-Z Seating Chart.csv`
+(gitignored). Re-run whenever the chart changes.
+
+---
+
+## Chatbot
+
+Answers guest questions at the bottom of `/sangeet` and `/wedding`.
+
+- **Add facts:** edit `api/_data/facts.md` (plain English), then push.
+  Schedules from `media/events_data.js` and `media/live_schedule_data.js`
+  are included automatically.
+- Brain: `api/_lib/assistant.js` (also exposes `answer()` for a future SMS
+  bot). Endpoint: `api/chat.js`. UI: `chat.js` + `chat.css`.
+- Model: `gpt-4.1-nano` by default (override with the `OPENAI_MODEL` env var).
+- Private-home events (Ganesh Puja, Haldi, Satyanarayana Puja) are described
+  without their address, because the chatbot is public.
+
+### Secrets (never committed)
+| Variable | Used by |
+|---|---|
+| `OPENAI_API_KEY` | chatbot |
+| `LIVE_ADMIN_PASSWORD` | `/live-admin` |
+| `FIREBASE_SERVICE_ACCOUNT` | `/live-admin` on Vercel (paste the whole service-account JSON) |
+
+- **Vercel:** Project → Settings → Environment Variables → add each one →
+  redeploy.
+- **Local:** copy `.env.example` → `.env.local`, fill it in, then run
+  `node dev-server.js` and open http://localhost:3001. `.env*` and
+  `.vercel/` are gitignored. Before pushing, `git status` should never list
+  `.env.local`.
+
+---
+
 ## Deprecated Files (kept as archive)
 
 | File | Status |

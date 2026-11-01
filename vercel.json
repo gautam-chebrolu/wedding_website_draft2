@@ -2,5 +2,14 @@
     "cleanUrls": true,
     "redirects": [
         { "source": "/hotels", "destination": "/travel", "permanent": true }
-    ]
-}
+    ],
+    "functions": {
+        "api/chat.js": {
+            "maxDuration": 30,
+            "includeFiles": "api/_data/**"
+        },
+        "api/live-admin.js": {
+            "maxDuration": 10
+        }
+    }
+}

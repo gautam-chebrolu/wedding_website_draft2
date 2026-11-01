@@ -2511,3 +2511,35 @@ footer.site-footer a:focus-visible {
     font-size: 14px;
   }
 }
+
+
+/* ── LIVE NAV PILL (added by main.js on Nov 20–21 only) ─────── */
+nav.site-nav ul li a.nav-live,
+nav.site-nav.scrolled ul li a.nav-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #fff;
+  background: linear-gradient(135deg, #ff7a6b, #e5484d);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 4px 18px rgba(229, 72, 77, 0.4);
+}
+
+nav.site-nav ul li a.nav-live:hover { filter: brightness(1.08); }
+
+.nav-live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #fff;
+  animation: navLivePulse 1.4s ease-in-out infinite;
+}
+
+@keyframes navLivePulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.7); }
+}
+
+@media (max-width: 600px) {
+  nav.site-nav ul li a.nav-live { gap: 5px; padding: 6px 10px; }
+}

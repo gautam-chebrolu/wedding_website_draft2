@@ -243,6 +243,7 @@
     fetchTracking: fetchTracking,
     submitAtl: submitAtl,
     nameKeyOf: nameKeyOf,
+    getDb: db,
     EVENT_ORDER: EVENT_ORDER,
     get mirrorToSheet() { return MIRROR_TO_SHEET; },
     set mirrorToSheet(v) { MIRROR_TO_SHEET = !!v; }

@@ -144,6 +144,8 @@ document.addEventListener('DOMContentLoaded', function () {
   const memberRsvpBadge = document.getElementById('member-rsvp-badge');
 
   const scheduleContainer = document.getElementById('schedule-container');
+  const scheduleCarouselPrev = document.getElementById('schedule-carousel-prev');
+  const scheduleCarouselNext = document.getElementById('schedule-carousel-next');
   const calendarBtn = document.getElementById('calendar-btn');
 
   const rsvpLoadingEl = document.getElementById('rsvp-loading');
@@ -154,6 +156,27 @@ document.addEventListener('DOMContentLoaded', function () {
   const submitRsvpBtn = document.getElementById('submit-rsvp-btn');
   const updateRsvpBtn = document.getElementById('update-rsvp-btn');
   const rsvpSuccessEl = document.getElementById('rsvp-success');
+
+  function updateScheduleCarousel() {
+    if (!scheduleCarouselPrev || !scheduleCarouselNext) return;
+    var maxScroll = Math.max(0, scheduleContainer.scrollWidth - scheduleContainer.clientWidth);
+    var atStart = scheduleContainer.scrollLeft <= 2;
+    var atEnd = scheduleContainer.scrollLeft >= maxScroll - 2;
+    scheduleCarouselPrev.disabled = atStart;
+    scheduleCarouselNext.disabled = atEnd || maxScroll === 0;
+  }
+
+  function moveScheduleCarousel(direction) {
+    var amount = Math.max(280, scheduleContainer.clientWidth * 0.7);
+    scheduleContainer.scrollBy({ left: direction * amount, behavior: 'smooth' });
+  }
+
+  if (scheduleCarouselPrev && scheduleCarouselNext) {
+    scheduleCarouselPrev.addEventListener('click', function () { moveScheduleCarousel(-1); });
+    scheduleCarouselNext.addEventListener('click', function () { moveScheduleCarousel(1); });
+    scheduleContainer.addEventListener('scroll', updateScheduleCarousel, { passive: true });
+    window.addEventListener('resize', updateScheduleCarousel);
+  }
 
   // ── State ─────────────────────────────────────────────────
   let currentGuestEvents = [];   // For ICS export (current individual)
@@ -558,13 +581,18 @@ document.addEventListener('DOMContentLoaded', function () {
     var memberEvents = member.events || [];
     var totalEvents = memberEvents.length;
     var badgeState = getBadgeState(member.rsvp, totalEvents);
-    var hideSchedule = (badgeState.cls === 'pending' || badgeState.cls === 'not-attending');
+    var confirmedEvents = memberEvents.filter(function (eventName) {
+      return member.rsvp && member.rsvp[eventName] === 'accepted';
+    });
+    var hideSchedule = confirmedEvents.length === 0;
 
     if (hideSchedule) {
       // Don't show event cards — show a message instead
       var msg = badgeState.cls === 'pending'
         ? 'Your RSVP is pending. If you would like to attend, please contact us.'
-        : 'You have declined all events. If this has changed, please contact us.';
+        : badgeState.cls === 'not-attending'
+          ? 'You have declined all events. If this has changed, please contact us.'
+          : 'You do not have any confirmed events. If this looks incorrect, please contact us.';
       scheduleContainer.innerHTML =
         '<div class="rsvp-closed-notice" style="margin-top: 0;">' +
         '<p>' + msg + '</p>' +
@@ -576,7 +604,7 @@ document.addEventListener('DOMContentLoaded', function () {
       // Render event cards
       calendarBtn.style.display = '';
       for (var tagKey in EVENTS) {
-        if (memberEvents.indexOf(tagKey) === -1) continue;
+        if (confirmedEvents.indexOf(tagKey) === -1) continue;
 
         var eventDetails = EVENTS[tagKey];
         currentGuestEvents.push(eventDetails);
@@ -590,6 +618,8 @@ document.addEventListener('DOMContentLoaded', function () {
         calendarBtn.style.display = 'none';
       }
     }
+
+    requestAnimationFrame(updateScheduleCarousel);
 
     // Supplemental questions remain editable even though RSVPs are closed
     if (apiAvailable) {
@@ -648,10 +678,13 @@ document.addEventListener('DOMContentLoaded', function () {
       '\\nTime: ' + eventDetails.time + '\nEND:VEVENT\nEND:VCALENDAR';
     var appleLink = 'data:text/calendar;charset=utf8,' + encodeURIComponent(singleIcs);
 
-    var descHtml = eventDetails.description
-      ? '<div class="schedule-description">' +
-      eventDetails.description.map(function (d) { return '<p>' + d + '</p>'; }).join('') +
-      '</div>'
+    var details = eventDetails.description || [];
+    var attire = details.filter(function (detail) { return /^Attire:/i.test(detail); })[0] || '';
+    var descHtml = details.filter(function (detail) { return !/^Attire:/i.test(detail); })
+      .map(function (detail) { return '<p>' + detail + '</p>'; }).join('');
+    descHtml = descHtml ? '<div class="schedule-description">' + descHtml + '</div>' : '';
+    var attireHtml = attire
+      ? '<div class="schedule-key-item schedule-attire"><span class="schedule-key-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6l1 5 3 2-2 3-2-1v9H9v-9l-2 1-2-3 3-2 1-5Z"></path><path d="M9 8h6"></path></svg></span><span><b>Attire</b><strong>' + attire.replace(/^Attire:\s*/i, '') + '</strong></span></div>'
       : '';
 
     // RSVP status column (read-only — RSVPs are now closed)
@@ -679,29 +712,70 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Card: left = event info, right = RSVP col
     var card = document.createElement('div');
-    card.className = 'schedule-card';
+    card.className = 'schedule-card schedule-card--confirmed';
     card.innerHTML =
       '<div class="schedule-card-body">' +
       '<div class="schedule-card-info">' +
-      '<div class="schedule-date">' + eventDetails.date + '<br><span class="schedule-time">' + eventDetails.time + '</span></div>' +
-      '<h3>' + eventDetails.name + '</h3>' +
-      descHtml +
-      '<p class="schedule-location">' +
+      '<div class="schedule-card-heading">' +
+      '<span><h3>' + eventDetails.name + '</h3>' +
+      '<span class="schedule-date">' + eventDetails.date + '</span><span class="schedule-time">' + eventDetails.time + '</span></span>' +
+      '</div>' +
+      '<a href="' + eventDetails.mapLink + '" class="schedule-location" target="_blank" rel="noopener noreferrer" aria-label="Open ' + eventDetails.location + ' in Google Maps">' +
       '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>' +
-      '<strong>' + eventDetails.location + '</strong>' +
-      '</p>' +
-      '<a href="' + eventDetails.mapLink + '" class="schedule-address-link" target="_blank" rel="noopener noreferrer">' +
-      eventDetails.address +
+      '<span><strong>' + eventDetails.location + '</strong><small>' + eventDetails.address + ' · Open in Google Maps</small></span>' +
       '</a>' +
+      attireHtml +
+      '<div class="schedule-card-details" hidden>' +
+      descHtml +
       '<div class="event-calendar-links">' +
       '<span>Add to:</span>' +
       '<a href="' + googleLink + '" target="_blank" rel="noopener noreferrer">Google</a>' +
       '<a href="' + outlookLink + '" target="_blank" rel="noopener noreferrer">Outlook</a>' +
       '<a href="' + appleLink + '" download="' + eventDetails.name.replace(/\s+/g, '_') + '.ics">Apple / ICS</a>' +
-      '</div>' +
+      '</div></div>' +
       '</div>' +
       rsvpHtml +
       '</div>';
+
+    var cardDetails = card.querySelector('.schedule-card-details');
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('role', 'button');
+    card.setAttribute('aria-expanded', 'false');
+
+    function toggleCard() {
+      var expanded = card.getAttribute('aria-expanded') === 'true';
+      var cards = scheduleContainer.querySelectorAll('.schedule-card');
+
+      cards.forEach(function (otherCard) {
+        var isActive = !expanded && otherCard === card;
+        var otherDetails = otherCard.querySelector('.schedule-card-details');
+        otherCard.setAttribute('aria-expanded', String(isActive));
+        otherCard.classList.toggle('is-expanded', isActive);
+        otherCard.classList.toggle('is-muted', !expanded && otherCard !== card);
+        if (otherDetails) otherDetails.hidden = !isActive;
+      });
+
+      if (!expanded) {
+        card.focus({ preventScroll: true });
+        setTimeout(function () {
+          card.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+          updateScheduleCarousel();
+        }, 40);
+      } else {
+        updateScheduleCarousel();
+      }
+    }
+
+    card.addEventListener('click', function (e) {
+      if (e.target.closest('a')) return;
+      toggleCard();
+    });
+    card.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleCard();
+      }
+    });
 
     // RSVP toggle clicks removed — RSVPs are now closed (read-only)
 

@@ -7,6 +7,7 @@
   <title>Your Schedule &amp; RSVP — Priya &amp; Gautam</title>
   <meta name="description" content="View your personalized event schedule and RSVP for Priya and Gautam's wedding." />
   <link rel="stylesheet" href="/assets/css/styles.css" />
+  <link rel="stylesheet" href="/assets/css/chat.css" />
   <link rel="icon" type="image/x-icon" href="/media/wedding_logo.svg">
   <script>
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
@@ -113,14 +114,6 @@
           </div>
         </div>
 
-        <!-- RSVP Closed Notice -->
-        <div class="rsvp-closed-notice">
-          <p>RSVPs are now closed. If your RSVP changes, please contact
-            <a href="mailto:varpra1@gmail.com">varpra1@gmail.com</a> or
-            <a href="mailto:priyagupta0829@gmail.com">priyagupta0829@gmail.com</a>.
-          </p>
-        </div>
-
         <!-- Success message (full width) -->
         <div id="rsvp-success" class="rsvp-success" style="display: none;">
           <div class="rsvp-success-icon">✓</div>
@@ -132,15 +125,17 @@
         <!-- ── Two-column layout ─────────────────────────────── -->
         <div class="member-schedule-grid">
 
-          <!-- LEFT: Additional Information (shown first on mobile) -->
-          <div class="member-schedule-sidebar">
-            <div id="rsvp-questions-section" style="display: none;"></div>
-          </div>
-
-          <!-- RIGHT: Event schedule -->
           <div class="member-schedule-main">
-            <div id="schedule-container" class="schedule-timeline">
-              <!-- Event cards injected here -->
+            <div class="schedule-carousel">
+              <button id="schedule-carousel-prev" class="schedule-carousel-btn" type="button" aria-label="Show previous events" disabled>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
+              </button>
+              <div id="schedule-container" class="schedule-timeline">
+                <!-- Event cards injected here -->
+              </div>
+              <button id="schedule-carousel-next" class="schedule-carousel-btn" type="button" aria-label="Show next events" disabled>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
+              </button>
             </div>
 
             <!-- Calendar download -->
@@ -150,6 +145,8 @@
           </div>
 
         </div>
+        <div id="rsvp-questions-section" class="schedule-personal-info" style="display: none;"></div>
+        <section class="schedule-chat" data-chat data-page="schedule" aria-label="Ask a question"></section>
         <!-- ── End two-column layout ─────────────────────────── -->
 
       </div>
@@ -206,6 +203,7 @@
   <script src="/assets/js/main.js"></script>
   <script src="/media/events_data.js"></script>
   <script src="/assets/js/schedule.js"></script>
+  <script src="/assets/js/chat.js"></script>
   <img src="/media/dahlia.svg" class="dahlia-corner" aria-hidden="true" alt="" />
 </body>
 

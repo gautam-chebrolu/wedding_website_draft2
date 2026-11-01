@@ -20,7 +20,7 @@
   <script defer src="/_vercel/insights/script.js"></script>
 </head>
 
-<body class="live-page">
+<body class="live-page sangeet-page">
 
   <!-- ── Navigation ─────────────────────────────────────────── -->
   <nav class="site-nav scrolled" aria-label="Main navigation">
@@ -42,31 +42,26 @@
       <p class="live-eyebrow">Friday · November 20</p>
       <h1>Sangeet</h1>
       <p class="page-subtitle">Brier Creek Country Club</p>
-      <nav class="live-switch" aria-label="Live event pages">
-        <a href="/sangeet" aria-current="page">Sangeet</a>
-        <a href="/wedding">Wedding Day</a>
-      </nav>
     </header>
 
     <main class="live-content">
-
-      <!-- Live hero / countdown -->
-      <section id="live-hero" class="live-hero" aria-live="polite" aria-label="What's happening now"></section>
 
       <!-- Messages from the family (Firestore live/sangeet) -->
       <div id="live-banners" class="live-banners" hidden></div>
 
       <!-- Venue + attire -->
-      <div class="live-info">
-        <a class="live-info-card" id="venue-link" href="https://maps.app.goo.gl/6pFxXeqZ9exSPwhj9" target="_blank" rel="noopener noreferrer">
+      <div class="live-info live-info--simple">
+        <a class="live-info-row" id="venue-link" href="https://maps.app.goo.gl/6pFxXeqZ9exSPwhj9" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
           <span>Venue · Directions</span>
           <b>Brier Creek Country Club</b>
           <small>9400 Club Hill Dr, Raleigh, NC 27617</small>
+          <em class="live-map-label">Google Maps &nearr;</em>
         </a>
-        <div class="live-info-card">
+        <div class="live-info-row">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6l1 5 3 2-2 3-2-1v9H9v-9l-2 1-2-3 3-2 1-5Z"></path><path d="M9 8h6"></path></svg>
           <span>Attire</span>
           <b>Indian Festive or Cocktail Glam</b>
-          <small>Shuttles run to &amp; from the Washington Duke Inn</small>
         </div>
       </div>
 
@@ -74,7 +69,7 @@
       <section class="live-section" id="schedule" aria-labelledby="schedule-title" style="margin-top: 36px;">
         <div class="live-section-head">
           <h2 id="schedule-title">Tonight’s Schedule</h2>
-          <p>Tap a finished item to see its details again</p>
+          <p>Tap any item to see more details</p>
         </div>
         <div id="live-timeline"></div>
       </section>
@@ -94,9 +89,6 @@
         <div class="poster-rail" id="poster-rail"></div>
       </section>
 
-      <!-- Ask the chatbot -->
-      <section class="live-section" id="ask" data-chat data-page="sangeet" aria-label="Ask a question"></section>
-
     </main>
 
     <div class="contact-strip">
@@ -111,6 +103,15 @@
 
   <button type="button" id="jump-now" class="jump-now" aria-label="Jump to what's happening now"><i aria-hidden="true"></i>Jump to now</button>
 
+  <button type="button" class="chat-fab" data-chat-drawer-toggle aria-controls="sangeet-chat-drawer" aria-expanded="false">
+    <span class="chat-orb" aria-hidden="true"></span><span>Ask a question</span>
+  </button>
+  <div class="chat-drawer-backdrop" data-chat-drawer-backdrop hidden></div>
+  <aside id="sangeet-chat-drawer" class="chat-drawer" data-chat-drawer aria-hidden="true" aria-label="Wedding assistant">
+    <button type="button" class="chat-drawer-close" data-chat-drawer-close aria-label="Close wedding assistant">&times;</button>
+    <section data-chat data-page="sangeet" aria-label="Ask a question"></section>
+  </aside>
+
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
   <script src="/assets/js/firestore_data.js"></script>
@@ -123,10 +124,10 @@
       var ev = LIVE_SCHEDULE.sangeet;
       Live.mountSchedule({
         event: ev,
-        hero: document.getElementById('live-hero'),
         timeline: document.getElementById('live-timeline'),
         banner: document.getElementById('live-banners'),
-        jump: document.getElementById('jump-now')
+        jump: document.getElementById('jump-now'),
+        expandable: true
       });
       Live.mountStations({
         stations: ev.stations,

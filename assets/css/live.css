@@ -1288,6 +1288,157 @@ a.live-info-card:hover { background: var(--glass-2); border-color: rgba(201, 169
 }
 
 /* ── Keyframes ──────────────────────────────────────────────── */
+/* Sangeet compact live experience */
+.tl-card-time { display: none; }
+
+.sangeet-page .live-content { max-width: 1040px; }
+
+.sangeet-page .live-info--simple {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 28px;
+  margin: 6px 0 22px;
+}
+
+.sangeet-page .live-info-row {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  align-items: start;
+  gap: 10px;
+  min-width: min(100%, 340px);
+  color: var(--cream);
+  text-decoration: none;
+}
+
+.sangeet-page .live-info-row > svg {
+  width: 19px;
+  height: 19px;
+  margin-top: 2px;
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.sangeet-page .live-info-row > span { display: none; }
+.sangeet-page .live-info-row > b,
+.sangeet-page .live-info-row > small,
+.sangeet-page .live-info-row > .live-map-label { grid-column: 2; }
+
+.sangeet-page .live-info-row > b {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.sangeet-page .live-info-row > small {
+  margin-top: -6px;
+  font-family: var(--sans);
+  font-size: 11px;
+  line-height: 1.45;
+  color: var(--cream-60);
+}
+
+.sangeet-page .live-map-label {
+  margin-top: -7px;
+  font-family: var(--sans);
+  font-size: 10px;
+  font-style: normal;
+  color: var(--gold-hi);
+}
+
+.sangeet-page a.live-info-row:hover b,
+.sangeet-page a.live-info-row:hover small { color: var(--gold-hi); }
+
+.sangeet-page .tl-list {
+  display: block;
+}
+
+.sangeet-page .tl-item {
+  display: grid;
+  grid-template-columns: 92px 28px minmax(0, 1fr);
+  min-width: 0;
+  opacity: 0.58;
+  transform: scale(0.985);
+  transform-origin: center;
+}
+
+.sangeet-page .tl-time { display: flex; }
+.sangeet-page .tl-rail { display: flex; }
+
+.sangeet-page .tl-card {
+  height: auto;
+  min-height: 0;
+  margin: 7px 0;
+  padding: 14px 18px;
+  cursor: pointer;
+}
+
+.sangeet-page .tl-item:not(.is-open):not(.is-live) .tl-card {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.sangeet-page .tl-item:not(.is-open):not(.is-live):hover .tl-card {
+  background: var(--glass);
+  border-color: var(--line);
+}
+
+.sangeet-page .tl-card-time { display: none; }
+
+.sangeet-page .tl-title { font-size: 20px; }
+
+.sangeet-page .tl-item:not(.is-open) .tl-body {
+  display: none;
+  opacity: 0;
+}
+
+.sangeet-page .tl-item:not(.is-open) .tl-progress { opacity: 0; }
+
+.sangeet-page .tl-item.is-open {
+  opacity: 1;
+  transform: none;
+}
+
+.sangeet-page .tl-item.is-open .tl-card {
+  min-height: 0;
+  padding: 24px;
+  background: linear-gradient(150deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.025));
+  border-color: rgba(201, 169, 110, 0.35);
+}
+
+.sangeet-page .tl-item.is-open .tl-title { font-size: 28px; }
+.sangeet-page .tl-item.is-live.is-open .tl-card {
+  background: linear-gradient(150deg, rgba(255, 111, 97, 0.14), rgba(255, 255, 255, 0.035));
+  border-color: rgba(255, 140, 120, 0.55);
+  box-shadow: 0 20px 60px -20px rgba(255, 111, 97, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+.sangeet-page .tl-item.is-live.is-open .tl-progress { opacity: 1; }
+.sangeet-page .tl-item:hover { opacity: 0.9; transform: translateY(-2px); }
+.sangeet-page .tl-item.is-open:hover { opacity: 1; transform: none; }
+
+.sangeet-page .poster .poster-title {
+  font-size: clamp(20px, 4vw, 28px);
+  line-height: 1.04;
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
+}
+
+.sangeet-page .poster .poster-title.poster-title--long { font-size: clamp(17px, 3.3vw, 23px); line-height: 1.1; }
+.sangeet-page .poster .poster-title.poster-title--xlong { font-size: clamp(14px, 2.8vw, 19px); line-height: 1.15; }
+
+@media (max-width: 600px) {
+  .sangeet-page .live-info--simple { display: grid; grid-template-columns: 1fr; }
+  .sangeet-page .tl-item { grid-template-columns: 64px 22px minmax(0, 1fr); }
+  .sangeet-page .tl-card,
+  .sangeet-page .tl-item.is-past .tl-card { padding: 16px; }
+  .sangeet-page .tl-item.is-open .tl-card,
+  .sangeet-page .tl-item.is-live .tl-card { padding: 20px 18px; }
+}
+
 @keyframes riseIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
 @keyframes spin { to { transform: rotate(360deg); } }
 @keyframes tick { 0% { transform: translateY(-6px); opacity: 0.3; } 100% { transform: none; opacity: 1; } }

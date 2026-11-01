@@ -25,6 +25,12 @@
       'What time does the ceremony start?',
       'Can I wear pink?',
       'When is dinner served?'
+    ],
+    schedule: [
+      'What should I wear to my event?',
+      'Where is the venue?',
+      'Is there a shuttle to the Sangeet?',
+      'What is a baraat?'
     ]
   };
 
@@ -188,6 +194,37 @@
 
   function init() {
     document.querySelectorAll('[data-chat]').forEach(mount);
+    initDrawer();
+  }
+
+  function initDrawer() {
+    var drawer = document.querySelector('[data-chat-drawer]');
+    var toggle = document.querySelector('[data-chat-drawer-toggle]');
+    var close = document.querySelector('[data-chat-drawer-close]');
+    var backdrop = document.querySelector('[data-chat-drawer-backdrop]');
+    if (!drawer || !toggle || !close || !backdrop) return;
+
+    function setOpen(open) {
+      drawer.classList.toggle('is-open', open);
+      backdrop.hidden = !open;
+      requestAnimationFrame(function () { backdrop.classList.toggle('is-open', open); });
+      drawer.setAttribute('aria-hidden', open ? 'false' : 'true');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      document.body.classList.toggle('chat-drawer-open', open);
+      if (open) {
+        var input = drawer.querySelector('.chat-input');
+        if (input) setTimeout(function () { input.focus(); }, 320);
+      } else {
+        toggle.focus();
+      }
+    }
+
+    toggle.addEventListener('click', function () { setOpen(true); });
+    close.addEventListener('click', function () { setOpen(false); });
+    backdrop.addEventListener('click', function () { setOpen(false); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && drawer.classList.contains('is-open')) setOpen(false);
+    });
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

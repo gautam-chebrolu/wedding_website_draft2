@@ -172,6 +172,7 @@
     var event = opts.event;
     var heroEl = opts.hero, tlEl = opts.timeline, bannerEl = opts.banner;
     var tabsEl = opts.tabs, jumpEl = opts.jump;
+    var expandable = !!opts.expandable;
 
     var ov = {};
     var model = buildModel(event, ov);
@@ -180,6 +181,7 @@
     var lastSig = '';
     var heroSig = '';
     var didAutoScroll = false;
+    var currentLiveId = null;
 
     // ── Tabs ──
     function renderTabs() {
@@ -239,7 +241,8 @@
         '<div class="tl-time">' + was + '<span>' + esc(displayTime(x)) + '</span></div>' +
         '<div class="tl-rail" aria-hidden="true"><span class="tl-dot"></span></div>' +
         '<article class="tl-card" tabindex="0">' +
-          '<div class="tl-card-head"><h3 class="tl-title">' + esc(it.title) + '</h3>' +
+          '<div class="tl-card-head"><div><h3 class="tl-title">' + esc(it.title) + '</h3>' +
+          '<span class="tl-card-time">' + esc(displayTime(x)) + '</span></div>' +
           '<span class="tl-chip"></span></div>' +
           '<div class="tl-body">' +
             (x.shift ? '<p class="tl-delay">Running about ' + (x.shift / MIN) + ' min behind</p>' : '') +
@@ -249,12 +252,32 @@
         '</article></li>';
     }
 
-    // Past cards collapse; tapping expands them again.
+    var manualOpenId = null;
+
+    function syncOpenCards(liveItem) {
+      tlEl.querySelectorAll('.tl-item').forEach(function (li) {
+        var open = expandable
+          ? (!!liveItem ? li.dataset.id === liveItem.id : li.dataset.id === manualOpenId)
+          : (li.classList.contains('is-past') && li.classList.contains('is-open'));
+        li.classList.toggle('is-open', open);
+        var card = li.querySelector('.tl-card');
+        if (card) card.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    }
+
+    // Expandable Sangeet cards; legacy pages keep past-item toggling.
     tlEl.addEventListener('click', function (e) {
       var card = e.target.closest('.tl-card');
       if (!card) return;
       var li = card.parentElement;
-      if (li.classList.contains('is-past')) li.classList.toggle('is-open');
+      if (expandable) {
+        if (currentLiveId) return;
+        manualOpenId = li.classList.contains('is-open') ? null : li.dataset.id;
+        syncOpenCards(null);
+        if (manualOpenId) li.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else if (li.classList.contains('is-past')) {
+        li.classList.toggle('is-open');
+      }
     });
     tlEl.addEventListener('keydown', function (e) {
       if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('tl-card')) {
@@ -286,6 +309,7 @@
     }
 
     function renderHero(st, now) {
+      if (!heroEl) return;
       var cur = st.current, next = st.next;
       var act = currentActInfo(st);
       var sig = st.phase + '|' + (cur && cur.id) + '|' + (next && next.id) + '|' + (act ? act.idx : '');
@@ -331,10 +355,12 @@
       }
     }
 
-    heroEl.addEventListener('click', function (e) {
-      var b = e.target.closest('[data-goto]');
-      if (b) scrollToItem(b.dataset.goto);
-    });
+    if (heroEl) {
+      heroEl.addEventListener('click', function (e) {
+        var b = e.target.closest('[data-goto]');
+        if (b) scrollToItem(b.dataset.goto);
+      });
+    }
 
     function currentActInfo(st) {
       var cur = st.current;
@@ -349,6 +375,7 @@
     // ── Per-tick update ──
     function update(now) {
       var st = stateAt(model, now);
+      currentLiveId = st.current ? st.current.id : null;
 
       // Auto-pick the tab that holds what's live / next.
       var focus = st.current || st.next || model.flat[model.flat.length - 1];
@@ -387,6 +414,7 @@
             }
           });
         });
+        if (expandable) syncOpenCards(st.current);
         observeLive(st.current);
       }
 
@@ -477,11 +505,13 @@
     var LAST_CALL = 15 * MIN;
 
     el.innerHTML = stations.map(function (s) {
+      var titleLength = String(s.title || '').length;
+      var titleClass = titleLength > 38 ? ' poster-title--xlong' : (titleLength > 24 ? ' poster-title--long' : '');
       return '<article class="poster poster--' + esc(s.theme) + '" id="station-' + esc(s.id) + '" data-id="' + esc(s.id) + '">' +
         '<div class="poster-ribbon"></div>' +
         '<div class="poster-art" aria-hidden="true"></div>' +
         '<p class="poster-billing">Priya &amp; Gautam present</p>' +
-        '<h3 class="poster-title">' + esc(s.title) + '</h3>' +
+        '<h3 class="poster-title' + titleClass + '">' + esc(s.title) + '</h3>' +
         '<p class="poster-tagline">' + esc(s.tagline || '') + '</p>' +
         '<div class="poster-foot">' +
           '<span class="poster-showtimes">Showtimes</span>' +

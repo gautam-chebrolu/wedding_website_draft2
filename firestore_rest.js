@@ -2,7 +2,7 @@
  * firestore_rest.js
  *
  * Shared, zero-dependency helpers for talking to Firestore (and Google Sheets)
- * from plain Node.js. Used by migrate_to_firestore.js and sync_from_sheet.js.
+ * from plain Node.js. Used by the sync, import, and export maintenance scripts.
  *
  * *** ZERO NPM DEPENDENCIES — uses only Node.js built-in modules ***
  */

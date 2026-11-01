@@ -126,21 +126,6 @@ document id is `firstname_lastname`, so identical names collide. Only the first 
 synced and the collision is reported — fix it in the Sheet (e.g. add a middle initial),
 since the website lookup cannot tell such guests apart either.
 
----
-
-## One-Time Migration (already done)
-
-The initial guest list was migrated from the CSV using `migrate_to_firestore.js`. You should not need to run this again, but if you ever need to re-seed from a CSV:
-
-1. Download a service account key from Firebase Console → Project Settings → Service Accounts → **Generate New Private Key**
-2. Save it as `service-account-key.json` in the project root (this file is gitignored — never commit it)
-3. Run:
-   ```bash
-   node migrate_to_firestore.js
-   ```
-
----
-
 ## Deployment
 
 The site is deployed on **Vercel** and updates automatically on push to `main`.
@@ -218,14 +203,3 @@ Answers guest questions at the bottom of `/sangeet` and `/wedding`.
   `node dev-server.js` and open http://localhost:3001. `.env*` and
   `.vercel/` are gitignored. Before pushing, `git status` should never list
   `.env.local`.
-
----
-
-## Deprecated Files (kept as archive)
-
-| File | Status |
-|---|---|
-| `encrypt_guests.js` | Deprecated — no longer needed |
-| `setup_sheet.js` | Deprecated — no longer needed |
-| `media/guest_data.js` | Deprecated — no longer loaded by the site |
-| `media/wedding_guest_list_july3.csv` | Archived — source data for initial migration |

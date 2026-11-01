@@ -7,7 +7,7 @@
  *
  * Reads two tabs of the wedding Sheet:
  *   • "Guests"      — one row per person (the roster)
- *   • "GroupLookup" — Name → Group, the high-level grouping used by tracking.html
+ *   • "GroupLookup" — Name → Group, the high-level grouping used by pages/tracking.html
  *
  * *** ZERO NPM DEPENDENCIES — uses only Node.js built-in modules ***
  *
@@ -16,12 +16,12 @@
  *   2. The Sheet must be shared as "Anyone with the link → Viewer".
  *
  * Usage:
- *   node sync_from_sheet.js --dry-run     # show what would change, write nothing
- *   node sync_from_sheet.js               # sync roster fields + groupName
- *   node sync_from_sheet.js --groups-only # only refresh groupName
- *   node sync_from_sheet.js --sheet-wins  # Sheet also overrides RSVP answers
- *   node sync_from_sheet.js --full        # ...and blank Sheet cells erase Firestore values
- *   node sync_from_sheet.js --prune       # ALSO delete Firestore docs missing from the Sheet
+ *   node scripts/firebase/sync_from_sheet.js --dry-run     # show changes only
+ *   node scripts/firebase/sync_from_sheet.js               # sync roster + groupName
+ *   node scripts/firebase/sync_from_sheet.js --groups-only # only refresh groupName
+ *   node scripts/firebase/sync_from_sheet.js --sheet-wins  # Sheet overrides RSVP answers
+ *   node scripts/firebase/sync_from_sheet.js --full        # blank Sheet cells also erase values
+ *   node scripts/firebase/sync_from_sheet.js --prune       # delete docs missing from the Sheet
  *
  * Which side wins
  * ---------------

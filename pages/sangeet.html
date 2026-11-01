@@ -7,13 +7,13 @@
   <title>Sangeet Live — Priya &amp; Gautam</title>
   <meta name="description" content="Live schedule for Priya and Gautam's Sangeet: what's happening now, the performance lineup, and which food stations are open." />
   <meta name="theme-color" content="#0d0c0b" />
-  <link rel="icon" type="image/x-icon" href="media/wedding_logo.svg">
+  <link rel="icon" type="image/x-icon" href="/media/wedding_logo.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bungee&family=Cinzel:wght@700&family=Limelight&family=Playfair+Display:ital,wght@0,900;1,900&display=swap">
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="live.css" />
-  <link rel="stylesheet" href="chat.css" />
+  <link rel="stylesheet" href="/assets/css/styles.css" />
+  <link rel="stylesheet" href="/assets/css/live.css" />
+  <link rel="stylesheet" href="/assets/css/chat.css" />
   <script>
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
   </script>
@@ -24,14 +24,14 @@
 
   <!-- ── Navigation ─────────────────────────────────────────── -->
   <nav class="site-nav scrolled" aria-label="Main navigation">
-    <a href="index.html" class="nav-logo" aria-label="Home">
-      <img src="media/wedding_logo.svg" alt="Priya &amp; Gautam" />
+    <a href="/" class="nav-logo" aria-label="Home">
+      <img src="/media/wedding_logo.svg" alt="Priya &amp; Gautam" />
     </a>
     <ul>
-      <li><a href="schedule.html">Schedule / RSVP</a></li>
-      <li><a href="travel.html">Travel</a></li>
-      <li><a href="funds.html">Gifts</a></li>
-      <li><a href="pictures.html">Pictures</a></li>
+      <li><a href="/schedule">Schedule / RSVP</a></li>
+      <li><a href="/travel">Travel</a></li>
+      <li><a href="/funds">Gifts</a></li>
+      <li><a href="/pictures">Pictures</a></li>
     </ul>
   </nav>
 
@@ -43,8 +43,8 @@
       <h1>Sangeet</h1>
       <p class="page-subtitle">Brier Creek Country Club</p>
       <nav class="live-switch" aria-label="Live event pages">
-        <a href="sangeet.html" aria-current="page">Sangeet</a>
-        <a href="wedding.html">Wedding Day</a>
+        <a href="/sangeet" aria-current="page">Sangeet</a>
+        <a href="/wedding">Wedding Day</a>
       </nav>
     </header>
 
@@ -113,11 +113,11 @@
 
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="firestore_data.js"></script>
-  <script src="main.js"></script>
-  <script src="media/live_schedule_data.js"></script>
-  <script src="live.js"></script>
-  <script src="chat.js"></script>
+  <script src="/assets/js/firestore_data.js"></script>
+  <script src="/assets/js/main.js"></script>
+  <script src="/media/live_schedule_data.js"></script>
+  <script src="/assets/js/live.js"></script>
+  <script src="/assets/js/chat.js"></script>
   <script>
     (function () {
       var ev = LIVE_SCHEDULE.sangeet;
@@ -136,7 +136,7 @@
       });
     })();
   </script>
-  <img src="media/dahlia.svg" class="dahlia-corner" aria-hidden="true" alt="" />
+  <img src="/media/dahlia.svg" class="dahlia-corner" aria-hidden="true" alt="" />
 </body>
 
 </html>

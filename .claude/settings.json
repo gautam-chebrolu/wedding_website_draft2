@@ -1,7 +1,7 @@
 {
   "permissions": {
     "allow": [
-      "Bash(node sync_from_sheet.js)"
+      "Bash(node scripts/firebase/sync_from_sheet.js)"
     ]
   }
 }

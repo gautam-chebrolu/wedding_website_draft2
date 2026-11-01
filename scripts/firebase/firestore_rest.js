@@ -13,7 +13,7 @@ const crypto = require('crypto');
 const https = require('https');
 
 const PROJECT_ID = 'wedding-website-backend-5a8df';
-const SERVICE_ACCOUNT_PATH = path.join(__dirname, 'service-account-key.json');
+const SERVICE_ACCOUNT_PATH = path.resolve(__dirname, '..', '..', 'service-account-key.json');
 const FIRESTORE_BASE =
   `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents`;
 
@@ -306,7 +306,7 @@ function parseCSV(csvText) {
 
 // ── Shared domain helpers ─────────────────────────────────────
 
-/** Firestore document id for a guest — must match schedule.js / tracking.html. */
+/** Firestore document id for a guest — must match assets/js/schedule.js / pages/tracking.html. */
 function guestDocId(firstName, lastName) {
   return (firstName + '_' + lastName).toLowerCase().replace(/\s+/g, '_');
 }

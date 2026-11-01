@@ -45,11 +45,11 @@
 
   window.addEventListener('scroll', onScroll, { passive: true });
 
-  // Mark the active nav link based on current page filename
-  var currentPage = window.location.pathname.split('/').pop() || 'index.html';
+  // Mark the active nav link based on the public clean URL.
+  var currentPath = window.location.pathname.replace(/\/+$/, '') || '/';
   document.querySelectorAll('nav.site-nav ul li a').forEach(function (link) {
-    var href = link.getAttribute('href');
-    if (href === currentPage || (currentPage === '' && href === 'index.html')) {
+    var linkPath = new URL(link.href, window.location.origin).pathname.replace(/\/+$/, '') || '/';
+    if (linkPath === currentPath) {
       link.classList.add('active');
     }
   });
@@ -62,14 +62,14 @@
   if (!ul) return;
   var now = Date.now();
   var windows = [
-    { href: 'sangeet.html', from: '2026-11-20T12:00:00-05:00', to: '2026-11-21T03:00:00-05:00' },
-    { href: 'wedding.html', from: '2026-11-21T05:00:00-05:00', to: '2026-11-22T03:00:00-05:00' }
+    { href: '/sangeet', from: '2026-11-20T12:00:00-05:00', to: '2026-11-21T03:00:00-05:00' },
+    { href: '/wedding', from: '2026-11-21T05:00:00-05:00', to: '2026-11-22T03:00:00-05:00' }
   ];
   var hit = windows.find(function (w) { return now >= Date.parse(w.from) && now < Date.parse(w.to); });
   if (!hit) return;
   var li = document.createElement('li');
   li.innerHTML = '<a href="' + hit.href + '" class="nav-live" id="nav-live-link"><span class="nav-live-dot" aria-hidden="true"></span>Live</a>';
   ul.insertBefore(li, ul.firstChild);
-  var page = window.location.pathname.split('/').pop();
-  if (page === hit.href || page + '.html' === hit.href) li.firstChild.classList.add('active');
+  var page = window.location.pathname.replace(/\/+$/, '') || '/';
+  if (page === hit.href) li.firstChild.classList.add('active');
 })();

@@ -5,7 +5,7 @@
  *
  * Requires the OPENAI_API_KEY environment variable:
  *   - Vercel:  Project → Settings → Environment Variables
- *   - Local:   .env.local (gitignored), then `node dev-server.js`
+ *   - Local:   .env.local (gitignored), then `node scripts/dev-server.js`
  */
 
 const { streamAnswer, sanitizeHistory } = require('./_lib/assistant');

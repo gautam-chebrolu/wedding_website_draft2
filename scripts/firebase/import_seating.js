@@ -4,9 +4,9 @@
  * Uploads the reception seating chart CSV to Firestore so the
  * "Find Your Seat" widget on /wedding can search it.
  *
- *   node import_seating.js            (uses the default CSV below)
- *   node import_seating.js path\to\file.csv
- *   node import_seating.js --dry-run  (parse + report, write nothing)
+ *   node scripts/firebase/import_seating.js            (uses the default CSV below)
+ *   node scripts/firebase/import_seating.js path\to\file.csv
+ *   node scripts/firebase/import_seating.js --dry-run  (parse + report, write nothing)
  *
  * Expected columns: Full Name, First Name, Last Name, <extra>, Table
  * (the unnamed 4th column holds a third name part / "Jr." etc.)
@@ -22,7 +22,7 @@ const fs = require('fs');
 const path = require('path');
 const firestore = require('./firestore_rest');
 
-const DEFAULT_CSV = path.join(__dirname, 'media', 'Reception Seating Chart - A-Z Seating Chart.csv');
+const DEFAULT_CSV = path.resolve(__dirname, '..', '..', 'media', 'Reception Seating Chart - A-Z Seating Chart.csv');
 
 const args = process.argv.slice(2);
 const dryRun = args.includes('--dry-run');

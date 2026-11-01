@@ -7,10 +7,10 @@
   <title>Wedding Day Live — Priya &amp; Gautam</title>
   <meta name="description" content="Live schedule for Priya and Gautam's wedding day: the ceremony, cocktail hour, and reception, plus a seating chart lookup." />
   <meta name="theme-color" content="#0d0c0b" />
-  <link rel="icon" type="image/x-icon" href="media/wedding_logo.svg">
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="live.css" />
-  <link rel="stylesheet" href="chat.css" />
+  <link rel="icon" type="image/x-icon" href="/media/wedding_logo.svg">
+  <link rel="stylesheet" href="/assets/css/styles.css" />
+  <link rel="stylesheet" href="/assets/css/live.css" />
+  <link rel="stylesheet" href="/assets/css/chat.css" />
   <script>
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
   </script>
@@ -21,14 +21,14 @@
 
   <!-- ── Navigation ─────────────────────────────────────────── -->
   <nav class="site-nav scrolled" aria-label="Main navigation">
-    <a href="index.html" class="nav-logo" aria-label="Home">
-      <img src="media/wedding_logo.svg" alt="Priya &amp; Gautam" />
+    <a href="/" class="nav-logo" aria-label="Home">
+      <img src="/media/wedding_logo.svg" alt="Priya &amp; Gautam" />
     </a>
     <ul>
-      <li><a href="schedule.html">Schedule / RSVP</a></li>
-      <li><a href="travel.html">Travel</a></li>
-      <li><a href="funds.html">Gifts</a></li>
-      <li><a href="pictures.html">Pictures</a></li>
+      <li><a href="/schedule">Schedule / RSVP</a></li>
+      <li><a href="/travel">Travel</a></li>
+      <li><a href="/funds">Gifts</a></li>
+      <li><a href="/pictures">Pictures</a></li>
     </ul>
   </nav>
 
@@ -40,8 +40,8 @@
       <h1>Wedding Day</h1>
       <p class="page-subtitle">Washington Duke Inn &amp; Golf Club</p>
       <nav class="live-switch" aria-label="Live event pages">
-        <a href="sangeet.html">Sangeet</a>
-        <a href="wedding.html" aria-current="page">Wedding Day</a>
+        <a href="/sangeet">Sangeet</a>
+        <a href="/wedding" aria-current="page">Wedding Day</a>
       </nav>
     </header>
 
@@ -118,11 +118,11 @@
 
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-  <script src="firestore_data.js"></script>
-  <script src="main.js"></script>
-  <script src="media/live_schedule_data.js"></script>
-  <script src="live.js"></script>
-  <script src="chat.js"></script>
+  <script src="/assets/js/firestore_data.js"></script>
+  <script src="/assets/js/main.js"></script>
+  <script src="/media/live_schedule_data.js"></script>
+  <script src="/assets/js/live.js"></script>
+  <script src="/assets/js/chat.js"></script>
   <script>
     (function () {
       Live.mountSchedule({
@@ -140,7 +140,7 @@
       });
     })();
   </script>
-  <img src="media/dahlia.svg" class="dahlia-corner" aria-hidden="true" alt="" />
+  <img src="/media/dahlia.svg" class="dahlia-corner" aria-hidden="true" alt="" />
 </body>
 
 </html>

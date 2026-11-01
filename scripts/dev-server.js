@@ -1,10 +1,10 @@
 /**
  * dev-server.js — local preview that behaves like Vercel.
  *
- *   node dev-server.js          → http://localhost:3001
- *   PORT=4000 node dev-server.js
+ *   node scripts/dev-server.js          → http://localhost:3001
+ *   PORT=4000 node scripts/dev-server.js
  *
- * - Serves the static site with clean URLs (/sangeet → sangeet.html)
+ * - Serves the static site with clean URLs (/sangeet → pages/sangeet.html)
  * - Runs /api/* functions (api/chat.js, api/live-admin.js) and reloads
  *   them on every request, so edits to facts.md apply immediately
  * - Loads secrets from .env.local (gitignored), the same names you set in
@@ -18,7 +18,7 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const ROOT = __dirname;
+const ROOT = path.resolve(__dirname, '..');
 const PORT = parseInt(process.env.PORT, 10) || 3001;
 
 // ── Load .env.local / .env ──────────────────────────────────
@@ -41,7 +41,7 @@ const TYPES = {
   '.mp3': 'audio/mpeg', '.woff2': 'font/woff2', '.txt': 'text/plain; charset=utf-8'
 };
 
-const BLOCKED = [/^\.env/i, /service-account-key\.json$/i, /\.csv$/i, /^api[\\/]/i, /^\.git/i, /^\.vercel/i, /^node_modules/i];
+const BLOCKED = [/^\.env/i, /service-account-key\.json$/i, /\.csv$/i, /^api[\\/]/i, /^scripts[\\/]/i, /^\.git/i, /^\.vercel/i, /^node_modules/i];
 
 function send(res, status, body, type) {
   res.writeHead(status, { 'Content-Type': type || 'text/plain; charset=utf-8' });
@@ -71,12 +71,24 @@ http.createServer((req, res) => {
   if (rel.startsWith('api/')) return runFunction(rel.slice(4).replace(/\/$/, ''), req, res);
   if (rel === 'hotels') { res.writeHead(308, { Location: '/travel' }); return res.end(); }
 
+  // Match Vercel's cleanUrls behavior for old .html links.
+  if (rel.endsWith('.html')) {
+    const clean = rel === 'index.html' ? '/' : '/' + rel.slice(0, -5);
+    res.writeHead(308, { Location: clean });
+    return res.end();
+  }
+
   if (!rel) rel = 'index.html';
   if (BLOCKED.some(rx => rx.test(rel))) return send(res, 404, 'Not found');
 
   let file = path.join(ROOT, rel);
   if (!file.startsWith(ROOT)) return send(res, 403, 'Forbidden');
-  if (!path.extname(file) && fs.existsSync(file + '.html')) file += '.html';     // clean URLs
+  if (!path.extname(file)) {
+    const rootPage = file + '.html';
+    const nestedPage = path.join(ROOT, 'pages', rel + '.html');
+    if (fs.existsSync(rootPage)) file = rootPage;
+    else if (fs.existsSync(nestedPage)) file = nestedPage;
+  }
   if (fs.existsSync(file) && fs.statSync(file).isDirectory()) file = path.join(file, 'index.html');
 
   fs.readFile(file, (err, data) => {

@@ -274,7 +274,7 @@ nav.site-nav.scrolled .nav-logo:hover img {
 .hero-bg {
   position: absolute;
   inset: 0;
-  background-image: url('media/website_background_full.png');
+  background-image: url('/media/website_background_full.png');
   background-size: cover;
   background-position: center top;
   background-repeat: no-repeat;

@@ -32,7 +32,7 @@ service cloud.firestore {
 
     // ── seating ───────────────────────────────────────────────
     // Reception seating chart for the /wedding "Find Your Seat" widget.
-    // Written only by import_seating.js (service account).
+    // Written only by scripts/firebase/import_seating.js (service account).
     match /seating/{docId} {
       allow read:  if true;
       allow write: if false;

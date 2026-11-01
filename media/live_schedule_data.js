@@ -101,7 +101,7 @@
       ],
 
       // ── "Now Showing" food stations ─────────────────────────
-      // theme → poster look (see .poster--<theme> in live.css)
+      // theme → poster look (see .poster--<theme> in assets/css/live.css)
       stations: [
         { id: 'chole',     title: 'G.P.’s Chole Bhatura',                       tagline: 'A family classic.',                          theme: 'retro',   open: '2026-11-20T17:45:00-05:00', close: '2026-11-20T22:00:00-05:00' },
         { id: 'guac',      title: 'The Guacfather',                              tagline: 'An offer you can’t refuse.',                 theme: 'noir',    open: '2026-11-20T17:45:00-05:00', close: '2026-11-20T22:00:00-05:00' },

@@ -1,6 +1,6 @@
 /**
  * api/_lib/http.js — small helpers shared by the serverless functions.
- * Works on Vercel's Node runtime and with the local dev-server.js.
+ * Works on Vercel's Node runtime and with scripts/dev-server.js.
  */
 
 /** Read a JSON body whether or not the platform already parsed it. */

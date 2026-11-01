@@ -10,6 +10,24 @@ The website uses **Firebase Firestore** as its primary database. Google Sheets i
 
 ---
 
+## Repository Layout
+
+| Folder | Purpose |
+|---|---|
+| `pages/` | Secondary HTML pages; `index.html` remains at the project root |
+| `assets/css/` | Browser stylesheets |
+| `assets/js/` | Browser-side JavaScript |
+| `media/` | Images, audio, and public data files |
+| `scripts/firebase/` | Firestore sync, import, and export utilities |
+| `api/` | Vercel serverless functions and chatbot data |
+| `apps-script/` | Local source for the Google Sheets backup integration |
+
+Vercel rewrites the existing clean public URLs (for example, `/schedule`) to
+their files under `pages/`, so reorganizing the repository does not change any
+guest-facing links.
+
+---
+
 ## Managing the Guest List
 
 Guests can be managed through the password-protected **Guest List Manager** at
@@ -19,7 +37,7 @@ RSVP updates, and document-ID changes for spelling corrections.
 
 The manager uses the same browser-to-Firebase approach as the RSVP pages, with no
 Vercel environment variables. Its password is currently `password`; change it in
-`guests.html` if desired. Changing a Document ID moves the record and preserves
+`pages/guests.html` if desired. Changing a Document ID moves the record and preserves
 other existing fields.
 
 Deploy the revised Firestore rules before using the manager:
@@ -59,8 +77,8 @@ firebase deploy --only firestore:rules --project wedding-website-backend-5a8df
 - **`party`** — the household that RSVPs together. Looking up any one member on the
   website pulls up everyone sharing the same `party` value.
 - **`groupName`** — the high-level bucket used for the filter pills and section
-  headers on `tracking.html`. Maintained on the **GroupLookup** tab of the Google
-  Sheet (`Name`, `Group`) and pushed into Firestore by `sync_from_sheet.js`.
+  headers on `pages/tracking.html`. Maintained on the **GroupLookup** tab of the Google
+  Sheet (`Name`, `Group`) and pushed into Firestore by `scripts/firebase/sync_from_sheet.js`.
   Current values: `Gupta Family`, `Gupta Friends`, `Chebrolu Family`,
   `Chebrolu Friends`, `Priya Friends`, `Gautam Friends`.
 
@@ -84,7 +102,7 @@ Open Firebase Console → `guests` → find the document → click the three-dot
 ## Syncing from the Google Sheet
 
 If you edit guest info in the Sheet (including the **GroupLookup** tab), push those
-edits into Firestore with `sync_from_sheet.js`. It reads the live Sheet, diffs it
+edits into Firestore with `scripts/firebase/sync_from_sheet.js`. It reads the live Sheet, diffs it
 against Firestore, and writes only what actually changed.
 
 Requires `service-account-key.json` in the project root (gitignored), and the Sheet
@@ -93,7 +111,7 @@ shared as *Anyone with the link → Viewer*.
 Always preview first — the dry run prints a field-by-field diff and writes nothing:
 
 ```bash
-node sync_from_sheet.js --dry-run
+node scripts/firebase/sync_from_sheet.js --dry-run
 ```
 
 **Roster fields always come from the Sheet** — `firstName`, `lastName`, `party`,
@@ -106,15 +124,15 @@ them to the Sheet best-effort, while you also edit the Sheet by hand.
 
 | Command | RSVP fields |
 |---|---|
-| `node sync_from_sheet.js` | **Firestore wins.** The Sheet only fills in what Firestore leaves blank, so a guest's submitted RSVP is never overwritten. Use for routine roster updates. |
-| `node sync_from_sheet.js --sheet-wins` | **Sheet wins where it has a value**, but a blank Sheet cell leaves a populated Firestore field alone. **Use this after editing RSVPs by hand in the Sheet.** |
-| `node sync_from_sheet.js --full` | **Sheet wins absolutely, blanks included.** This *erases* Firestore values whose Sheet cell is empty — including ~56 phone numbers that came from the original CSV import and were never copied into the Sheet. Rarely what you want. |
+| `node scripts/firebase/sync_from_sheet.js` | **Firestore wins.** The Sheet only fills in what Firestore leaves blank, so a guest's submitted RSVP is never overwritten. Use for routine roster updates. |
+| `node scripts/firebase/sync_from_sheet.js --sheet-wins` | **Sheet wins where it has a value**, but a blank Sheet cell leaves a populated Firestore field alone. **Use this after editing RSVPs by hand in the Sheet.** |
+| `node scripts/firebase/sync_from_sheet.js --full` | **Sheet wins absolutely, blanks included.** This *erases* Firestore values whose Sheet cell is empty — including ~56 phone numbers that came from the original CSV import and were never copied into the Sheet. Rarely what you want. |
 
 Other flags:
 
 ```bash
-node sync_from_sheet.js --groups-only # only refresh groupName
-node sync_from_sheet.js --prune       # delete Firestore docs missing from the Sheet
+node scripts/firebase/sync_from_sheet.js --groups-only # only refresh groupName
+node scripts/firebase/sync_from_sheet.js --prune       # delete Firestore docs missing from the Sheet
 ```
 
 Without `--prune`, documents present in Firestore but absent from the Sheet are only
@@ -147,8 +165,8 @@ seating search.
 | What to change | Where |
 |---|---|
 | Schedule times, titles, performance lineup, food stations | `media/live_schedule_data.js` |
-| Look & feel | `live.css` (posters: `.poster--<theme>`) |
-| Engine (states, countdown, seating search) | `live.js` |
+| Look & feel | `assets/css/live.css` (posters: `.poster--<theme>`) |
+| Engine (states, countdown, seating search) | `assets/js/live.js` |
 
 **Preview any moment:** add `?now=` (Eastern time) to the URL, e.g.
 `/sangeet?now=2026-11-20T19:40` or `/wedding?now=2026-11-21T17:15`. Add
@@ -156,7 +174,7 @@ seating search.
 while this is active.
 
 A pulsing **● Live** pill is added to the nav automatically, but only on
-Nov 20–21 (`main.js`).
+Nov 20–21 (`assets/js/main.js`).
 
 ### Live controls (`/live-admin`)
 Password-protected page for your phone during the event:
@@ -169,8 +187,8 @@ It writes to the Firestore `live/{sangeet|wedding}` docs through
 
 ### Seating chart
 ```bash
-node import_seating.js --dry-run   # check the CSV
-node import_seating.js             # upload → Firestore seating/reception
+node scripts/firebase/import_seating.js --dry-run   # check the CSV
+node scripts/firebase/import_seating.js             # upload → Firestore seating/reception
 ```
 Default CSV: `media/Reception Seating Chart - A-Z Seating Chart.csv`
 (gitignored). Re-run whenever the chart changes.
@@ -185,7 +203,7 @@ Answers guest questions at the bottom of `/sangeet` and `/wedding`.
   Schedules from `media/events_data.js` and `media/live_schedule_data.js`
   are included automatically.
 - Brain: `api/_lib/assistant.js` (also exposes `answer()` for a future SMS
-  bot). Endpoint: `api/chat.js`. UI: `chat.js` + `chat.css`.
+  bot). Endpoint: `api/chat.js`. UI: `assets/js/chat.js` + `assets/css/chat.css`.
 - Model: `gpt-4.1-nano` by default (override with the `OPENAI_MODEL` env var).
 - Private-home events (Ganesh Puja, Haldi, Satyanarayana Puja) are described
   without their address, because the chatbot is public.
@@ -200,6 +218,6 @@ Answers guest questions at the bottom of `/sangeet` and `/wedding`.
 - **Vercel:** Project → Settings → Environment Variables → add each one →
   redeploy.
 - **Local:** copy `.env.example` → `.env.local`, fill it in, then run
-  `node dev-server.js` and open http://localhost:3001. `.env*` and
+  `node scripts/dev-server.js` and open http://localhost:3001. `.env*` and
   `.vercel/` are gitignored. Before pushing, `git status` should never list
   `.env.local`.

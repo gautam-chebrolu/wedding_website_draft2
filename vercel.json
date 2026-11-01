@@ -1,7 +1,24 @@
 {
+    "$schema": "https://openapi.vercel.sh/vercel.json",
     "cleanUrls": true,
     "redirects": [
         { "source": "/hotels", "destination": "/travel", "permanent": true }
+    ],
+    "rewrites": [
+        { "source": "/atl_invitation", "destination": "/pages/atl_invitation" },
+        { "source": "/ceremony", "destination": "/pages/ceremony" },
+        { "source": "/funds", "destination": "/pages/funds" },
+        { "source": "/guests", "destination": "/pages/guests" },
+        { "source": "/invitation", "destination": "/pages/invitation" },
+        { "source": "/live-admin", "destination": "/pages/live-admin" },
+        { "source": "/pictures", "destination": "/pages/pictures" },
+        { "source": "/privacy", "destination": "/pages/privacy" },
+        { "source": "/sangeet", "destination": "/pages/sangeet" },
+        { "source": "/schedule", "destination": "/pages/schedule" },
+        { "source": "/sms-terms", "destination": "/pages/sms-terms" },
+        { "source": "/tracking", "destination": "/pages/tracking" },
+        { "source": "/travel", "destination": "/pages/travel" },
+        { "source": "/wedding", "destination": "/pages/wedding" }
     ],
     "functions": {
         "api/chat.js": {

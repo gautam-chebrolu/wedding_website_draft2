@@ -10,8 +10,14 @@ node_modules/
 # ── Apps Script config (contains Sheet IDs / API keys) ──────────
 apps-script/
 
-# ── Firebase service account key (NEVER commit) ────────────────
+# ── Credentials (NEVER commit) ─────────────────────────────────
 service-account-key.json
+*service-account*.json
+*credentials*.json
+*.pem
+*.key
+*.p12
+*.pfx
 
 # ── Secrets: OpenAI key, live-admin password, etc. (NEVER commit) ─
 .env

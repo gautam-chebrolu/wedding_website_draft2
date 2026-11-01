@@ -34,6 +34,15 @@ for (const file of ['.env.local', '.env']) {
   }
 }
 
+// Local-only convenience: expose the gitignored key through the same env var
+// used by Vercel. Deployable API code never reads credential files directly.
+if (!process.env.FIREBASE_SERVICE_ACCOUNT) {
+  const localServiceAccount = path.join(ROOT, 'service-account-key.json');
+  if (fs.existsSync(localServiceAccount)) {
+    process.env.FIREBASE_SERVICE_ACCOUNT = fs.readFileSync(localServiceAccount, 'utf8');
+  }
+}
+
 const TYPES = {
   '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
   '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg',

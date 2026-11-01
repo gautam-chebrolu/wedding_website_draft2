@@ -215,6 +215,15 @@ Answers guest questions at the bottom of `/sangeet` and `/wedding`.
 | `LIVE_ADMIN_PASSWORD` | `/live-admin` |
 | `FIREBASE_SERVICE_ACCOUNT` | `/live-admin` on Vercel (paste the whole service-account JSON) |
 
+Store `FIREBASE_SERVICE_ACCOUNT` as a Vercel **Secret** for both Production and
+Preview environments, then redeploy. The deployed API reads this credential only
+from the environment variable; it never reads a credential file. Local credential
+files remain excluded from Git-based deployments through `.gitignore`.
+
+The Firebase web configuration in `assets/js/` and the HTML pages is intentionally
+public and is not a service-account credential. Access to Firestore data is
+controlled by `firestore.rules`.
+
 - **Vercel:** Project → Settings → Environment Variables → add each one →
   redeploy.
 - **Local:** copy `.env.example` → `.env.local`, fill it in, then run

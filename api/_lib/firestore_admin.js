@@ -5,13 +5,11 @@
  * Authenticates with a service account, which bypasses security rules,
  * so the public `live` collection can stay read-only for browsers.
  *
- * Credentials (first one found wins):
- *   1. FIREBASE_SERVICE_ACCOUNT env var — the full JSON key (raw or base64)
- *   2. ../../service-account-key.json   — local development only (gitignored)
+ * Credentials come only from FIREBASE_SERVICE_ACCOUNT, containing the full
+ * service-account JSON (raw or base64). The local dev server loads the
+ * gitignored key file into that variable before this module runs.
  */
 
-const fs = require('fs');
-const path = require('path');
 const crypto = require('crypto');
 
 const PROJECT_ID = 'wedding-website-backend-5a8df';
@@ -21,13 +19,17 @@ let cachedToken = null;   // { token, exp }
 
 function loadServiceAccount() {
   const env = process.env.FIREBASE_SERVICE_ACCOUNT;
-  if (env) {
-    const text = env.trim().startsWith('{') ? env : Buffer.from(env, 'base64').toString('utf8');
-    return JSON.parse(text);
+  if (!env) throw new Error('FIREBASE_SERVICE_ACCOUNT is not set');
+
+  const text = env.trim().startsWith('{') ? env : Buffer.from(env, 'base64').toString('utf8');
+  const account = JSON.parse(text);
+  if (!account || typeof account.client_email !== 'string' || typeof account.private_key !== 'string') {
+    throw new Error('FIREBASE_SERVICE_ACCOUNT is invalid');
   }
-  const local = path.join(__dirname, '..', '..', 'service-account-key.json');
-  if (fs.existsSync(local)) return JSON.parse(fs.readFileSync(local, 'utf8'));
-  throw new Error('FIREBASE_SERVICE_ACCOUNT is not set');
+  if (account.project_id && account.project_id !== PROJECT_ID) {
+    throw new Error('FIREBASE_SERVICE_ACCOUNT belongs to a different project');
+  }
+  return account;
 }
 
 async function getToken() {

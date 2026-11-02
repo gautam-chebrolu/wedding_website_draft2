@@ -228,6 +228,9 @@
 
     function itemHTML(x) {
       var it = x.raw;
+      var titleLength = String(it.title || '').length;
+      var titleClass = titleLength > 26 ? ' tl-title--xlong' :
+        (titleLength > 21 ? ' tl-title--long' : (titleLength > 17 ? ' tl-title--medium' : ''));
       var details = (it.details || []).map(function (d) { return '<li>' + esc(d) + '</li>'; }).join('');
       var acts = '';
       if (it.acts && it.acts.length) {
@@ -242,7 +245,7 @@
         '<div class="tl-time">' + was + '<span>' + esc(displayTime(x)) + '</span></div>' +
         '<div class="tl-rail" aria-hidden="true"><span class="tl-dot"></span></div>' +
         '<article class="tl-card" tabindex="0">' +
-          '<div class="tl-card-head"><div><h3 class="tl-title">' + esc(it.title) + '</h3>' +
+          '<div class="tl-card-head"><div><h3 class="tl-title' + titleClass + '">' + esc(it.title) + '</h3>' +
           '<span class="tl-card-time">' + esc(displayTime(x)) + '</span></div>' +
           '<span class="tl-chip"></span></div>' +
           '<div class="tl-body">' +

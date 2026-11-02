@@ -1421,6 +1421,7 @@ a.live-info-card:hover { background: var(--glass-2); border-color: rgba(201, 169
 :is(.sangeet-page, .wedding-page) .live-info--simple {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 10px 28px;
   margin: 6px 0 22px;
 }
@@ -1430,7 +1431,8 @@ a.live-info-card:hover { background: var(--glass-2); border-color: rgba(201, 169
   grid-template-columns: 20px 1fr;
   align-items: start;
   gap: 10px;
-  min-width: min(100%, 340px);
+  width: min(100%, 340px);
+  min-width: 0;
   color: var(--cream);
   text-decoration: none;
 }
@@ -1577,12 +1579,72 @@ a.live-info-card:hover { background: var(--glass-2); border-color: rgba(201, 169
 .sangeet-page .poster .poster-title.poster-title--xlong { font-size: clamp(14px, 2.8vw, 19px); line-height: 1.15; }
 
 @media (max-width: 600px) {
-  :is(.sangeet-page, .wedding-page) .live-info--simple { display: grid; grid-template-columns: 1fr; }
+  :is(.sangeet-page, .wedding-page) #live-timeline { padding-inline: 5px; }
+  :is(.sangeet-page, .wedding-page) .live-info--simple {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 14px;
+  }
+  :is(.sangeet-page, .wedding-page) .live-info-row { margin-inline: auto; }
   :is(.sangeet-page, .wedding-page) .tl-item { grid-template-columns: 64px 22px minmax(0, 1fr); }
   :is(.sangeet-page, .wedding-page) .tl-card,
-  :is(.sangeet-page, .wedding-page) .tl-item.is-past .tl-card { padding: 16px; }
+  :is(.sangeet-page, .wedding-page) .tl-item.is-past .tl-card {
+    margin: 2px 0;
+    padding: 7px 8px;
+  }
   :is(.sangeet-page, .wedding-page) .tl-item.is-open .tl-card,
-  :is(.sangeet-page, .wedding-page) .tl-item.is-live .tl-card { padding: 20px 18px; }
+  :is(.sangeet-page, .wedding-page) .tl-item.is-live .tl-card { padding: 8px 10px 12px; }
+  :is(.sangeet-page, .wedding-page) .tl-time { padding-top: 8px; }
+  :is(.sangeet-page, .wedding-page) .tl-dot,
+  :is(.sangeet-page, .wedding-page) .tl-item.is-past .tl-dot { margin-top: 13px; }
+  :is(.sangeet-page, .wedding-page) .tl-item.is-live .tl-dot { margin-top: 11px; }
+  :is(.sangeet-page, .wedding-page) .tl-item:first-child .tl-rail::before { top: 18px; }
+  :is(.sangeet-page, .wedding-page) .tl-item:last-child .tl-rail::before { bottom: calc(100% - 18px); }
+  :is(.sangeet-page, .wedding-page) .tl-card-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 3px;
+  }
+  :is(.sangeet-page, .wedding-page) .tl-card-head > div { min-width: 0; max-width: 100%; }
+  :is(.sangeet-page, .wedding-page) .tl-title,
+  :is(.sangeet-page, .wedding-page) .tl-title.tl-title--medium,
+  :is(.sangeet-page, .wedding-page) .tl-title.tl-title--long,
+  :is(.sangeet-page, .wedding-page) .tl-title.tl-title--xlong,
+  :is(.sangeet-page, .wedding-page) .tl-item.is-open .tl-title,
+  :is(.sangeet-page, .wedding-page) .tl-item.is-open .tl-title.tl-title--medium,
+  :is(.sangeet-page, .wedding-page) .tl-item.is-open .tl-title.tl-title--long,
+  :is(.sangeet-page, .wedding-page) .tl-item.is-open .tl-title.tl-title--xlong,
+  :is(.sangeet-page, .wedding-page) .tl-item.is-live .tl-title {
+    font-size: clamp(14px, 4vw, 16px);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+  }
+  :is(.sangeet-page, .wedding-page) .tl-chip {
+    margin-top: 0;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+  }
+
+  .wedding-page #seating,
+  .wedding-page .seating-priority-slot { width: 100%; max-width: 100%; }
+  .wedding-page .seat-card,
+  .wedding-page .seat-card:has(.seat-floor-plan:not([hidden])),
+  .wedding-page .seating-priority-slot #seating .seat-card,
+  .wedding-page .seating-priority-slot #seating .seat-card:has(.seat-floor-plan:not([hidden])) {
+    width: 100%;
+    max-width: 100%;
+    margin-inline: auto;
+    padding: 18px 12px;
+  }
+  .wedding-page .seat-map-scroll { overflow-x: hidden; }
+  .wedding-page .seat-map-stage { min-width: 0; }
+  .wedding-page .seat-map-marker { border-width: 2px; }
+  .wedding-page .seat-map-marker b { padding: 3px 4px; font-size: 6.5px; }
+  .wedding-page .seat-reveal { padding-inline: 0; }
+  .wedding-page .seat-row { padding-inline: 12px; }
+  .wedding-page .seat-row span { min-width: 0; overflow-wrap: anywhere; }
   .wedding-page .tl-block-title { margin-left: 86px; }
   .wedding-page .tl-block + .tl-block { margin-top: 54px; padding-top: 34px; }
 }

@@ -41,7 +41,7 @@
             {
               id: "welcome",
               start: "2026-11-20T17:45:00-05:00",
-              title: "Welcome & Dinner",
+              title: "Welcome & Food Stations Open",
               details: [
                 "Event begins — main food stations and bar open",
                 "Henna artists available",
@@ -50,7 +50,7 @@
             {
               id: "program",
               start: "2026-11-20T19:30:00-05:00",
-              title: "Sangeet Program",
+              title: "Sangeet Performances",
               details: ["Grab a seat — the performances are starting!"],
               acts: [
                 { who: "Sister of the Groom", name: "Puja" },
@@ -79,7 +79,7 @@
               id: "dance",
               start: "2026-11-20T20:15:00-05:00",
               time: "8:30 PM",
-              title: "Dance Floor Opens",
+              title: "Dance Floor and Late-Night Stations Open",
               details: [
                 "Sangeet program concludes",
                 "Dessert & additional food stations open",
@@ -97,9 +97,7 @@
               id: "last-call",
               start: "2026-11-20T22:30:00-05:00",
               title: "Last Call",
-              details: [
-                "Bar and all food stations close, except biryani & naan",
-              ],
+              details: ["Bar and all food stations close"],
             },
             {
               id: "wrap",

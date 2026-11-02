@@ -204,7 +204,8 @@ Answers guest questions at the bottom of `/sangeet` and `/wedding`.
   are included automatically.
 - Brain: `api/_lib/assistant.js` (also exposes `answer()` for a future SMS
   bot). Endpoint: `api/chat.js`. UI: `assets/js/chat.js` + `assets/css/chat.css`.
-- Model: `gpt-4.1-nano` by default (override with the `OPENAI_MODEL` env var).
+- Model: `gpt-6-luna` by default. Set the `OPENAI_MODEL` environment variable
+  to change the exact model without editing application code.
 - Private-home events (Ganesh Puja, Haldi, Satyanarayana Puja) are described
   without their address, because the chatbot is public.
 

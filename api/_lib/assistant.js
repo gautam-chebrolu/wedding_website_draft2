@@ -21,7 +21,9 @@ const EVENTS = require('../../media/events_data.js');
 const LIVE = require('../../media/live_schedule_data.js');
 
 const FACTS_PATH = path.join(__dirname, '..', '_data', 'facts.md');
-const MODEL = process.env.OPENAI_MODEL || 'gpt-4.1-nano';
+// Set OPENAI_MODEL in the deployment environment to change models without
+// editing application code. Blank values use the safe default.
+const MODEL = (process.env.OPENAI_MODEL || '').trim() || 'gpt-6-luna';
 const TZ = 'America/New_York';
 
 // Events held at a private home — the chatbot is public, so it never
@@ -130,10 +132,15 @@ function sanitizeHistory(raw, { maxMessages = 12, maxChars = 800 } = {}) {
 // ── OpenAI call ───────────────────────────────────────────────
 function requestBody(messages, stream) {
   const body = { model: MODEL, messages, stream };
-  if (/^(gpt-5|o\d)/.test(MODEL)) {
-    // Reasoning models: keep thinking minimal so answers stay instant.
+  if (/^(gpt-(?:5|6)|o\d)/.test(MODEL)) {
+    // Reasoning models use max_completion_tokens. Keep reasoning off for the
+    // Luna/Sol/Terra variants that support it, and low for other GPT-6 models.
     body.max_completion_tokens = 400;
-    body.reasoning_effort = 'minimal';
+    if (/^gpt-6/.test(MODEL)) {
+      body.reasoning_effort = /^gpt-6(?:-luna|-sol|\.1-terra)(?:-|$)/.test(MODEL) ? 'none' : 'low';
+    } else {
+      body.reasoning_effort = /^gpt-5\.6/.test(MODEL) ? 'none' : 'minimal';
+    }
   } else {
     body.max_tokens = 300;
     body.temperature = 0.3;

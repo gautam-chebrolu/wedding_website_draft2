@@ -173,6 +173,7 @@
     var heroEl = opts.hero, tlEl = opts.timeline, bannerEl = opts.banner;
     var tabsEl = opts.tabs, jumpEl = opts.jump;
     var expandable = !!opts.expandable;
+    var continuous = !!opts.continuous;
 
     var ov = {};
     var model = buildModel(event, ov);
@@ -209,7 +210,7 @@
         });
       }
       tlEl.querySelectorAll('.tl-block').forEach(function (sec) {
-        sec.hidden = event.blocks.length > 1 && +sec.dataset.block !== i;
+        sec.hidden = !continuous && event.blocks.length > 1 && +sec.dataset.block !== i;
       });
     }
 
@@ -265,7 +266,7 @@
       });
     }
 
-    // Expandable Sangeet cards; legacy pages keep past-item toggling.
+    // Compact live pages expand any card; legacy pages keep past-item toggling.
     tlEl.addEventListener('click', function (e) {
       var card = e.target.closest('.tl-card');
       if (!card) return;
@@ -463,7 +464,7 @@
     function syncJump() {
       if (!jumpEl) return;
       var x = liveId && model.flat.find(function (f) { return f.id === liveId; });
-      var show = !!liveId && (!liveVisible || (x && x.block !== activeBlock));
+      var show = !!liveId && (!liveVisible || (!continuous && x && x.block !== activeBlock));
       jumpEl.classList.toggle('is-visible', show);
     }
     if (jumpEl) {
@@ -595,9 +596,93 @@
       .replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
   }
 
+  // Percentage-based centers measured from reception_floor_plan.png.
+  // They stay aligned as the plan scales and allow a wider scrollable plan on phones.
+  var SEAT_MAP_TABLES = [
+    ['1', 45.5, 68.2], ['2', 55.0, 68.2], ['3', 35.9, 68.2], ['4', 64.4, 68.2],
+    ['5', 40.0, 81.7], ['6', 60.2, 81.7], ['7', 25.9, 81.7], ['8', 74.8, 81.7],
+    ['9', 21.8, 68.2], ['10', 79.4, 68.2], ['11', 25.9, 54.4], ['12', 74.8, 54.4],
+    ['13', 21.9, 39.6], ['14', 79.0, 39.6], ['15', 25.9, 27.2], ['16', 74.8, 27.2],
+    ['17', 14.8, 27.2], ['18', 85.5, 27.2], ['19', 10.7, 39.6], ['20', 89.9, 39.6],
+    ['21', 16.3, 54.4], ['22', 84.5, 54.4], ['23', 10.7, 68.2], ['24', 89.9, 68.2],
+    ['25', 16.3, 81.7], ['26', 84.5, 81.7], ['27', 6.6, 81.7], ['28', 94.1, 81.7],
+    ['29', 6.6, 54.4], ['30', 94.1, 54.4], ['31', 6.6, 27.2], ['32', 94.1, 27.2],
+    ['33', 19.8, 15.5], ['34', 80.5, 15.5],
+    ['HT1', 34.9, 39.8, 'HT 1', true], ['HT2', 65.3, 39.8, 'HT 2', true]
+  ];
+
+  function seatTableKey(value) {
+    var key = String(value == null ? '' : value).toUpperCase().replace(/\s+/g, '');
+    if (/^HT[12]$/.test(key)) return key;
+    var number = key.match(/\d+/);
+    return number ? String(parseInt(number[0], 10)) : key;
+  }
+
   function mountSeating(opts) {
     var input = opts.input, results = opts.results, statusEl = opts.status;
+    var section = opts.section, promoteTarget = opts.promoteTarget;
+    var floorPlan = opts.floorPlan, mapScroll = opts.mapScroll;
+    var mapMarkers = opts.mapMarkers, mapCaption = opts.mapCaption;
+    var promoteAt = opts.promoteAt ? Date.parse(opts.promoteAt) : null;
+    var queryParam = opts.queryParam || 'name';
+    var params = new URLSearchParams(global.location.search);
+    var initialName = String(params.get(queryParam) || '').trim();
     var rows = [];
+
+    if (initialName) input.value = initialName;
+
+    if (mapMarkers) {
+      mapMarkers.innerHTML = SEAT_MAP_TABLES.map(function (table) {
+        var label = table[3] || table[0];
+        return '<span class="seat-map-marker' + (table[4] ? ' is-head-table' : '') + '"' +
+          ' data-table-key="' + table[0] + '" data-table-label="' + esc(label) + '"' +
+          ' style="--seat-x:' + table[1] + '%;--seat-y:' + table[2] + '%">' +
+          '<b>' + (table[4] ? esc(label) : 'Table ' + esc(label)) + '</b></span>';
+      }).join('');
+    }
+
+    function hideFloorPlan() {
+      if (!floorPlan) return;
+      floorPlan.hidden = true;
+      if (mapCaption) mapCaption.textContent = '';
+      if (mapMarkers) mapMarkers.querySelectorAll('.seat-map-marker').forEach(function (marker) {
+        marker.classList.remove('is-active');
+      });
+    }
+
+    function highlightTable(table) {
+      if (!floorPlan || !mapMarkers) return;
+      var key = seatTableKey(table);
+      var marker = mapMarkers.querySelector('[data-table-key="' + key + '"]');
+      if (!marker) { hideFloorPlan(); return; }
+      mapMarkers.querySelectorAll('.seat-map-marker').forEach(function (item) {
+        item.classList.toggle('is-active', item === marker);
+      });
+      floorPlan.hidden = false;
+      var label = marker.dataset.tableLabel;
+      if (mapCaption) {
+        mapCaption.textContent = (key.indexOf('HT') === 0 ? 'Head Table ' + key.slice(2) : 'Table ' + label) +
+          ' is highlighted in gold. The dance floor is in the center of the room.';
+      }
+      if (mapScroll) requestAnimationFrame(function () {
+        var left = marker.offsetLeft + marker.offsetWidth / 2 - mapScroll.clientWidth / 2;
+        mapScroll.scrollTo({ left: Math.max(0, left), behavior: 'smooth' });
+      });
+    }
+
+    if (section && promoteTarget && !isNaN(promoteAt)) {
+      var homeMarker = document.createComment('seating-home');
+      section.parentNode.insertBefore(homeMarker, section);
+      var isPromoted = false;
+      onTick(function (now) {
+        var shouldPromote = now >= promoteAt;
+        if (shouldPromote === isPromoted) return;
+        isPromoted = shouldPromote;
+        section.classList.toggle('is-promoted', isPromoted);
+        if (isPromoted) promoteTarget.appendChild(section);
+        else homeMarker.parentNode.insertBefore(section, homeMarker.nextSibling);
+      });
+    }
 
     function setStatus(t) { if (statusEl) statusEl.textContent = t; }
 
@@ -613,7 +698,12 @@
           input.disabled = false;
           input.placeholder = 'Start typing your name…';
           setStatus(rows.length ? '' : 'The seating chart will appear here soon.');
-          if (input.value) search();
+          if (input.value) {
+            search();
+            if (initialName && section && Clock.now() < promoteAt) {
+              section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }
         }).catch(function (e) {
           console.warn('Seating load failed:', e && e.message);
           setStatus('Couldn’t load the seating chart — please check with the welcome table.');
@@ -666,9 +756,10 @@
 
     function search() {
       var q = input.value;
-      if (norm(q).length < 2) { results.innerHTML = ''; setStatus(''); return; }
+      if (norm(q).length < 2) { results.innerHTML = ''; setStatus(''); hideFloorPlan(); return; }
       var found = find(q);
       if (!found.length) {
+        hideFloorPlan();
         results.innerHTML = '<p class="seat-empty">We couldn’t find “' + esc(q.trim()) +
           '”. Try just your first or last name, or ask anyone at the welcome table.</p>';
         return;
@@ -676,8 +767,10 @@
       var exact = found[0].full === norm(q);
       if (found.length === 1 || (exact && (found.length < 2 || found[1].full !== found[0].full))) {
         results.innerHTML = revealHTML(found[0]);
+        highlightTable(found[0].table);
         return;
       }
+      hideFloorPlan();
       var shown = found.slice(0, 12);
       results.innerHTML = '<ul class="seat-list">' + shown.map(function (r, i) {
         return '<li><button type="button" class="seat-row" data-i="' + i + '"><span>' + esc(r.name) +
@@ -691,12 +784,15 @@
       if (e.target.closest('#seat-again-btn')) {
         input.value = '';
         results.innerHTML = '';
+        hideFloorPlan();
         input.focus();
         return;
       }
       var b = e.target.closest('.seat-row');
       if (!b || !results._shown) return;
-      results.innerHTML = revealHTML(results._shown[+b.dataset.i]);
+      var selected = results._shown[+b.dataset.i];
+      results.innerHTML = revealHTML(selected);
+      highlightTable(selected.table);
     });
 
     var t = null;

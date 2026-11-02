@@ -17,7 +17,7 @@
   <script defer src="/_vercel/insights/script.js"></script>
 </head>
 
-<body class="live-page">
+<body class="live-page wedding-page">
 
   <!-- ── Navigation ─────────────────────────────────────────── -->
   <nav class="site-nav scrolled" aria-label="Main navigation">
@@ -39,41 +39,39 @@
       <p class="live-eyebrow">Saturday · November 21</p>
       <h1>Wedding Day</h1>
       <p class="page-subtitle">Washington Duke Inn &amp; Golf Club</p>
-      <nav class="live-switch" aria-label="Live event pages">
-        <a href="/sangeet">Sangeet</a>
-        <a href="/wedding" aria-current="page">Wedding Day</a>
-      </nav>
     </header>
 
     <main class="live-content">
 
-      <!-- Live hero / countdown -->
-      <section id="live-hero" class="live-hero" aria-live="polite" aria-label="What's happening now"></section>
-
       <!-- Messages from the family (Firestore live/wedding) -->
       <div id="live-banners" class="live-banners" hidden></div>
 
+      <!-- The seating lookup moves here when cocktail hour begins. -->
+      <div id="seating-priority-slot" class="seating-priority-slot"></div>
+
       <!-- Venue + attire -->
-      <div class="live-info">
-        <a class="live-info-card" id="venue-link" href="https://maps.app.goo.gl/Z63vBuTvGSHRSrmQ8" target="_blank" rel="noopener noreferrer">
+      <div class="live-info live-info--simple">
+        <a class="live-info-row" id="venue-link" href="https://maps.app.goo.gl/Z63vBuTvGSHRSrmQ8" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
           <span>Venue · Directions</span>
           <b>Washington Duke Inn &amp; Golf Club</b>
           <small>3001 Cameron Blvd, Durham, NC 27705</small>
+          <em class="live-map-label">Google Maps &nearr;</em>
         </a>
-        <a class="live-info-card" id="seat-shortcut" href="#seating">
-          <span>Reception Seating</span>
-          <b>Find your table →</b>
-          <small>Search your name below</small>
-        </a>
+        <div class="live-info-row">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6l1 5 3 2-2 3-2-1v9H9v-9l-2 1-2-3 3-2 1-5Z"></path><path d="M9 8h6"></path></svg>
+          <span>Attire</span>
+          <b>Western or Indian Formal</b>
+          <small>Please avoid wearing pink to the wedding ceremony</small>
+        </div>
       </div>
 
       <!-- Schedule -->
       <section class="live-section" id="schedule" aria-labelledby="schedule-title" style="margin-top: 36px;">
         <div class="live-section-head">
           <h2 id="schedule-title">Today’s Schedule</h2>
-          <p>Attire: Western or Indian Formal · please avoid wearing pink</p>
+          <p>Tap any item to see more details</p>
         </div>
-        <div class="live-tabs" id="live-tabs" role="tablist" aria-label="Wedding day events"></div>
         <div id="live-timeline"></div>
       </section>
 
@@ -96,6 +94,17 @@
           </div>
           <p id="seat-status" class="seat-status" aria-live="polite"></p>
           <div id="seat-results" class="seat-results" aria-live="polite"></div>
+          <div id="seat-floor-plan" class="seat-floor-plan" hidden>
+            <p class="seat-map-heading">Your table on the floor plan</p>
+            <div id="seat-map-scroll" class="seat-map-scroll" tabindex="0" aria-label="Scrollable reception floor plan">
+              <div class="seat-map-stage">
+                <img src="/media/reception_floor_plan.png"
+                  alt="Reception floor plan with the dance floor in the center, numbered guest tables, two head tables, and bars in the upper corners" />
+                <div id="seat-map-markers" class="seat-map-markers" aria-hidden="true"></div>
+              </div>
+            </div>
+            <p id="seat-map-caption" class="seat-map-caption" aria-live="polite"></p>
+          </div>
         </div>
       </section>
 
@@ -127,16 +136,24 @@
     (function () {
       Live.mountSchedule({
         event: LIVE_SCHEDULE.wedding,
-        hero: document.getElementById('live-hero'),
         timeline: document.getElementById('live-timeline'),
-        tabs: document.getElementById('live-tabs'),
         banner: document.getElementById('live-banners'),
-        jump: document.getElementById('jump-now')
+        jump: document.getElementById('jump-now'),
+        expandable: true,
+        continuous: true
       });
       Live.mountSeating({
+        section: document.getElementById('seating'),
         input: document.getElementById('seat-search'),
         results: document.getElementById('seat-results'),
-        status: document.getElementById('seat-status')
+        status: document.getElementById('seat-status'),
+        floorPlan: document.getElementById('seat-floor-plan'),
+        mapScroll: document.getElementById('seat-map-scroll'),
+        mapMarkers: document.getElementById('seat-map-markers'),
+        mapCaption: document.getElementById('seat-map-caption'),
+        promoteTarget: document.getElementById('seating-priority-slot'),
+        promoteAt: '2026-11-21T18:00:00-05:00',
+        queryParam: 'name'
       });
     })();
   </script>

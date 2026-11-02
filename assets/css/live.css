@@ -1105,6 +1105,22 @@ a.live-info-card:hover { background: var(--glass-2); border-color: rgba(201, 169
   border: 1px solid var(--line);
 }
 
+.seating-priority-slot:empty { display: none; }
+
+.seating-priority-slot #seating {
+  margin-top: 10px;
+  margin-bottom: 42px;
+  animation: riseIn 0.5s var(--ease) both;
+}
+
+.seating-priority-slot #seating .live-section-head { margin-bottom: 16px; }
+
+.seating-priority-slot #seating .seat-card {
+  max-width: 620px;
+  border-color: rgba(201, 169, 110, 0.38);
+  box-shadow: 0 22px 60px -40px rgba(201, 169, 110, 0.55);
+}
+
 .seat-field { position: relative; }
 
 .seat-field svg {
@@ -1137,6 +1153,115 @@ a.live-info-card:hover { background: var(--glass-2); border-color: rgba(201, 169
 .seat-status:empty { display: none; }
 
 .seat-results { margin-top: 14px; }
+
+.seat-floor-plan[hidden] { display: none; }
+
+.seat-floor-plan {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.seat-card:has(.seat-floor-plan:not([hidden])),
+.seating-priority-slot #seating .seat-card:has(.seat-floor-plan:not([hidden])) {
+  max-width: 920px;
+}
+
+.seat-map-heading {
+  margin-bottom: 10px;
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.seat-map-scroll {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border: 1px solid rgba(201, 169, 110, 0.3);
+  border-radius: 16px;
+  background: linear-gradient(145deg, #1c1a17, #11100e);
+  outline: none;
+  overscroll-behavior-inline: contain;
+  scrollbar-color: rgba(201, 169, 110, 0.65) rgba(13, 12, 11, 0.14);
+}
+
+.seat-map-scroll:focus-visible { box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.28); }
+
+.seat-map-stage {
+  position: relative;
+  width: 100%;
+  min-width: 760px;
+  aspect-ratio: 1589 / 651;
+  overflow: hidden;
+}
+
+.seat-map-stage > img {
+  position: absolute;
+  top: -16.28%;
+  left: -2.52%;
+  display: block;
+  width: 105.22%;
+  height: auto;
+}
+
+.seat-map-markers { position: absolute; inset: 0; pointer-events: none; }
+
+.seat-map-marker {
+  position: absolute;
+  left: var(--seat-x);
+  top: var(--seat-y);
+  display: flex;
+  width: 6.4%;
+  aspect-ratio: 1;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid #d9b873;
+  border-radius: 50%;
+  background: rgba(218, 178, 92, 0.48);
+  box-shadow: inset 0 0 18px rgba(255, 235, 176, 0.26), 0 0 0 3px rgba(245, 224, 180, 0.5), 0 0 24px 7px rgba(201, 169, 110, 0.4);
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.7);
+}
+
+.seat-map-marker.is-head-table {
+  width: 5.8%;
+  height: 30%;
+  aspect-ratio: auto;
+  border-radius: 14px;
+}
+
+.seat-map-marker b {
+  padding: 5px 7px;
+  border-radius: 999px;
+  font-family: var(--sans);
+  font-size: clamp(8px, 1.2vw, 11px);
+  line-height: 1;
+  white-space: nowrap;
+  color: #17130c;
+  background: linear-gradient(135deg, #f2d18b, #d7a94f);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.34);
+}
+
+.seat-map-marker.is-active {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  animation: seatMapPulse 1.8s ease-in-out infinite;
+}
+
+.seat-map-caption {
+  margin: 10px auto 0;
+  max-width: 620px;
+  font-family: var(--sans);
+  font-size: 11px;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--cream-60);
+}
 
 .seat-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
 
@@ -1288,19 +1413,19 @@ a.live-info-card:hover { background: var(--glass-2); border-color: rgba(201, 169
 }
 
 /* ── Keyframes ──────────────────────────────────────────────── */
-/* Sangeet compact live experience */
+/* Compact live timelines */
 .tl-card-time { display: none; }
 
-.sangeet-page .live-content { max-width: 1040px; }
+:is(.sangeet-page, .wedding-page) .live-content { max-width: 1040px; }
 
-.sangeet-page .live-info--simple {
+:is(.sangeet-page, .wedding-page) .live-info--simple {
   display: flex;
   flex-wrap: wrap;
   gap: 10px 28px;
   margin: 6px 0 22px;
 }
 
-.sangeet-page .live-info-row {
+:is(.sangeet-page, .wedding-page) .live-info-row {
   display: grid;
   grid-template-columns: 20px 1fr;
   align-items: start;
@@ -1310,7 +1435,7 @@ a.live-info-card:hover { background: var(--glass-2); border-color: rgba(201, 169
   text-decoration: none;
 }
 
-.sangeet-page .live-info-row > svg {
+:is(.sangeet-page, .wedding-page) .live-info-row > svg {
   width: 19px;
   height: 19px;
   margin-top: 2px;
@@ -1321,18 +1446,18 @@ a.live-info-card:hover { background: var(--glass-2); border-color: rgba(201, 169
   stroke-linejoin: round;
 }
 
-.sangeet-page .live-info-row > span { display: none; }
-.sangeet-page .live-info-row > b,
-.sangeet-page .live-info-row > small,
-.sangeet-page .live-info-row > .live-map-label { grid-column: 2; }
+:is(.sangeet-page, .wedding-page) .live-info-row > span { display: none; }
+:is(.sangeet-page, .wedding-page) .live-info-row > b,
+:is(.sangeet-page, .wedding-page) .live-info-row > small,
+:is(.sangeet-page, .wedding-page) .live-info-row > .live-map-label { grid-column: 2; }
 
-.sangeet-page .live-info-row > b {
+:is(.sangeet-page, .wedding-page) .live-info-row > b {
   font-family: var(--sans);
   font-size: 13px;
   font-weight: 500;
 }
 
-.sangeet-page .live-info-row > small {
+:is(.sangeet-page, .wedding-page) .live-info-row > small {
   margin-top: -6px;
   font-family: var(--sans);
   font-size: 11px;
@@ -1340,7 +1465,7 @@ a.live-info-card:hover { background: var(--glass-2); border-color: rgba(201, 169
   color: var(--cream-60);
 }
 
-.sangeet-page .live-map-label {
+:is(.sangeet-page, .wedding-page) .live-map-label {
   margin-top: -7px;
   font-family: var(--sans);
   font-size: 10px;
@@ -1348,14 +1473,14 @@ a.live-info-card:hover { background: var(--glass-2); border-color: rgba(201, 169
   color: var(--gold-hi);
 }
 
-.sangeet-page a.live-info-row:hover b,
-.sangeet-page a.live-info-row:hover small { color: var(--gold-hi); }
+:is(.sangeet-page, .wedding-page) a.live-info-row:hover b,
+:is(.sangeet-page, .wedding-page) a.live-info-row:hover small { color: var(--gold-hi); }
 
-.sangeet-page .tl-list {
+:is(.sangeet-page, .wedding-page) .tl-list {
   display: block;
 }
 
-.sangeet-page .tl-item {
+:is(.sangeet-page, .wedding-page) .tl-item {
   display: grid;
   grid-template-columns: 92px 28px minmax(0, 1fr);
   min-width: 0;
@@ -1364,10 +1489,10 @@ a.live-info-card:hover { background: var(--glass-2); border-color: rgba(201, 169
   transform-origin: center;
 }
 
-.sangeet-page .tl-time { display: flex; }
-.sangeet-page .tl-rail { display: flex; }
+:is(.sangeet-page, .wedding-page) .tl-time { display: flex; }
+:is(.sangeet-page, .wedding-page) .tl-rail { display: flex; }
 
-.sangeet-page .tl-card {
+:is(.sangeet-page, .wedding-page) .tl-card {
   height: auto;
   min-height: 0;
   margin: 7px 0;
@@ -1375,49 +1500,70 @@ a.live-info-card:hover { background: var(--glass-2); border-color: rgba(201, 169
   cursor: pointer;
 }
 
-.sangeet-page .tl-item:not(.is-open):not(.is-live) .tl-card {
+:is(.sangeet-page, .wedding-page) .tl-item:not(.is-open):not(.is-live) .tl-card {
   background: transparent;
   border-color: transparent;
   box-shadow: none;
 }
 
-.sangeet-page .tl-item:not(.is-open):not(.is-live):hover .tl-card {
+:is(.sangeet-page, .wedding-page) .tl-item:not(.is-open):not(.is-live):hover .tl-card {
   background: var(--glass);
   border-color: var(--line);
 }
 
-.sangeet-page .tl-card-time { display: none; }
+:is(.sangeet-page, .wedding-page) .tl-card-time { display: none; }
 
-.sangeet-page .tl-title { font-size: 20px; }
+:is(.sangeet-page, .wedding-page) .tl-title { font-size: 20px; }
 
-.sangeet-page .tl-item:not(.is-open) .tl-body {
+:is(.sangeet-page, .wedding-page) .tl-item:not(.is-open) .tl-body {
   display: none;
   opacity: 0;
 }
 
-.sangeet-page .tl-item:not(.is-open) .tl-progress { opacity: 0; }
+:is(.sangeet-page, .wedding-page) .tl-item:not(.is-open) .tl-progress { opacity: 0; }
 
-.sangeet-page .tl-item.is-open {
+:is(.sangeet-page, .wedding-page) .tl-item.is-open {
   opacity: 1;
   transform: none;
 }
 
-.sangeet-page .tl-item.is-open .tl-card {
+:is(.sangeet-page, .wedding-page) .tl-item.is-open .tl-card {
   min-height: 0;
   padding: 24px;
   background: linear-gradient(150deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.025));
   border-color: rgba(201, 169, 110, 0.35);
 }
 
-.sangeet-page .tl-item.is-open .tl-title { font-size: 28px; }
-.sangeet-page .tl-item.is-live.is-open .tl-card {
+:is(.sangeet-page, .wedding-page) .tl-item.is-open .tl-title { font-size: 28px; }
+:is(.sangeet-page, .wedding-page) .tl-item.is-live.is-open .tl-card {
   background: linear-gradient(150deg, rgba(255, 111, 97, 0.14), rgba(255, 255, 255, 0.035));
   border-color: rgba(255, 140, 120, 0.55);
   box-shadow: 0 20px 60px -20px rgba(255, 111, 97, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
-.sangeet-page .tl-item.is-live.is-open .tl-progress { opacity: 1; }
-.sangeet-page .tl-item:hover { opacity: 0.9; transform: translateY(-2px); }
-.sangeet-page .tl-item.is-open:hover { opacity: 1; transform: none; }
+:is(.sangeet-page, .wedding-page) .tl-item.is-live.is-open .tl-progress { opacity: 1; }
+:is(.sangeet-page, .wedding-page) .tl-item:hover { opacity: 0.9; transform: translateY(-2px); }
+:is(.sangeet-page, .wedding-page) .tl-item.is-open:hover { opacity: 1; transform: none; }
+
+.wedding-page .tl-block-title {
+  position: static;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  clip: auto;
+  margin: 0 0 12px 120px;
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.wedding-page .tl-block + .tl-block {
+  margin-top: 72px;
+  padding-top: 42px;
+  border-top: 1px solid var(--line);
+}
 
 .sangeet-page .poster .poster-title {
   font-size: clamp(20px, 4vw, 28px);
@@ -1431,12 +1577,14 @@ a.live-info-card:hover { background: var(--glass-2); border-color: rgba(201, 169
 .sangeet-page .poster .poster-title.poster-title--xlong { font-size: clamp(14px, 2.8vw, 19px); line-height: 1.15; }
 
 @media (max-width: 600px) {
-  .sangeet-page .live-info--simple { display: grid; grid-template-columns: 1fr; }
-  .sangeet-page .tl-item { grid-template-columns: 64px 22px minmax(0, 1fr); }
-  .sangeet-page .tl-card,
-  .sangeet-page .tl-item.is-past .tl-card { padding: 16px; }
-  .sangeet-page .tl-item.is-open .tl-card,
-  .sangeet-page .tl-item.is-live .tl-card { padding: 20px 18px; }
+  :is(.sangeet-page, .wedding-page) .live-info--simple { display: grid; grid-template-columns: 1fr; }
+  :is(.sangeet-page, .wedding-page) .tl-item { grid-template-columns: 64px 22px minmax(0, 1fr); }
+  :is(.sangeet-page, .wedding-page) .tl-card,
+  :is(.sangeet-page, .wedding-page) .tl-item.is-past .tl-card { padding: 16px; }
+  :is(.sangeet-page, .wedding-page) .tl-item.is-open .tl-card,
+  :is(.sangeet-page, .wedding-page) .tl-item.is-live .tl-card { padding: 20px 18px; }
+  .wedding-page .tl-block-title { margin-left: 86px; }
+  .wedding-page .tl-block + .tl-block { margin-top: 54px; padding-top: 34px; }
 }
 
 @keyframes riseIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
@@ -1458,3 +1606,7 @@ a.live-info-card:hover { background: var(--glass-2); border-color: rgba(201, 169
 }
 @keyframes twinkle { from { opacity: 0.5; } to { opacity: 1; } }
 @keyframes tableIn { from { opacity: 0; transform: scale(0.7) rotate(-20deg); } to { opacity: 1; transform: none; } }
+@keyframes seatMapPulse {
+  0%, 100% { box-shadow: inset 0 0 18px rgba(255, 235, 176, 0.26), 0 0 0 3px rgba(245, 224, 180, 0.5), 0 0 22px 6px rgba(201, 169, 110, 0.36); }
+  50% { box-shadow: inset 0 0 22px rgba(255, 235, 176, 0.38), 0 0 0 7px rgba(245, 224, 180, 0.28), 0 0 34px 11px rgba(201, 169, 110, 0.52); }
+}

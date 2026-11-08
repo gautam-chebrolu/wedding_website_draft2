@@ -1,9 +1,9 @@
 /**
  * api/_lib/assistant.js
  *
- * The chatbot's "brain", shared by every channel:
- *   - api/chat.js          → website chat (streams tokens)
- *   - (future) api/sms.js  → text-message bot (call answer())
+ * Website-local assistant used until the shared messaging API is configured.
+ * Once MESSAGING_ASSISTANT_URL is set, web and SMS use the messaging backend
+ * and its published Firestore knowledge. This module is then a rollback copy.
  *
  * Knowledge comes from three places, so you rarely need to touch code:
  *   1. api/_data/facts.md          ← ADD NEW FACTS HERE (plain English)
@@ -109,104 +109,6 @@ function staticPrompt() {
   return cachedPrompt;
 }
 
-function buildMessages(history, nowMs) {
-  return [
-    { role: 'system', content: staticPrompt() },
-    { role: 'system', content: `Current date and time: ${fmtNow.format(new Date(nowMs || Date.now()))} (Eastern).` },
-    ...history
-  ];
-}
-
-/** Keep only well-formed user/assistant turns, trimmed and capped. */
-function sanitizeHistory(raw, { maxMessages = 12, maxChars = 800 } = {}) {
-  if (!Array.isArray(raw)) return [];
-  const clean = raw
-    .filter(m => m && (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string')
-    .map(m => ({ role: m.role, content: m.content.trim().slice(0, maxChars) }))
-    .filter(m => m.content)
-    .slice(-maxMessages);
-  while (clean.length && clean[0].role !== 'user') clean.shift();
-  return clean;
-}
-
-// ── OpenAI call ───────────────────────────────────────────────
-function requestBody(messages, stream) {
-  const body = { model: MODEL, messages, stream };
-  if (/^(gpt-(?:5|6)|o\d)/.test(MODEL)) {
-    // Reasoning models use max_completion_tokens. Keep reasoning off for the
-    // Luna/Sol/Terra variants that support it, and low for other GPT-6 models.
-    body.max_completion_tokens = 400;
-    if (/^gpt-6/.test(MODEL)) {
-      body.reasoning_effort = /^gpt-6(?:-luna|-sol|\.1-terra)(?:-|$)/.test(MODEL) ? 'none' : 'low';
-    } else {
-      body.reasoning_effort = /^gpt-5\.6/.test(MODEL) ? 'none' : 'minimal';
-    }
-  } else {
-    body.max_tokens = 300;
-    body.temperature = 0.3;
-  }
-  return body;
-}
-
-async function callOpenAI(messages, stream) {
-  const key = process.env.OPENAI_API_KEY;
-  if (!key) {
-    const err = new Error('OPENAI_API_KEY is not set');
-    err.status = 503;
-    throw err;
-  }
-  const res = await fetch('https://api.openai.com/v1/chat/completions', {
-    method: 'POST',
-    headers: { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify(requestBody(messages, stream))
-  });
-  if (!res.ok) {
-    const text = await res.text().catch(() => '');
-    const err = new Error(`OpenAI ${res.status}: ${text.slice(0, 300)}`);
-    err.status = res.status === 429 ? 429 : 502;
-    throw err;
-  }
-  return res;
-}
-
-/**
- * Stream an answer token-by-token.
- * @param {{history: Array, now?: number}} opts
- * @param {(text: string) => void} onToken
- * @returns {Promise<string>} the full answer
- */
-async function streamAnswer({ history, now }, onToken) {
-  const res = await callOpenAI(buildMessages(history, now), true);
-  const reader = res.body.getReader();
-  const decoder = new TextDecoder();
-  let buffer = '';
-  let full = '';
-
-  for (;;) {
-    const { value, done } = await reader.read();
-    if (done) break;
-    buffer += decoder.decode(value, { stream: true });
-    let nl;
-    while ((nl = buffer.indexOf('\n')) !== -1) {
-      const line = buffer.slice(0, nl).trim();
-      buffer = buffer.slice(nl + 1);
-      if (!line.startsWith('data:')) continue;
-      const data = line.slice(5).trim();
-      if (data === '[DONE]') return full;
-      try {
-        const delta = JSON.parse(data).choices?.[0]?.delta?.content;
-        if (delta) { full += delta; onToken(delta); }
-      } catch (_) { /* partial / keep-alive line */ }
-    }
-  }
-  return full;
-}
-
-/** Non-streaming answer — for channels like SMS. */
-async function answer({ history, now }) {
-  const res = await callOpenAI(buildMessages(history, now), false);
-  const json = await res.json();
-  return (json.choices?.[0]?.message?.content || '').trim();
-}
-
-module.exports = { streamAnswer, answer, sanitizeHistory, staticPrompt, MODEL };
+const { createAssistant } = require('./assistant-core');
+const assistant = createAssistant({ loadContext: async () => staticPrompt(), model: MODEL });
+module.exports = { ...assistant, staticPrompt };

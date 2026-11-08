@@ -3,12 +3,14 @@
  *
  * Body: { messages: [{role:'user'|'assistant', content}], page?, now? }
  *
- * Requires the OPENAI_API_KEY environment variable:
+ * Uses MESSAGING_ASSISTANT_URL + WEB_CHAT_SERVICE_TOKEN when configured;
+ * otherwise requires the OPENAI_API_KEY environment variable:
  *   - Vercel:  Project → Settings → Environment Variables
  *   - Local:   .env.local (gitignored), then `node scripts/dev-server.js`
  */
 
 const { streamAnswer, sanitizeHistory } = require('./_lib/assistant');
+const { proxyAnswer } = require('./_lib/messaging-proxy');
 const { readJson, sendJson, clientIp, sameOrigin, rateLimiter } = require('./_lib/http');
 
 const allowPerMinute = rateLimiter({ limit: 15, windowMs: 60 * 1000 });
@@ -43,7 +45,10 @@ module.exports = async function handler(req, res) {
 
   let started = false;
   try {
-    await streamAnswer({ history, now }, (token) => {
+    const respond = process.env.MESSAGING_ASSISTANT_URL
+      ? (opts, onToken) => proxyAnswer({ history: opts.history, ip, onToken })
+      : streamAnswer;
+    await respond({ history, now }, (token) => {
       if (!started) {
         started = true;
         res.statusCode = 200;

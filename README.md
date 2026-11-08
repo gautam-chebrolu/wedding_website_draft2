@@ -1,5 +1,10 @@
 # Wedding Website
 
+The sibling [wedding messaging app](../wedding_messaging/README.md) contains the organizer
+dashboard, Twilio/Firebase backend, local demo and setup guide. It is a separate
+deployment; the website keeps its current chat until the messaging adapter is
+configured. Guest personalization, campaigns and photo storage are later phases.
+
 ## Architecture
 
 The website uses **Firebase Firestore** as its primary database. Google Sheets is kept as a backup (written to automatically on every RSVP submission via Apps Script).
@@ -43,7 +48,8 @@ other existing fields.
 Deploy the revised Firestore rules before using the manager:
 
 ```bash
-firebase deploy --only firestore:rules --project wedding-website-backend-5a8df
+cd ../wedding_messaging
+firebase deploy --only firestore:rules,firestore:indexes --project wedding-website-backend-5a8df
 ```
 
 **Firebase Console:** https://console.firebase.google.com/project/wedding-website-backend-5a8df/firestore
@@ -148,9 +154,11 @@ since the website lookup cannot tell such guests apart either.
 
 The site is deployed on **Vercel** and updates automatically on push to `main`.
 
-The Firebase security rules are in `firestore.rules`. To deploy rule changes:
+The shared Firebase rules and indexes are owned by the messaging repository.
+Run database deployments from that checkout; this website has no Firebase deployment config:
 ```bash
-firebase deploy --only firestore:rules --project wedding-website-backend-5a8df
+cd ../wedding_messaging
+firebase deploy --only firestore:rules,firestore:indexes --project wedding-website-backend-5a8df
 ```
 
 ---
@@ -223,7 +231,7 @@ files remain excluded from Git-based deployments through `.gitignore`.
 
 The Firebase web configuration in `assets/js/` and the HTML pages is intentionally
 public and is not a service-account credential. Access to Firestore data is
-controlled by `firestore.rules`.
+controlled by the canonical `firestore.rules` in the messaging repository.
 
 - **Vercel:** Project → Settings → Environment Variables → add each one →
   redeploy.
@@ -231,3 +239,30 @@ controlled by `firestore.rules`.
   `node scripts/dev-server.js` and open http://localhost:3001. `.env*` and
   `.vercel/` are gitignored. Before pushing, `git status` should never list
   `.env.local`.
+
+## Shared chat knowledge
+
+Production web chat can use the messaging API by setting the server-only
+MESSAGING_ASSISTANT_URL and WEB_CHAT_SERVICE_TOKEN variables. Published facts live
+in Firestore and are edited in the messaging dashboard. The browser never reads
+private knowledge collections directly. Until that connection is configured,
+website chat uses its existing local assistant; those files are a bootstrap and
+rollback source once the connection is enabled, not the live knowledge editor.
+
+The website deploys independently from its own repository root. Moving this local
+checkout does not require changing Vercel's repository root-directory setting.
+The assistant copy in api/_lib is local to this website; it is never imported by
+the messaging build. Database rules/indexes have one deployment owner in messaging.
+
+To prepare an explicit, public bootstrap handoff (Node 22+; no dependencies):
+
+```powershell
+node scripts/export-chat-knowledge.js --output ../knowledge-export.json
+```
+
+Then import that file explicitly from a messaging checkout using its
+scripts/import-knowledge.js command. The export redacts private event details,
+refuses to overwrite an existing file, and never writes to Firebase. After initial
+seeding, edit published facts in the messaging dashboard. Website schedule files
+remain the source for its live pages; later schedule publications need a reviewed
+snapshot activation in messaging.

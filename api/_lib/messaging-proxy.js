@@ -1,4 +1,13 @@
 const { createHmac } = require('node:crypto');
+// Bound browser history before forwarding to the shared backend.
+function sanitizeHistory(raw, { maxMessages = 12, maxChars = 800 } = {}) {
+  if (!Array.isArray(raw)) return [];
+  const clean = raw.filter(m => m && ['user', 'assistant'].includes(m.role) && typeof m.content === 'string')
+    .map(m => ({ role: m.role, content: m.content.trim().slice(0, maxChars) }))
+    .filter(m => m.content).slice(-maxMessages);
+  while (clean.length && clean[0].role !== 'user') clean.shift();
+  return clean;
+}
 /** Keep the browser's plain-text streaming contract while calling the shared backend. */
 async function proxyAnswer({ history, ip, onToken }) {
   const url = process.env.MESSAGING_ASSISTANT_URL;
@@ -26,4 +35,4 @@ async function proxyAnswer({ history, ip, onToken }) {
   } finally { reader.releaseLock(); }
   return full;
 }
-module.exports = { proxyAnswer };
+module.exports = { proxyAnswer, sanitizeHistory };

@@ -207,20 +207,20 @@ Default CSV: `media/Reception Seating Chart - A-Z Seating Chart.csv`
 
 Answers guest questions at the bottom of `/sangeet` and `/wedding`.
 
-- **Add facts:** edit `api/_data/facts.md` (plain English), then push.
-  Schedules from `media/events_data.js` and `media/live_schedule_data.js`
-  are included automatically.
-- Brain: `api/_lib/assistant.js` (also exposes `answer()` for a future SMS
-  bot). Endpoint: `api/chat.js`. UI: `assets/js/chat.js` + `assets/css/chat.css`.
-- Model: `gpt-6-luna` by default. Set the `OPENAI_MODEL` environment variable
-  to change the exact model without editing application code.
-- Private-home events (Ganesh Puja, Haldi, Satyanarayana Puja) are described
-  without their address, because the chatbot is public.
+- Edit published public answers in the messaging dashboard's **Knowledge** tab.
+  Changes apply to SMS and website chat without redeployment.
+- `api/chat.js` validates requests and streams answers through
+  `api/_lib/messaging-proxy.js` to the shared messaging backend.
+- Website chat requires `MESSAGING_ASSISTANT_URL` and `WEB_CHAT_SERVICE_TOKEN`.
+  Missing configuration returns an unavailable response; there is no local bot.
+- The OpenAI key and model are configured only in the messaging backend.
+- Website event and live schedule files still power their existing pages.
 
 ### Secrets (never committed)
 | Variable | Used by |
 |---|---|
-| `OPENAI_API_KEY` | chatbot |
+| `MESSAGING_ASSISTANT_URL` | shared assistant endpoint |
+| `WEB_CHAT_SERVICE_TOKEN` | authenticates the website to the messaging backend |
 | `LIVE_ADMIN_PASSWORD` | `/live-admin` |
 | `FIREBASE_SERVICE_ACCOUNT` | `/live-admin` on Vercel (paste the whole service-account JSON) |
 
@@ -242,27 +242,16 @@ controlled by the canonical `firestore.rules` in the messaging repository.
 
 ## Shared chat knowledge
 
-Production web chat can use the messaging API by setting the server-only
+Website chat uses the messaging API through the server-only
 MESSAGING_ASSISTANT_URL and WEB_CHAT_SERVICE_TOKEN variables. Published facts live
 in Firestore and are edited in the messaging dashboard. The browser never reads
-private knowledge collections directly. Until that connection is configured,
-website chat uses its existing local assistant; those files are a bootstrap and
-rollback source once the connection is enabled, not the live knowledge editor.
+private knowledge collections directly. Removing either setting disables website
+chat; it does not switch to a separate facts file or assistant.
 
 The website deploys independently from its own repository root. Moving this local
 checkout does not require changing Vercel's repository root-directory setting.
-The assistant copy in api/_lib is local to this website; it is never imported by
-the messaging build. Database rules/indexes have one deployment owner in messaging.
+Database rules/indexes have one deployment owner in messaging.
 
-To prepare an explicit, public bootstrap handoff (Node 22+; no dependencies):
-
-```powershell
-node scripts/export-chat-knowledge.js --output ../knowledge-export.json
-```
-
-Then import that file explicitly from a messaging checkout using its
-scripts/import-knowledge.js command. The export redacts private event details,
-refuses to overwrite an existing file, and never writes to Firebase. After initial
-seeding, edit published facts in the messaging dashboard. Website schedule files
-remain the source for its live pages; later schedule publications need a reviewed
-snapshot activation in messaging.
+Website schedule files remain the source for its live pages; schedule changes
+also require a reviewed Firestore snapshot publication in messaging. Editing a
+written Knowledge fact does not update schedule times.

@@ -109,5 +109,5 @@ const EVENTS = {
   }
 };
 
-// Lets the chatbot (api/_lib/assistant.js) reuse this file in Node.
+// Keep event data available to Node-based tooling as well as the browser.
 if (typeof module !== 'undefined' && module.exports) module.exports = EVENTS;

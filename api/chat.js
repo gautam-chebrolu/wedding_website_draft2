@@ -1,16 +1,12 @@
 /**
  * POST /api/chat — website chatbot (streams plain-text tokens).
  *
- * Body: { messages: [{role:'user'|'assistant', content}], page?, now? }
- *
- * Uses MESSAGING_ASSISTANT_URL + WEB_CHAT_SERVICE_TOKEN when configured;
- * otherwise requires the OPENAI_API_KEY environment variable:
- *   - Vercel:  Project → Settings → Environment Variables
- *   - Local:   .env.local (gitignored), then `node scripts/dev-server.js`
+ * Body: { messages: [{role:'user'|'assistant', content}], page? }
+ * Requires MESSAGING_ASSISTANT_URL + WEB_CHAT_SERVICE_TOKEN on Vercel or
+ * in .env.local. The shared backend owns knowledge and the production clock.
  */
 
-const { streamAnswer, sanitizeHistory } = require('./_lib/assistant');
-const { proxyAnswer } = require('./_lib/messaging-proxy');
+const { proxyAnswer, sanitizeHistory } = require('./_lib/messaging-proxy');
 const { readJson, sendJson, clientIp, sameOrigin, rateLimiter } = require('./_lib/http');
 
 const allowPerMinute = rateLimiter({ limit: 15, windowMs: 60 * 1000 });
@@ -35,20 +31,9 @@ module.exports = async function handler(req, res) {
     return sendJson(res, 400, { error: 'Ask a question to get started.' });
   }
 
-  // `now` is only sent by ?now= preview links; it just changes this answer's
-  // sense of "current time", nothing else.
-  let now = Date.now();
-  if (body && body.now) {
-    const t = Date.parse(body.now);
-    if (!isNaN(t) && Math.abs(t - now) < 400 * 86400000) now = t;
-  }
-
   let started = false;
   try {
-    const respond = process.env.MESSAGING_ASSISTANT_URL
-      ? (opts, onToken) => proxyAnswer({ history: opts.history, ip, onToken })
-      : streamAnswer;
-    await respond({ history, now }, (token) => {
+    await proxyAnswer({ history, ip, onToken: (token) => {
       if (!started) {
         started = true;
         res.statusCode = 200;
@@ -57,7 +42,7 @@ module.exports = async function handler(req, res) {
         res.setHeader('X-Accel-Buffering', 'no');
       }
       res.write(token);
-    });
+    } });
     if (!started) return sendJson(res, 502, { error: 'Empty answer' });
     res.end();
   } catch (err) {

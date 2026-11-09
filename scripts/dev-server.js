@@ -6,9 +6,9 @@
  *
  * - Serves the static site with clean URLs (/sangeet → pages/sangeet.html)
  * - Runs /api/* functions (api/chat.js, api/live-admin.js) and reloads
- *   them on every request, so edits to facts.md apply immediately
+ *   them on every request for local code changes
  * - Loads secrets from .env.local (gitignored), the same names you set in
- *   Vercel: OPENAI_API_KEY, LIVE_ADMIN_PASSWORD, ...
+ *   Vercel: MESSAGING_ASSISTANT_URL, WEB_CHAT_SERVICE_TOKEN, LIVE_ADMIN_PASSWORD, ...
  * - Never serves secrets: .env*, service-account-key.json, CSVs, api/_*
  *
  * Zero npm dependencies.
@@ -109,6 +109,6 @@ http.createServer((req, res) => {
   console.log(`\n  Wedding site → http://localhost:${PORT}`);
   console.log(`  Sangeet live → http://localhost:${PORT}/sangeet?now=2026-11-20T19:40`);
   console.log(`  Wedding live → http://localhost:${PORT}/wedding?now=2026-11-21T09:50`);
-  console.log(`  OpenAI key   : ${process.env.OPENAI_API_KEY ? 'loaded ✓' : 'missing (add to .env.local)'}`);
+  console.log(`  Chat backend : ${process.env.MESSAGING_ASSISTANT_URL && process.env.WEB_CHAT_SERVICE_TOKEN ? 'loaded ✓' : 'missing (add to .env.local)'}`);
   console.log(`  Admin pass   : ${process.env.LIVE_ADMIN_PASSWORD ? 'loaded ✓' : 'missing (add to .env.local)'}\n`);
 });

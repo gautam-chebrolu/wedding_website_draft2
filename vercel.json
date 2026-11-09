@@ -22,8 +22,7 @@
     ],
     "functions": {
         "api/chat.js": {
-            "maxDuration": 30,
-            "includeFiles": "api/_data/**"
+            "maxDuration": 30
         },
         "api/live-admin.js": {
             "maxDuration": 10

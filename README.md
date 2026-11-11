@@ -154,6 +154,30 @@ since the website lookup cannot tell such guests apart either.
 
 The site is deployed on **Vercel** and updates automatically on push to `main`.
 
+### RSVP notification emails
+
+RSVP confirmation emails are sent by the separate Google Apps Script in the local
+`apps-script/Code.gs`, after the website mirrors the submission to the guest Sheet.
+They include each submitted guest's email, phone, nut allergy, dietary restrictions
+and song requests, including empty values shown as **Not provided**. Changed fields
+are marked **Updated** and show the previous value from the Sheet backup captured
+before the submission is written. That comparison reflects the last successful
+Sheet backup, which can lag Firestore if a previous mirror failed. Both HTML and
+plain-text emails contain these details; the couple still receives the existing
+BCC (or a direct notification when no guest email is supplied).
+
+The configured Apps Script directory is deliberately gitignored. To activate a
+local change, copy the updated `apps-script/Code.gs` into **Code.gs** in the existing
+Google Apps Script project. Save it, then use **Deploy > Manage deployments > Edit**,
+select **New version**, and deploy the existing web app so its URL stays the same.
+A Vercel deployment alone does not update these emails.
+
+Run the local email checks without sending messages or modifying live guest data:
+
+```bash
+node --test scripts/tests/rsvp-email.test.js
+```
+
 The shared Firebase rules and indexes are owned by the messaging repository.
 Run database deployments from that checkout; this website has no Firebase deployment config:
 ```bash

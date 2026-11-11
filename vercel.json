@@ -13,6 +13,7 @@
         { "source": "/live-admin", "destination": "/pages/live-admin" },
         { "source": "/pictures", "destination": "/pages/pictures" },
         { "source": "/privacy", "destination": "/pages/privacy" },
+        { "source": "/questions", "destination": "/pages/questions" },
         { "source": "/sangeet", "destination": "/pages/sangeet" },
         { "source": "/schedule", "destination": "/pages/schedule" },
         { "source": "/sms-terms", "destination": "/pages/sms-terms" },

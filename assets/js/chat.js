@@ -14,6 +14,12 @@
   var MAX_INPUT = 500;           // characters per question
 
   var SUGGESTIONS = {
+    questions: [
+      'What should I wear to the wedding?',
+      'How do I find my event schedule?',
+      'What transportation is available?',
+      'What is a baraat?'
+    ],
     sangeet: [
       'What should I wear tonight?',
       'What is a sangeet?',

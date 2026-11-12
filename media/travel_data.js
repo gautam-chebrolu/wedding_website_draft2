@@ -27,7 +27,7 @@ const TRAVEL_LOCATIONS = [
     address: '9400 Club Hill Dr, Raleigh, NC 27617',
     lat: 35.8963,
     lng: -78.7601,
-    note: 'Sangeet Venue. Round-trip shuttle available to/from Washington Duke Inn.',
+    note: 'Sangeet Venue.',
     mapsUrl: 'https://maps.app.goo.gl/6pFxXeqZ9exSPwhj9',
     eventKeys: ['Sangeet']   // Only shown if guest is invited to Sangeet
   },

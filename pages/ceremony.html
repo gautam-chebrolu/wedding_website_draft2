@@ -7,10 +7,11 @@
   <title>Ceremony — Priya &amp; Gautam</title>
   <meta name="description" content="Ceremony details for Priya and Gautam's wedding." />
   <link rel="stylesheet" href="/assets/css/styles.css" />
+  <link rel="stylesheet" href="/assets/css/ceremony.css" />
   <link rel="icon" type="image/x-icon" href="/media/wedding_logo.svg">
 </head>
 
-<body>
+<body class="ceremony-page">
   <nav class="site-nav scrolled" aria-label="Main navigation">
     <a href="/" class="nav-logo" aria-label="Home">
       <img src="/media/wedding_logo.svg" alt="Priya &amp; Gautam" />
@@ -27,9 +28,28 @@
     <div class="page-header" aria-hidden="true"></div>
     <header class="page-hero">
       <h1>Ceremony</h1>
+      <p class="page-subtitle">Priya &amp; Gautam<br>Saturday, November 21, 2026 · 9:30 AM–12:05 PM Eastern<br>
+        <a href="https://maps.app.goo.gl/Z63vBuTvGSHRSrmQ8" target="_blank" rel="noopener noreferrer">Washington Duke Inn &amp; Golf Club</a><br>
+        3001 Cameron Blvd, Durham, NC 27705</p>
     </header>
-    <main class="page-content">
-      <div class="placeholder-block">Coming Soon</div>
+    <main class="ceremony-content">
+      <p class="ceremony-intro">Follow the moments, prayers, and promises that bring us together.
+        Swipe through our ceremony and open any card to learn about its meaning.</p>
+      <p id="ceremony-preview" class="ceremony-preview" hidden></p>
+      <section id="ceremony-status" class="ceremony-live" aria-live="polite" aria-atomic="true" aria-label="Current ceremony moment"></section>
+      <p class="ceremony-note">All times are Eastern (EST). This guide advances automatically with the planned program; the priest’s cues guide the ceremony if timings change.</p>
+      <div class="ceremony-toolbar" role="group" aria-label="Browse ceremony rituals">
+        <p id="ceremony-scroll-hint">Swipe or scroll horizontally to explore all 16 moments.</p>
+        <button id="ritual-prev" type="button" aria-label="Previous ritual" aria-controls="ceremony-track">←</button>
+        <button id="ritual-next" type="button" aria-label="Next ritual" aria-controls="ceremony-track">→</button>
+        <button id="ritual-follow" type="button" aria-controls="ceremony-track">Follow the ceremony</button>
+      </div>
+      <div id="ceremony-track" class="ceremony-track" role="region" aria-label="Ceremony program" aria-describedby="ceremony-scroll-hint" tabindex="0"></div>
+      <noscript><p>Please enable JavaScript to follow the ceremony program. The ceremony is on November 21, 2026, from 9:30 AM to approximately 12:05 PM Eastern at the Washington Duke Inn &amp; Golf Club.</p></noscript>
+      <div class="ceremony-after">
+        <p>Our program brings together traditions celebrated in different ways across Hindu families. These explanations offer context for the moments we have chosen.</p>
+        <a class="pill-btn outline" href="/wedding">Wedding day schedule &amp; reception seating</a>
+      </div>
     </main>
     <footer class="site-footer">
       Priya &amp; Gautam &nbsp;·&nbsp; 2026 &nbsp;·&nbsp; <a href="/privacy">Privacy Policy</a> &nbsp;·&nbsp; <a href="/sms-terms">SMS Terms</a>
@@ -37,6 +57,8 @@
   </div>
 
   <script src="/assets/js/main.js"></script>
+  <script src="/media/ceremony_data.js"></script>
+  <script src="/assets/js/ceremony.js"></script>
 </body>
 
 </html>

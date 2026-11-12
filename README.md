@@ -197,6 +197,8 @@ seating search.
 | What to change | Where |
 |---|---|
 | Schedule times, titles, performance lineup, food stations | `media/live_schedule_data.js` |
+| Ceremony program, ritual meanings and sources | `media/ceremony_data.js` (also used by the Wedding Day timeline) |
+| Horizontal ceremony guide and clock | `pages/ceremony.html`, `assets/css/ceremony.css`, `assets/js/ceremony.js` |
 | Look & feel | `assets/css/live.css` (posters: `.poster--<theme>`) |
 | Engine (states, countdown, seating search) | `assets/js/live.js` |
 
@@ -320,3 +322,19 @@ not qualify an entire dish (for example, chole alone is listed gluten-free, whil
 the chole bhatura dish is not).
 
 Run the local food checks with `node --test scripts/tests/food.test.js`.
+
+### Ceremony guide (`/ceremony`)
+
+The 16 moments use the organizer?s November 21, 2026 program in Eastern Time.
+Cards can be swiped horizontally or browsed with buttons. The status and current
+card change at each scheduled start/end, including gaps between rites. Browsing
+pauses automatic scrolling; ?Follow the ceremony? resumes it. It honors reduced
+motion and refreshes after the tab becomes visible. The clock follows scheduled
+rather than priest-confirmed progress. Test a moving preview with
+`/ceremony?now=2026-11-21T10:51`; the preview notice is visible.
+
+The ceremony data script must precede `live_schedule_data.js` in browser pages.
+Node consumers load it through `require`. Run `node --test scripts/tests/*.test.js`.
+The messaging repository has an explicit import/publication workflow documented
+in its `docs/ceremony-knowledge-update.md`; deploying this website does not update
+Firestore knowledge automatically.

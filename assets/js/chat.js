@@ -24,7 +24,7 @@
       'What should I wear tonight?',
       'What is a sangeet?',
       'When does the biryani open?',
-      'Is there a shuttle back to the hotel?'
+      'What time does dancing start?'
     ],
     wedding: [
       'What is a baraat?',
@@ -35,7 +35,7 @@
     schedule: [
       'What should I wear to my event?',
       'Where is the venue?',
-      'Is there a shuttle to the Sangeet?',
+      'How do I find directions to my event?',
       'What is a baraat?'
     ]
   };
@@ -102,7 +102,7 @@
 
     function renderAll() {
       log.innerHTML = '';
-      bubble('bot', 'Hi! I can help with schedules, what to wear, addresses, shuttles, and what any of the wedding traditions mean. What would you like to know?');
+      bubble('bot', 'Hi! I can help with schedules, what to wear, addresses, and what any of the wedding traditions mean. What would you like to know?');
       history.forEach(function (m) { bubble(m.role === 'user' ? 'user' : 'bot', m.content); });
       renderSuggestions();
     }

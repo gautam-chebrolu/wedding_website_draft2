@@ -23,6 +23,9 @@
 (function (root) {
   "use strict";
 
+  var ceremony = typeof module !== "undefined" && module.exports
+    ? require("./ceremony_data.js") : root.CEREMONY_PROGRAM;
+
   var LIVE_SCHEDULE = {
     // ─────────────────────────────────────────────────────────
     sangeet: {
@@ -78,8 +81,7 @@
             },
             {
               id: "dance",
-              start: "2026-11-20T20:15:00-05:00",
-              time: "8:30 PM",
+              start: "2026-11-20T20:30:00-05:00",
               title: "Dance Floor and Late-Night Stations Open",
               details: [
                 "Sangeet program concludes",
@@ -106,7 +108,7 @@
               liveUntil: "2026-11-20T23:15:00-05:00",
               title: "Event Wrap-Up",
               details: [
-                "Thank you for celebrating with us! Shuttles return to the Washington Duke Inn.",
+                "Thank you for celebrating with us!",
               ],
             },
           ],
@@ -215,28 +217,18 @@
                 "Post-baraat snack and drink served",
               ],
             },
-            {
-              id: "baraat-welcome",
-              start: "2026-11-21T09:30:00-05:00",
-              title: "Baraat Welcome & Guests Seated",
-              details: ["Please make your way to your seats"],
-            },
-            {
-              id: "ceremony",
-              start: "2026-11-21T09:45:00-05:00",
-              title: "Wedding Ceremony Begins",
-              details: [
-                "Hospitality room refreshments indoors will remain open",
-              ],
-            },
+          ].concat(ceremony.items.map(function (item) {
+            return { id: item.id, start: item.start, end: item.end, title: item.title,
+              details: item.details };
+          }), [
             {
               id: "lunch",
-              start: "2026-11-21T12:00:00-05:00",
+              start: "2026-11-21T12:05:00-05:00",
               liveUntil: "2026-11-21T14:00:00-05:00",
               title: "Lunch is Served",
               details: ["The wedding concludes — please join us for lunch"],
             },
-          ],
+          ]),
         },
         {
           id: "reception",

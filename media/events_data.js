@@ -25,7 +25,6 @@ const EVENTS = {
     icsEnd: "20261120T030000Z",
     description: [
       "Join Priya and Gautam as their families and friends come together to apply turmeric paste to the bride and groom for good luck, health, and a wedding-ready glow.",
-      "If you are staying at the Washington Duke Inn, you can request a shoulder room at the same block rate by calling the hotel at +1-919-490-0999 (Group ID: 1168688)",
       "Appetizers will be served, with dinner to follow after the ceremony",
       "Attire: Pastel Colors (think soft yellow, mint green, powder blue, peach, lilac, etc.)"
     ]
@@ -42,7 +41,6 @@ const EVENTS = {
     description: [
       "This is our official pre-wedding bash filled with dance performances, lots of music, and food.",
       "A variety of live stations will be serving food throughout the evening for dinner.",
-      "Round trip transportation will be provided to and from Sangeet venue (Brier Creek) and Washington Duke Inn.",
       "Attire: Indian Festive or Cocktail Glam"
     ]
   },

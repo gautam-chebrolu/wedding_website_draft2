@@ -174,6 +174,8 @@
     var tabsEl = opts.tabs, jumpEl = opts.jump;
     var expandable = !!opts.expandable;
     var continuous = !!opts.continuous;
+    var group = opts.group;
+    var groupedItems = [], lastGroupLiveId = null;
 
     var ov = {};
     var model = buildModel(event, ov);
@@ -216,14 +218,61 @@
 
     // ── Timeline DOM (rebuilt only when the override changes times) ──
     function renderTimeline() {
+      groupedItems = [];
+      lastGroupLiveId = null;
       tlEl.innerHTML = event.blocks.map(function (block, bi) {
         var items = model.flat.filter(function (x) { return x.block === bi; });
+        var members = group ? items.filter(function (x) { return group.itemIds.indexOf(x.id) >= 0; }) : [];
         return '<section class="tl-block" data-block="' + bi + '" aria-label="' + esc(block.label) + '">' +
           (event.blocks.length > 1 ? '<h2 class="tl-block-title">' + esc(block.label) + '</h2>' : '') +
-          '<ol class="tl-list">' + items.map(itemHTML).join('') + '</ol></section>';
+          '<ol class="tl-list">' + items.map(function (x) {
+            if (members.indexOf(x) < 0) return itemHTML(x);
+            return x === members[0] ? groupHTML(members) : '';
+          }).join('') + '</ol></section>';
       }).join('');
       setBlock(activeBlock == null ? 0 : activeBlock);
       lastSig = '';
+    }
+
+    // Group only the presentation: the model retains every ritual and delay anchor.
+    function groupHTML(items) {
+      groupedItems = items;
+      var first = items[0], last = items[items.length - 1];
+      return '<li class="tl-ceremony-wrapper" id="group-' + esc(group.id) + '">' +
+        '<div class="tl-time"><span>' + esc(rangeLabel(first.start, last.liveEnd)) + '</span></div>' +
+        '<div class="tl-rail" aria-hidden="true"><span class="tl-dot"></span></div>' +
+        '<details class="tl-ceremony-group"><summary class="tl-ceremony-summary">' +
+          '<h3 class="tl-title">' + esc(group.title) + '</h3>' +
+          '<span class="tl-ceremony-current">' + items.length + ' ceremony moments · expand to view</span>' +
+          '<span class="tl-ceremony-chevron" aria-hidden="true">⌄</span></summary>' +
+          '<ol class="tl-acts tl-ceremony-rituals">' + items.map(function (x) {
+            var was = x.shift ? '<s class="tl-was">' + esc(timeLabel(x.origStart)) + '</s>' : '';
+            return '<li class="tl-item tl-ceremony-item is-upcoming" id="item-' + esc(x.id) + '" data-id="' + esc(x.id) + '">' +
+              '<div class="tl-time">' + was + '<span>' + esc(displayTime(x)) + '</span></div>' +
+              '<div class="tl-ceremony-copy"><div class="tl-ceremony-heading"><h4>' + esc(x.raw.title) + '</h4><span class="tl-chip"></span></div>' +
+              (x.raw.details || []).map(function (detail) { return '<p>' + esc(detail) + '</p>'; }).join('') + '</div></li>';
+          }).join('') + '</ol></details></li>';
+    }
+
+    function syncGroup(now) {
+      if (!groupedItems.length) return;
+      var wrapper = document.getElementById('group-' + group.id);
+      if (!wrapper) return;
+      var current = groupedItems.find(function (x) { return x.state === 'live'; });
+      var next = groupedItems.find(function (x) { return x.state === 'upcoming'; });
+      var state = now >= groupedItems[groupedItems.length - 1].liveEnd ? 'past' :
+        (now >= groupedItems[0].start ? 'live' : 'upcoming');
+      ['past', 'live', 'upcoming'].forEach(function (value) { wrapper.classList.toggle('is-' + value, state === value); });
+      var label = current ? 'Live · ' + current.raw.title : state === 'past' ? 'Ceremony complete' :
+        (state === 'live' && next ? 'Up next · ' + next.raw.title : groupedItems.length + ' ceremony moments · expand to view');
+      var status = wrapper.querySelector('.tl-ceremony-current');
+      if (status.textContent !== label) status.textContent = label;
+      if (current && current.id !== lastGroupLiveId) wrapper.querySelector('details').open = true;
+      lastGroupLiveId = current ? current.id : null;
+      groupedItems.forEach(function (x) {
+        var row = document.getElementById('item-' + x.id);
+        if (x === current) row.setAttribute('aria-current', 'step'); else row.removeAttribute('aria-current');
+      });
     }
 
     function itemHTML(x) {
@@ -379,6 +428,7 @@
     // ── Per-tick update ──
     function update(now) {
       var st = stateAt(model, now);
+      syncGroup(now);
       currentLiveId = st.current ? st.current.id : null;
 
       // Auto-pick the tab that holds what's live / next.
@@ -447,7 +497,11 @@
       if (!x) return;
       if (x.block !== activeBlock) { userPickedTab = false; setBlock(x.block); }
       var li = document.getElementById('item-' + id);
-      if (li) li.scrollIntoView({ behavior: gentle ? 'smooth' : 'smooth', block: 'center' });
+      if (li) {
+        var parentGroup = li.closest('.tl-ceremony-group');
+        if (parentGroup) parentGroup.open = true;
+        li.scrollIntoView({ behavior: gentle ? 'smooth' : 'smooth', block: 'center' });
+      }
     }
 
     // ── "Jump to now" floating button ──

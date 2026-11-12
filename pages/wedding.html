@@ -142,6 +142,11 @@
         timeline: document.getElementById('live-timeline'),
         banner: document.getElementById('live-banners'),
         jump: document.getElementById('jump-now'),
+        group: {
+          id: 'wedding-ceremony',
+          title: 'Wedding Ceremony',
+          itemIds: CEREMONY_PROGRAM.items.map(function (item) { return item.id; })
+        },
         expandable: true,
         continuous: true
       });

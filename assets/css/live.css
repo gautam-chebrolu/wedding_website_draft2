@@ -1672,3 +1672,60 @@ a.live-info-card:hover { background: var(--glass-2); border-color: rgba(201, 169
   0%, 100% { box-shadow: inset 0 0 18px rgba(255, 235, 176, 0.26), 0 0 0 3px rgba(245, 224, 180, 0.5), 0 0 22px 6px rgba(201, 169, 110, 0.36); }
   50% { box-shadow: inset 0 0 22px rgba(255, 235, 176, 0.38), 0 0 0 7px rgba(245, 224, 180, 0.28), 0 0 34px 11px rgba(201, 169, 110, 0.52); }
 }
+
+
+/* Wedding Day ceremony: one expandable card, with the original live ritual rows. */
+.wedding-page .tl-ceremony-wrapper {
+  display: grid;
+  grid-template-columns: 92px 28px minmax(0, 1fr);
+  min-width: 0;
+}
+.wedding-page .tl-ceremony-group {
+  min-width: 0;
+  margin: 7px 0;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--glass);
+}
+.wedding-page .tl-ceremony-summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 12px;
+  padding: 18px;
+  cursor: pointer;
+  list-style: none;
+}
+.wedding-page .tl-ceremony-summary::-webkit-details-marker { display: none; }
+.wedding-page .tl-ceremony-summary:focus-visible { outline: 2px solid var(--gold-hi); outline-offset: 3px; border-radius: 16px; }
+.wedding-page .tl-ceremony-summary .tl-title { margin: 0; white-space: normal; }
+.wedding-page .tl-ceremony-current { grid-column: 1; margin-top: 8px; font: 11px/1.6 var(--sans); color: var(--cream-60); }
+.wedding-page .tl-ceremony-chevron { grid-column: 2; grid-row: 1 / span 2; align-self: center; color: var(--gold-hi); }
+.wedding-page .tl-ceremony-group[open] .tl-ceremony-chevron { transform: rotate(180deg); }
+.wedding-page .tl-ceremony-group[open] .tl-ceremony-summary { border-bottom: 1px solid var(--line); }
+.wedding-page .tl-ceremony-group:not([open]) > .tl-ceremony-rituals { display: none; }
+.wedding-page .tl-ceremony-wrapper.is-live .tl-ceremony-group { border-color: rgba(255, 140, 120, .55); }
+.wedding-page .tl-ceremony-wrapper.is-live .tl-ceremony-current { color: var(--live); }
+.wedding-page .tl-ceremony-rituals { margin: 0; padding: 6px 12px; gap: 0; }
+.wedding-page .tl-ceremony-rituals .tl-ceremony-item {
+  grid-template-columns: 86px minmax(0, 1fr);
+  gap: 12px;
+  padding: 14px 8px;
+  opacity: 1;
+  transform: none;
+  border-bottom: 1px solid var(--line);
+  border-radius: 8px;
+}
+.wedding-page .tl-ceremony-rituals .tl-ceremony-item:last-child { border-bottom: 0; }
+.wedding-page .tl-ceremony-rituals .tl-ceremony-item.is-past { opacity: .55; }
+.wedding-page .tl-ceremony-rituals .tl-ceremony-item.is-live { background: rgba(255, 111, 97, .1); box-shadow: inset 2px 0 var(--live); }
+.wedding-page .tl-ceremony-item .tl-time { align-items: flex-start; padding-top: 0; font-size: 11px; }
+.wedding-page .tl-ceremony-copy { min-width: 0; }
+.wedding-page .tl-ceremony-heading { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; }
+.wedding-page .tl-ceremony-heading h4 { font: 500 13px/1.5 var(--sans); margin: 0; color: var(--cream); }
+.wedding-page .tl-ceremony-copy p { font: 300 12px/1.6 var(--sans); color: var(--cream-60); margin: 6px 0 0; }
+@media (max-width: 600px) {
+  .wedding-page .tl-ceremony-wrapper { grid-template-columns: 64px 22px minmax(0, 1fr); }
+  .wedding-page .tl-ceremony-summary { padding: 14px 10px; }
+  .wedding-page .tl-ceremony-rituals { padding: 4px; }
+  .wedding-page .tl-ceremony-rituals .tl-ceremony-item { grid-template-columns: 58px minmax(0, 1fr); gap: 8px; padding: 12px 6px; }
+}

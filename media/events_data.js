@@ -57,7 +57,7 @@ const EVENTS = {
     icsEnd: "20261121T190000Z",
     description: [
       "Groom's procession (baraat) will begin promptly at 8:45 AM at Washington Duke Inn.",
-      "Grab-and-go breakfast and pastries will be available at the venue from 7:30 - 8:30 am in the hospitality room. A refreshment will be available after the baraat. Lunch will be served after the wedding.",
+      "A refreshment will be available after the baraat. Lunch will be served after the wedding.",
       "Attire: Western or Indian Formal; please avoid wearing pink"
     ]
   },

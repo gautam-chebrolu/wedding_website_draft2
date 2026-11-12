@@ -67,6 +67,7 @@
                 { who: "Cousins of the Bride", name: "Prashant & Kritika" },
                 { who: "Cousins & Family of the Groom", name: "" },
                 { who: "Nieces & Nephews of the Groom", name: "" },
+                { who: "Cary Academy Friends", name: "" },
                 { who: "Childhood Friends of the Bride", name: "" },
                 { who: "Surprise Dance for the Groom", name: "" },
                 {
@@ -205,15 +206,6 @@
           id: "ceremony",
           label: "Wedding",
           items: [
-            {
-              id: "breakfast",
-              start: "2026-11-21T07:30:00-05:00",
-              end: "2026-11-21T08:30:00-05:00",
-              title: "Grab & Go Breakfast",
-              details: [
-                "Breakfast & beverages available in the Hospitality Room",
-              ],
-            },
             {
               id: "baraat",
               start: "2026-11-21T08:45:00-05:00",

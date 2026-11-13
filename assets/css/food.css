@@ -44,6 +44,7 @@
 .menu-item { padding: 13px 10px; margin-inline: -10px; border-bottom: 1px solid #e4ded2; border-left: 3px solid transparent; }
 .dish-heading { display: flex; align-items: baseline; flex-wrap: wrap; gap: 3px 10px; }
 .dish-heading h4 { font-size: 24px; font-weight: 600; line-height: 1.15; }
+.dish-translation { font-size: 16px; font-style: italic; line-height: 1.4; color: var(--muted); margin-top: 4px; }
 .dish-note { font-size: 18px; line-height: 1.4; color: var(--muted); margin-top: 4px; }
 .dish-tags { font: 400 9px/1.9 'Montserrat',sans-serif; color: #626557; margin-top: 5px; }
 .dish-match { font: 500 9px/1.6 'Montserrat',sans-serif; color: #41562f; white-space: nowrap; }

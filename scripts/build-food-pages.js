@@ -11,6 +11,7 @@ function renderItem(item) {
   if (tags.has('vg') && !item.review) { tags.add('df'); tags.add('v'); }
   return `<li class="menu-item" data-diets="${escape([...tags].join(' '))}">
     <div class="dish-heading"><h4>${escape(item.name)}</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    ${item.translation ? `<p class="dish-translation"><i>${escape(item.translation)}</i></p>` : ''}
     ${item.note ? `<p class="dish-note">${escape(item.note)}</p>` : ''}
     <p class="dish-tags">${item.tags.length ? item.tags.map(t => `<span${t === 'nuts' ? ' class="contains-nuts"' : ''}>${labels[t]}</span>`).join('<span class="tag-divider" aria-hidden="true"> · </span>') : 'Dietary details to come'}${item.review ? '<span class="review-label"> · Label under review</span>' : ''}</p>
     ${item.review ? `<p class="dish-review">${escape(item.review)}</p>` : ''}

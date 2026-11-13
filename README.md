@@ -299,6 +299,7 @@ are public, unlisted pages with `noindex`, not authenticated invitation checks.
 **To change dishes, labels or event assignments:** edit `media/food-menu.json`,
 then run `node scripts/build-food-pages.js` and include the regenerated three
 `pages/food*.html` files. Move an item or course between events in that data file.
+Each item’s `translation` field supplies the small italic English description beneath its name.
 To change layout or interactions, edit `assets/css/food.css`, `assets/js/food.js`
 and the HTML template in `scripts/build-food-pages.js`.
 

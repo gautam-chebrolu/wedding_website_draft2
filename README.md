@@ -279,3 +279,39 @@ Database rules/indexes have one deployment owner in messaging.
 Website schedule files remain the source for its live pages; schedule changes
 also require a reviewed Firestore snapshot publication in messaging. Editing a
 written Knowledge fact does not update schedule times.
+
+
+## Food menus (`/food`, `/food-sangeet`, `/food-haldi`)
+
+Text-first, printable menus with dietary checkboxes. Matches must satisfy every
+selected preference; highlighting keeps the full menu visible by default. Guests
+can optionally show only matches. The pages work as complete menus without JavaScript.
+
+- `/food`: Wedding (breakfast, post-baraat refreshments and lunch) + Reception.
+- `/food-sangeet`: Sangeet + Wedding + Reception.
+- `/food-haldi`: Haldi + Sangeet + Wedding + Reception. Haldi is a placeholder
+  until its menu arrives.
+
+The main navigation links to `/food`. Share the expanded links directly with the
+appropriate invitees; the pages do not link to the other audience versions. These
+are public, unlisted pages with `noindex`, not authenticated invitation checks.
+
+**To change dishes, labels or event assignments:** edit `media/food-menu.json`,
+then run `node scripts/build-food-pages.js` and include the regenerated three
+`pages/food*.html` files. Move an item or course between events in that data file.
+To change layout or interactions, edit `assets/css/food.css`, `assets/js/food.js`
+and the HTML template in `scripts/build-food-pages.js`.
+
+Initial source: the supplied Uthsaav Lunch, Reception and Sangeet PDFs (November
+11 draft). Equipment quantities, serving instructions and source-document links
+are omitted from guest menus. No Haldi menu was supplied. Labels remain provisional.
+Tags: `v` vegetarian, `vg` vegan, `df` dairy-free, `gf` gluten-free, `nuts` contains
+nuts. Vegan implies vegetarian and dairy-free for matching. Missing labels never
+imply ingredient absence; no nut-free or soy-free claims are inferred. Use `review`
+to explain conflicting labels; do not include a disputed tag until confirmed.
+Yogurt rice and reception raita have disputed vegan labels withheld. Cross-contact
+and soy-oil notes stay visible even when filtering. Ingredient subcomponents do
+not qualify an entire dish (for example, chole alone is listed gluten-free, while
+the chole bhatura dish is not).
+
+Run the local food checks with `node --test scripts/tests/food.test.js`.

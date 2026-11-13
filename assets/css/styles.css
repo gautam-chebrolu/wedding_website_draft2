@@ -2886,3 +2886,12 @@ nav.site-nav ul li a.nav-live:hover { filter: brightness(1.08); }
 @media (max-width: 600px) {
   nav.site-nav ul li a.nav-live { gap: 5px; padding: 6px 10px; }
 }
+
+/* Keep the added Food link and date-dependent Live link within small screens. */
+@media (max-width: 900px) {
+  nav.site-nav ul.has-food-menu { gap: 8px; }
+  nav.site-nav ul.has-food-menu li a { padding-inline: 10px; }
+}
+@media (max-width: 600px) {
+  nav.site-nav ul.has-food-menu { flex-wrap: wrap; row-gap: 18px; }
+}

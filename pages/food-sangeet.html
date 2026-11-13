@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Our Table — Priya &amp; Gautam</title>
+  <meta name="description" content="Explore the Sangeet, Wedding, Reception menus and highlight dishes by dietary preference." />
+  <meta name="robots" content="noindex" />
+  <link rel="icon" href="/media/wedding_logo.svg" />
+  <link rel="stylesheet" href="/assets/css/styles.css" />
+  <link rel="stylesheet" href="/assets/css/food.css" />
+  <script defer src="/assets/js/main.js"></script>
+  <script defer src="/assets/js/food.js"></script>
+</head>
+<body class="food-page">
+  <a class="food-skip" href="#menu">Skip to menus</a>
+  <nav class="site-nav scrolled" aria-label="Main navigation">
+    <a href="/" class="nav-logo" aria-label="Home"><img src="/media/wedding_logo.svg" alt="Priya &amp; Gautam" /></a>
+    <ul><li><a href="/schedule">Schedule / RSVP</a></li><li><a href="/travel">Travel</a></li><li><a href="/food-sangeet" class="active" aria-current="page">Food</a></li><li><a href="/funds">Gifts</a></li><li><a href="/pictures">Pictures</a></li></ul>
+  </nav>
+  <main class="food-main">
+    <header class="food-hero"><p class="menu-eyebrow">Priya &amp; Gautam · November 2026</p><h1>Our Table</h1><p class="food-subtitle">Good food. Wonderful company.</p><div class="food-ornament" aria-hidden="true">✦</div><p class="food-welcome">A taste of the celebrations, from the first bite to the last sweet.<br />Find a little of what you love.</p></header>
+    <nav class="event-index" aria-label="Jump to an event menu"><a href="#sangeet">Sangeet</a><a href="#wedding">Wedding</a><a href="#reception">Reception</a></nav>
+    <section class="dietary-tools" aria-labelledby="dietary-title">
+      <h2 id="dietary-title">Find your favorites</h2>
+      <p id="diet-help">Choose your dietary needs to highlight dishes. Multiple selections must all match. The full menu stays in view.</p>
+      <form id="diet-form" hidden>
+        <fieldset aria-describedby="diet-help"><legend class="sr-only">Dietary preferences</legend><div class="diet-options"><label class="diet-option"><input type="checkbox" name="diet" value="v" /> <span>Vegetarian</span></label><label class="diet-option"><input type="checkbox" name="diet" value="vg" /> <span>Vegan</span></label><label class="diet-option"><input type="checkbox" name="diet" value="df" /> <span>Dairy-free</span></label><label class="diet-option"><input type="checkbox" name="diet" value="gf" /> <span>Gluten-free</span></label></div></fieldset>
+        <div class="diet-actions"><label class="matches-toggle"><input type="checkbox" id="matches-only" /> Show matches only</label><button type="reset" id="clear-diets">Clear selections</button></div>
+      </form>
+      <p id="diet-status" class="diet-status" role="status" aria-live="polite" aria-atomic="true">All dishes are shown. Dietary labels are provisional.</p>
+      <noscript><p>Enable JavaScript to highlight dishes. You can still browse the complete menus below.</p></noscript>
+    </section>
+    <aside class="menu-notice" aria-label="About dietary information"><p><strong>A menu in the making.</strong> Dishes and event menus may change. Dietary labels come from our caterer’s draft and are awaiting confirmation. Highlights show draft matches, not confirmed allergy-safe dishes. Missing labels do not mean a dish is free of an ingredient.</p><p>The caterer notes that cooking oil may contain soy. Nut labels are shown where supplied; nut-free and soy-free options are not yet confirmed. For allergies, please check ingredients and preparation with the catering team before eating.</p></aside>
+    <div id="menu"><section class="menu-event" id="sangeet" aria-labelledby="heading-sangeet">
+    <header class="event-heading"><span class="event-number" aria-hidden="true">01</span><div><p class="menu-eyebrow">Friday, November 20</p><h2 id="heading-sangeet">Sangeet</h2><p class="event-venue">Brier Creek Country Club</p></div></header>
+    <p class="event-intro">An evening of dancing, grazing &amp; going back for seconds.</p>
+    <div class="menu-columns"><section class="menu-course"><h3>Chaat station</h3><ul><li class="menu-item" data-diets="v vg df">
+    <div class="dish-heading"><h4>Pani puri</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Vegetarian</span><span class="tag-divider" aria-hidden="true"> · </span><span>Vegan</span><span class="tag-divider" aria-hidden="true"> · </span><span>Dairy-free</span></p>
+    
+  </li><li class="menu-item" data-diets="v gf">
+    <div class="dish-heading"><h4>Palak chaat</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Vegetarian</span><span class="tag-divider" aria-hidden="true"> · </span><span>Gluten-free</span></p>
+    
+  </li><li class="menu-item" data-diets="v df">
+    <div class="dish-heading"><h4>Chole bhatura</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    <p class="dish-note">Only the chole is listed as gluten-free; the bhatura is not.</p>
+    <p class="dish-tags"><span>Vegetarian</span><span class="tag-divider" aria-hidden="true"> · </span><span>Dairy-free</span></p>
+    
+  </li><li class="menu-item" data-diets="">
+    <div class="dish-heading"><h4>Condiments</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags">Dietary details to come</p>
+    
+  </li></ul></section><section class="menu-course"><h3>From the tandoor</h3><ul><li class="menu-item" data-diets="v gf">
+    <div class="dish-heading"><h4>Tandoori vegetables</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    <p class="dish-note">Broccoli, cauliflower, bell pepper, onion &amp; carrots</p>
+    <p class="dish-tags"><span>Vegetarian</span><span class="tag-divider" aria-hidden="true"> · </span><span>Gluten-free</span></p>
+    
+  </li><li class="menu-item" data-diets="v gf">
+    <div class="dish-heading"><h4>Paneer tikka</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Vegetarian</span><span class="tag-divider" aria-hidden="true"> · </span><span>Gluten-free</span></p>
+    
+  </li><li class="menu-item" data-diets="gf">
+    <div class="dish-heading"><h4>Salmon tikka</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Gluten-free</span></p>
+    
+  </li><li class="menu-item" data-diets="gf">
+    <div class="dish-heading"><h4>Koyla chicken</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Gluten-free</span></p>
+    
+  </li><li class="menu-item" data-diets="gf">
+    <div class="dish-heading"><h4>Lamb boti kabab</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Gluten-free</span></p>
+    
+  </li><li class="menu-item" data-diets="v">
+    <div class="dish-heading"><h4>Bao</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Vegetarian</span></p>
+    
+  </li><li class="menu-item" data-diets="v">
+    <div class="dish-heading"><h4>Plain &amp; chili garlic naan</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Vegetarian</span></p>
+    
+  </li><li class="menu-item" data-diets="v gf">
+    <div class="dish-heading"><h4>Raita</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Vegetarian</span><span class="tag-divider" aria-hidden="true"> · </span><span>Gluten-free</span></p>
+    
+  </li><li class="menu-item" data-diets="">
+    <div class="dish-heading"><h4>Condiments</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags">Dietary details to come</p>
+    
+  </li></ul></section><section class="menu-course"><h3>Biryani station</h3><ul><li class="menu-item" data-diets="v gf">
+    <div class="dish-heading"><h4>Vegetable biryani</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Vegetarian</span><span class="tag-divider" aria-hidden="true"> · </span><span>Gluten-free</span></p>
+    
+  </li><li class="menu-item" data-diets="gf">
+    <div class="dish-heading"><h4>Chicken biryani</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Gluten-free</span></p>
+    
+  </li><li class="menu-item" data-diets="">
+    <div class="dish-heading"><h4>Raita</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags">Dietary details to come</p>
+    
+  </li><li class="menu-item" data-diets="">
+    <div class="dish-heading"><h4>Bullet naan</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags">Dietary details to come</p>
+    
+  </li></ul></section><section class="menu-course"><h3>Mexican station</h3><ul><li class="menu-item" data-diets="v">
+    <div class="dish-heading"><h4>Paneer &amp; vegetable karahi with cheese</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Vegetarian</span></p>
+    
+  </li><li class="menu-item" data-diets="v">
+    <div class="dish-heading"><h4>Paneer &amp; mushroom karahi with cheese</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Vegetarian</span></p>
+    
+  </li><li class="menu-item" data-diets="">
+    <div class="dish-heading"><h4>Salsa</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags">Dietary details to come</p>
+    
+  </li><li class="menu-item" data-diets="">
+    <div class="dish-heading"><h4>Chips</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags">Dietary details to come</p>
+    
+  </li></ul></section><section class="menu-course"><h3>Something sweet</h3><ul><li class="menu-item" data-diets="v">
+    <div class="dish-heading"><h4>Jalebi</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Vegetarian</span></p>
+    
+  </li><li class="menu-item" data-diets="nuts">
+    <div class="dish-heading"><h4>Live kulfi falooda</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span class="contains-nuts">Contains nuts</span></p>
+    
+  </li></ul></section><section class="menu-course"><h3>To sip</h3><ul><li class="menu-item" data-diets="">
+    <div class="dish-heading"><h4>Mocktail station</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    <p class="dish-note">Selections to come</p>
+    <p class="dish-tags">Dietary details to come</p>
+    
+  </li></ul></section></div><p class="event-empty" hidden>No draft matches for these selections at Sangeet. Dietary details may still be incomplete.</p>
+  </section>
+<section class="menu-event" id="wedding" aria-labelledby="heading-wedding">
+    <header class="event-heading"><span class="event-number" aria-hidden="true">02</span><div><p class="menu-eyebrow">Saturday, November 21</p><h2 id="heading-wedding">Wedding</h2><p class="event-venue">Washington Duke Inn &amp; Golf Club</p></div></header>
+    <p class="event-intro">From the first bite to a celebratory lunch.</p>
+    <div class="menu-columns"><section class="menu-course"><h3>Grab &amp; go breakfast</h3><ul><li class="menu-item" data-diets="v nuts">
+    <div class="dish-heading"><h4>Upma</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Vegetarian</span><span class="tag-divider" aria-hidden="true"> · </span><span class="contains-nuts">Contains nuts</span></p>
+    
+  </li><li class="menu-item" data-diets="">
+    <div class="dish-heading"><h4>Coconut chutney</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags">Dietary details to come</p>
+    
+  </li><li class="menu-item" data-diets="v nuts">
+    <div class="dish-heading"><h4>Rava kesari</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Vegetarian</span><span class="tag-divider" aria-hidden="true"> · </span><span class="contains-nuts">Contains nuts</span></p>
+    
+  </li><li class="menu-item" data-diets="v nuts">
+    <div class="dish-heading"><h4>Samosa</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Vegetarian</span><span class="tag-divider" aria-hidden="true"> · </span><span class="contains-nuts">Contains nuts</span></p>
+    
+  </li></ul></section><section class="menu-course"><h3>After the baraat</h3><ul><li class="menu-item" data-diets="v">
+    <div class="dish-heading"><h4>Bombay sandwich</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Vegetarian</span></p>
+    
+  </li><li class="menu-item" data-diets="">
+    <div class="dish-heading"><h4>Panakam</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags">Dietary details to come</p>
+    
+  </li></ul></section><section class="menu-course"><h3>Wedding lunch</h3><ul><li class="menu-item" data-diets="v">
+    <div class="dish-heading"><h4>Mangalore bajji</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Vegetarian</span></p>
+    
+  </li><li class="menu-item" data-diets="v vg df">
+    <div class="dish-heading"><h4>Moong dal kosambari</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Vegetarian</span><span class="tag-divider" aria-hidden="true"> · </span><span>Vegan</span><span class="tag-divider" aria-hidden="true"> · </span><span>Dairy-free</span></p>
+    
+  </li><li class="menu-item" data-diets="v vg df">
+    <div class="dish-heading"><h4>Chikkudukaya</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Vegetarian</span><span class="tag-divider" aria-hidden="true"> · </span><span>Vegan</span><span class="tag-divider" aria-hidden="true"> · </span><span>Dairy-free</span></p>
+    
+  </li><li class="menu-item" data-diets="v vg nuts df">
+    <div class="dish-heading"><h4>Gutti vankaya</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Vegetarian</span><span class="tag-divider" aria-hidden="true"> · </span><span>Vegan</span><span class="tag-divider" aria-hidden="true"> · </span><span class="contains-nuts">Contains nuts</span></p>
+    
+  </li><li class="menu-item" data-diets="v vg df">
+    <div class="dish-heading"><h4>Tindora fry</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Vegetarian</span><span class="tag-divider" aria-hidden="true"> · </span><span>Vegan</span></p>
+    
+  </li><li class="menu-item" data-diets="v vg gf df">
+    <div class="dish-heading"><h4>Mango pappu</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Vegetarian</span><span class="tag-divider" aria-hidden="true"> · </span><span>Vegan</span><span class="tag-divider" aria-hidden="true"> · </span><span>Gluten-free</span></p>
+    
+  </li><li class="menu-item" data-diets="v vg gf nuts df">
+    <div class="dish-heading"><h4>Tamarind rice</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Vegetarian</span><span class="tag-divider" aria-hidden="true"> · </span><span>Vegan</span><span class="tag-divider" aria-hidden="true"> · </span><span>Gluten-free</span><span class="tag-divider" aria-hidden="true"> · </span><span class="contains-nuts">Contains nuts</span></p>
+    
+  </li><li class="menu-item" data-diets="v vg gf df">
+    <div class="dish-heading"><h4>White rice</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Vegetarian</span><span class="tag-divider" aria-hidden="true"> · </span><span>Vegan</span><span class="tag-divider" aria-hidden="true"> · </span><span>Gluten-free</span></p>
+    
+  </li><li class="menu-item" data-diets="v">
+    <div class="dish-heading"><h4>Yogurt rice</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Vegetarian</span><span class="review-label"> · Label under review</span></p>
+    <p class="dish-review">The draft lists this as vegan, but also names yogurt. Vegan and dairy-free status need confirmation.</p>
+  </li><li class="menu-item" data-diets="v vg df">
+    <div class="dish-heading"><h4>Chapati</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Vegetarian</span><span class="tag-divider" aria-hidden="true"> · </span><span>Vegan</span></p>
+    
+  </li></ul></section><section class="menu-course"><h3>Dosa station</h3><ul><li class="menu-item" data-diets="v">
+    <div class="dish-heading"><h4>Dosa</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Vegetarian</span></p>
+    
+  </li><li class="menu-item" data-diets="">
+    <div class="dish-heading"><h4>Chutney</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags">Dietary details to come</p>
+    
+  </li></ul></section><section class="menu-course"><h3>Something sweet</h3><ul><li class="menu-item" data-diets="v nuts">
+    <div class="dish-heading"><h4>Payasam</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Vegetarian</span><span class="tag-divider" aria-hidden="true"> · </span><span class="contains-nuts">Contains nuts</span></p>
+    
+  </li><li class="menu-item" data-diets="v">
+    <div class="dish-heading"><h4>Mysore pak</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Vegetarian</span></p>
+    
+  </li></ul></section></div><p class="event-empty" hidden>No draft matches for these selections at Wedding. Dietary details may still be incomplete.</p>
+  </section>
+<section class="menu-event" id="reception" aria-labelledby="heading-reception">
+    <header class="event-heading"><span class="event-number" aria-hidden="true">03</span><div><p class="menu-eyebrow">Saturday, November 21</p><h2 id="heading-reception">Reception</h2><p class="event-venue">Washington Duke Inn &amp; Golf Club</p></div></header>
+    <p class="event-intro">Gather around. Stay for something sweet.</p>
+    <div class="menu-columns"><section class="menu-course"><h3>Cocktail hour</h3><ul><li class="menu-item" data-diets="v vg gf df">
+    <div class="dish-heading"><h4>Stuffed mushrooms</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Vegetarian</span><span class="tag-divider" aria-hidden="true"> · </span><span>Vegan</span><span class="tag-divider" aria-hidden="true"> · </span><span>Gluten-free</span></p>
+    
+  </li><li class="menu-item" data-diets="v">
+    <div class="dish-heading"><h4>Bhel in phyllo cups</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Vegetarian</span></p>
+    
+  </li><li class="menu-item" data-diets="gf">
+    <div class="dish-heading"><h4>Malai chicken bites</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Gluten-free</span></p>
+    
+  </li></ul></section><section class="menu-course"><h3>Dinner buffet</h3><ul><li class="menu-item" data-diets="v gf">
+    <div class="dish-heading"><h4>Paneer tikka masala</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Vegetarian</span><span class="tag-divider" aria-hidden="true"> · </span><span>Gluten-free</span></p>
+    
+  </li><li class="menu-item" data-diets="v gf">
+    <div class="dish-heading"><h4>Dal makhani</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Vegetarian</span><span class="tag-divider" aria-hidden="true"> · </span><span>Gluten-free</span></p>
+    
+  </li><li class="menu-item" data-diets="v gf">
+    <div class="dish-heading"><h4>Methi mattar malai</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Vegetarian</span><span class="tag-divider" aria-hidden="true"> · </span><span>Gluten-free</span></p>
+    
+  </li><li class="menu-item" data-diets="v vg gf df">
+    <div class="dish-heading"><h4>Bhindi masala</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Vegetarian</span><span class="tag-divider" aria-hidden="true"> · </span><span>Vegan</span><span class="tag-divider" aria-hidden="true"> · </span><span>Gluten-free</span></p>
+    
+  </li><li class="menu-item" data-diets="gf">
+    <div class="dish-heading"><h4>Tandoori chicken tikka in butter chicken gravy</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Gluten-free</span></p>
+    
+  </li><li class="menu-item" data-diets="gf">
+    <div class="dish-heading"><h4>Goat rogan josh</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Gluten-free</span></p>
+    
+  </li><li class="menu-item" data-diets="v">
+    <div class="dish-heading"><h4>Plain, garlic &amp; chili garlic naan</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Vegetarian</span></p>
+    
+  </li></ul></section><section class="menu-course"><h3>On the side</h3><ul><li class="menu-item" data-diets="v gf df">
+    <div class="dish-heading"><h4>Pickle</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Vegetarian</span><span class="tag-divider" aria-hidden="true"> · </span><span>Gluten-free</span><span class="tag-divider" aria-hidden="true"> · </span><span>Dairy-free</span></p>
+    
+  </li><li class="menu-item" data-diets="v">
+    <div class="dish-heading"><h4>Raita</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span>Vegetarian</span><span class="review-label"> · Label under review</span></p>
+    <p class="dish-review">The draft lists this as vegan. Ingredients need confirmation before vegan or dairy-free highlighting.</p>
+  </li><li class="menu-item" data-diets="">
+    <div class="dish-heading"><h4>Onions &amp; green chilies</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags">Dietary details to come</p>
+    
+  </li></ul></section><section class="menu-course"><h3>Something sweet</h3><ul><li class="menu-item" data-diets="nuts">
+    <div class="dish-heading"><h4>Kulfi falooda</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span class="contains-nuts">Contains nuts</span></p>
+    
+  </li><li class="menu-item" data-diets="nuts">
+    <div class="dish-heading"><h4>Rabri jalebi</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    
+    <p class="dish-tags"><span class="contains-nuts">Contains nuts</span></p>
+    
+  </li></ul></section></div><p class="event-empty" hidden>No draft matches for these selections at Reception. Dietary details may still be incomplete.</p>
+  </section></div>
+    <footer class="food-footer"><span aria-hidden="true">✦</span><p>Made for gathering.</p><p class="menu-eyebrow">With love, Priya &amp; Gautam</p><a href="/">Back to our wedding website</a></footer>
+  </main>
+</body>
+</html>

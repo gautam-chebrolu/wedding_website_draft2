@@ -5,6 +5,9 @@
         { "source": "/hotels", "destination": "/travel", "permanent": true }
     ],
     "rewrites": [
+        { "source": "/food", "destination": "/pages/food" },
+        { "source": "/food-sangeet", "destination": "/pages/food-sangeet" },
+        { "source": "/food-haldi", "destination": "/pages/food-haldi" },
         { "source": "/atl_invitation", "destination": "/pages/atl_invitation" },
         { "source": "/ceremony", "destination": "/pages/ceremony" },
         { "source": "/funds", "destination": "/pages/funds" },

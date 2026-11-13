@@ -1,0 +1,599 @@
+[
+  {
+    "id": "haldi",
+    "name": "Haldi",
+    "date": "Thursday, November 19",
+    "venue": "Gupta Home",
+    "intro": "A little spice, a little sunshine.",
+    "courses": [],
+    "pending": "Our Haldi menu is still being finalized. Check back here for dishes and dietary details."
+  },
+  {
+    "id": "sangeet",
+    "name": "Sangeet",
+    "date": "Friday, November 20",
+    "venue": "Brier Creek Country Club",
+    "intro": "An evening of dancing, grazing & going back for seconds.",
+    "courses": [
+      {
+        "title": "Chaat station",
+        "items": [
+          {
+            "name": "Pani puri",
+            "tags": [
+              "v",
+              "vg",
+              "df"
+            ],
+            "note": "",
+            "review": ""
+          },
+          {
+            "name": "Palak chaat",
+            "tags": [
+              "v",
+              "gf"
+            ],
+            "note": "",
+            "review": ""
+          },
+          {
+            "name": "Chole bhatura",
+            "tags": [
+              "v",
+              "df"
+            ],
+            "note": "Only the chole is listed as gluten-free; the bhatura is not.",
+            "review": ""
+          },
+          {
+            "name": "Condiments",
+            "tags": [],
+            "note": "",
+            "review": ""
+          }
+        ]
+      },
+      {
+        "title": "From the tandoor",
+        "items": [
+          {
+            "name": "Tandoori vegetables",
+            "tags": [
+              "v",
+              "gf"
+            ],
+            "note": "Broccoli, cauliflower, bell pepper, onion & carrots",
+            "review": ""
+          },
+          {
+            "name": "Paneer tikka",
+            "tags": [
+              "v",
+              "gf"
+            ],
+            "note": "",
+            "review": ""
+          },
+          {
+            "name": "Salmon tikka",
+            "tags": [
+              "gf"
+            ],
+            "note": "",
+            "review": ""
+          },
+          {
+            "name": "Koyla chicken",
+            "tags": [
+              "gf"
+            ],
+            "note": "",
+            "review": ""
+          },
+          {
+            "name": "Lamb boti kabab",
+            "tags": [
+              "gf"
+            ],
+            "note": "",
+            "review": ""
+          },
+          {
+            "name": "Bao",
+            "tags": [
+              "v"
+            ],
+            "note": "",
+            "review": ""
+          },
+          {
+            "name": "Plain & chili garlic naan",
+            "tags": [
+              "v"
+            ],
+            "note": "",
+            "review": ""
+          },
+          {
+            "name": "Raita",
+            "tags": [
+              "v",
+              "gf"
+            ],
+            "note": "",
+            "review": ""
+          },
+          {
+            "name": "Condiments",
+            "tags": [],
+            "note": "",
+            "review": ""
+          }
+        ]
+      },
+      {
+        "title": "Biryani station",
+        "items": [
+          {
+            "name": "Vegetable biryani",
+            "tags": [
+              "v",
+              "gf"
+            ],
+            "note": "",
+            "review": ""
+          },
+          {
+            "name": "Chicken biryani",
+            "tags": [
+              "gf"
+            ],
+            "note": "",
+            "review": ""
+          },
+          {
+            "name": "Raita",
+            "tags": [],
+            "note": "",
+            "review": ""
+          },
+          {
+            "name": "Bullet naan",
+            "tags": [],
+            "note": "",
+            "review": ""
+          }
+        ]
+      },
+      {
+        "title": "Mexican station",
+        "items": [
+          {
+            "name": "Paneer & vegetable karahi with cheese",
+            "tags": [
+              "v"
+            ],
+            "note": "",
+            "review": ""
+          },
+          {
+            "name": "Paneer & mushroom karahi with cheese",
+            "tags": [
+              "v"
+            ],
+            "note": "",
+            "review": ""
+          },
+          {
+            "name": "Salsa",
+            "tags": [],
+            "note": "",
+            "review": ""
+          },
+          {
+            "name": "Chips",
+            "tags": [],
+            "note": "",
+            "review": ""
+          }
+        ]
+      },
+      {
+        "title": "Something sweet",
+        "items": [
+          {
+            "name": "Jalebi",
+            "tags": [
+              "v"
+            ],
+            "note": "",
+            "review": ""
+          },
+          {
+            "name": "Live kulfi falooda",
+            "tags": [
+              "nuts"
+            ],
+            "note": "",
+            "review": ""
+          }
+        ]
+      },
+      {
+        "title": "To sip",
+        "items": [
+          {
+            "name": "Mocktail station",
+            "tags": [],
+            "note": "Selections to come",
+            "review": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "wedding",
+    "name": "Wedding",
+    "date": "Saturday, November 21",
+    "venue": "Washington Duke Inn & Golf Club",
+    "intro": "From the first bite to a celebratory lunch.",
+    "courses": [
+      {
+        "title": "Grab & go breakfast",
+        "items": [
+          {
+            "name": "Upma",
+            "tags": [
+              "v",
+              "nuts"
+            ],
+            "note": "",
+            "review": ""
+          },
+          {
+            "name": "Coconut chutney",
+            "tags": [],
+            "note": "",
+            "review": ""
+          },
+          {
+            "name": "Rava kesari",
+            "tags": [
+              "v",
+              "nuts"
+            ],
+            "note": "",
+            "review": ""
+          },
+          {
+            "name": "Samosa",
+            "tags": [
+              "v",
+              "nuts"
+            ],
+            "note": "",
+            "review": ""
+          }
+        ]
+      },
+      {
+        "title": "After the baraat",
+        "items": [
+          {
+            "name": "Bombay sandwich",
+            "tags": [
+              "v"
+            ],
+            "note": "",
+            "review": ""
+          },
+          {
+            "name": "Panakam",
+            "tags": [],
+            "note": "",
+            "review": ""
+          }
+        ]
+      },
+      {
+        "title": "Wedding lunch",
+        "items": [
+          {
+            "name": "Mangalore bajji",
+            "tags": [
+              "v"
+            ],
+            "note": "",
+            "review": ""
+          },
+          {
+            "name": "Moong dal kosambari",
+            "tags": [
+              "v",
+              "vg",
+              "df"
+            ],
+            "note": "",
+            "review": ""
+          },
+          {
+            "name": "Chikkudukaya",
+            "tags": [
+              "v",
+              "vg",
+              "df"
+            ],
+            "note": "",
+            "review": ""
+          },
+          {
+            "name": "Gutti vankaya",
+            "tags": [
+              "v",
+              "vg",
+              "nuts"
+            ],
+            "note": "",
+            "review": ""
+          },
+          {
+            "name": "Tindora fry",
+            "tags": [
+              "v",
+              "vg"
+            ],
+            "note": "",
+            "review": ""
+          },
+          {
+            "name": "Mango pappu",
+            "tags": [
+              "v",
+              "vg",
+              "gf"
+            ],
+            "note": "",
+            "review": ""
+          },
+          {
+            "name": "Tamarind rice",
+            "tags": [
+              "v",
+              "vg",
+              "gf",
+              "nuts"
+            ],
+            "note": "",
+            "review": ""
+          },
+          {
+            "name": "White rice",
+            "tags": [
+              "v",
+              "vg",
+              "gf"
+            ],
+            "note": "",
+            "review": ""
+          },
+          {
+            "name": "Yogurt rice",
+            "tags": [
+              "v"
+            ],
+            "note": "",
+            "review": "The draft lists this as vegan, but also names yogurt. Vegan and dairy-free status need confirmation."
+          },
+          {
+            "name": "Chapati",
+            "tags": [
+              "v",
+              "vg"
+            ],
+            "note": "",
+            "review": ""
+          }
+        ]
+      },
+      {
+        "title": "Dosa station",
+        "items": [
+          {
+            "name": "Dosa",
+            "tags": [
+              "v"
+            ],
+            "note": "",
+            "review": ""
+          },
+          {
+            "name": "Chutney",
+            "tags": [],
+            "note": "",
+            "review": ""
+          }
+        ]
+      },
+      {
+        "title": "Something sweet",
+        "items": [
+          {
+            "name": "Payasam",
+            "tags": [
+              "v",
+              "nuts"
+            ],
+            "note": "",
+            "review": ""
+          },
+          {
+            "name": "Mysore pak",
+            "tags": [
+              "v"
+            ],
+            "note": "",
+            "review": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "reception",
+    "name": "Reception",
+    "date": "Saturday, November 21",
+    "venue": "Washington Duke Inn & Golf Club",
+    "intro": "Gather around. Stay for something sweet.",
+    "courses": [
+      {
+        "title": "Cocktail hour",
+        "items": [
+          {
+            "name": "Stuffed mushrooms",
+            "tags": [
+              "v",
+              "vg",
+              "gf"
+            ],
+            "note": "",
+            "review": ""
+          },
+          {
+            "name": "Bhel in phyllo cups",
+            "tags": [
+              "v"
+            ],
+            "note": "",
+            "review": ""
+          },
+          {
+            "name": "Malai chicken bites",
+            "tags": [
+              "gf"
+            ],
+            "note": "",
+            "review": ""
+          }
+        ]
+      },
+      {
+        "title": "Dinner buffet",
+        "items": [
+          {
+            "name": "Paneer tikka masala",
+            "tags": [
+              "v",
+              "gf"
+            ],
+            "note": "",
+            "review": ""
+          },
+          {
+            "name": "Dal makhani",
+            "tags": [
+              "v",
+              "gf"
+            ],
+            "note": "",
+            "review": ""
+          },
+          {
+            "name": "Methi mattar malai",
+            "tags": [
+              "v",
+              "gf"
+            ],
+            "note": "",
+            "review": ""
+          },
+          {
+            "name": "Bhindi masala",
+            "tags": [
+              "v",
+              "vg",
+              "gf"
+            ],
+            "note": "",
+            "review": ""
+          },
+          {
+            "name": "Tandoori chicken tikka in butter chicken gravy",
+            "tags": [
+              "gf"
+            ],
+            "note": "",
+            "review": ""
+          },
+          {
+            "name": "Goat rogan josh",
+            "tags": [
+              "gf"
+            ],
+            "note": "",
+            "review": ""
+          },
+          {
+            "name": "Plain, garlic & chili garlic naan",
+            "tags": [
+              "v"
+            ],
+            "note": "",
+            "review": ""
+          }
+        ]
+      },
+      {
+        "title": "On the side",
+        "items": [
+          {
+            "name": "Pickle",
+            "tags": [
+              "v",
+              "gf",
+              "df"
+            ],
+            "note": "",
+            "review": ""
+          },
+          {
+            "name": "Raita",
+            "tags": [
+              "v"
+            ],
+            "note": "",
+            "review": "The draft lists this as vegan. Ingredients need confirmation before vegan or dairy-free highlighting."
+          },
+          {
+            "name": "Onions & green chilies",
+            "tags": [],
+            "note": "",
+            "review": ""
+          }
+        ]
+      },
+      {
+        "title": "Something sweet",
+        "items": [
+          {
+            "name": "Kulfi falooda",
+            "tags": [
+              "nuts"
+            ],
+            "note": "",
+            "review": ""
+          },
+          {
+            "name": "Rabri jalebi",
+            "tags": [
+              "nuts"
+            ],
+            "note": "",
+            "review": ""
+          }
+        ]
+      }
+    ]
+  }
+]

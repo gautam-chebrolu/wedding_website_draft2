@@ -56,20 +56,6 @@
 })();
 
 
-// ── Food menu link: expanded menus are shared by their own direct URLs. ──
-(function () {
-  var ul = document.querySelector('nav.site-nav ul');
-  if (!ul || ul.querySelector('a[href^="/food"]')) return;
-  var li = document.createElement('li');
-  var link = document.createElement('a');
-  link.href = '/food';
-  link.textContent = 'Food';
-  li.appendChild(link);
-  ul.appendChild(li);
-  ul.classList.add('has-food-menu');
-})();
-
-
 // ── "● Live" nav pill (only during the Sangeet & wedding day) ──
 (function () {
   var ul = document.querySelector('nav.site-nav ul');

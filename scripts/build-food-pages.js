@@ -44,7 +44,7 @@ for (const [slug, ids] of Object.entries(versions)) {
   <a class="food-skip" href="#menu">Skip to menus</a>
   <nav class="site-nav scrolled" aria-label="Main navigation">
     <a href="/" class="nav-logo" aria-label="Home"><img src="/media/wedding_logo.svg" alt="Priya &amp; Gautam" /></a>
-    <ul><li><a href="/schedule">Schedule / RSVP</a></li><li><a href="/travel">Travel</a></li><li><a href="/${slug}" class="active" aria-current="page">Food</a></li><li><a href="/funds">Gifts</a></li><li><a href="/pictures">Pictures</a></li></ul>
+    <ul><li><a href="/schedule">Schedule / RSVP</a></li><li><a href="/travel">Travel</a></li><li><a href="/funds">Gifts</a></li><li><a href="/pictures">Pictures</a></li></ul>
   </nav>
   <main class="food-main">
     <header class="food-hero"><p class="menu-eyebrow">Priya &amp; Gautam · November 2026</p><h1>Our Table</h1><p class="food-subtitle">Good food. Wonderful company.</p><div class="food-ornament" aria-hidden="true">✦</div><p class="food-welcome">A taste of the celebrations, from the first bite to the last sweet.<br />Find a little of what you love.</p></header>

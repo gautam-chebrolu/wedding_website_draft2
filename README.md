@@ -291,8 +291,8 @@ can optionally show only matches. The pages work as complete menus without JavaS
 - `/food-sangeet`: Sangeet + Wedding + Reception.
 - `/food-haldi`: Haldi + Sangeet + Wedding + Reception.
 
-The main navigation links to `/food`. Share the expanded links directly with the
-appropriate invitees; the pages do not link to the other audience versions. These
+Food is hidden from the main navigation while testing. Open the menu URLs directly.
+Share the expanded links directly with the appropriate invitees; the pages do not link to the other audience versions. These
 are public, unlisted pages with `noindex`, not authenticated invitation checks.
 
 **To change dishes, labels or event assignments:** edit `media/food-menu.json`,

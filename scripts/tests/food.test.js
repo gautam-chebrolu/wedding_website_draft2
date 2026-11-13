@@ -39,7 +39,7 @@ test('disputed labels and component-only claims cannot produce allergy matches',
 function setup(slug) {
   const html=readPage(slug);
   const events={};
-  const choices=['v','vg','df','gf'].map(value=>({value,checked:false,nextElementSibling:{textContent:value}}));
+  const choices=['v','vg','df','gf','nf'].map(value=>({value,checked:false,nextElementSibling:{textContent:value}}));
   const only={checked:false};
   const status={textContent:''};
   const rows=[...html.matchAll(/<li class="menu-item" data-diets="([^"]*)">([\s\S]*?)<\/li>/g)].map(([,diets,content])=>{
@@ -91,4 +91,31 @@ test('an empty result keeps an explanation, and filter-only with no needs shows 
   assert.equal(s.empty.hidden,false);
   assert.equal(s.course.hidden,true);
   assert.match(s.status.textContent,/0 draft matches/);
+});
+
+
+test('nut-free requires an explicit label and combines with other dietary needs', () => {
+  for (const slug of ['food', 'food-sangeet', 'food-haldi']) {
+    assert.match(readPage(slug), /name="diet" value="nf"/);
+    const s = setup(slug);
+    s.choices.find(c => c.value === 'nf').checked = true;
+    s.events.change();
+    // Current menus have no explicit nut-free confirmations.
+    assert.equal(s.rows.filter(r => r.classes.has('is-match')).length, 0);
+    assert(s.rows.every(r => !r.hidden));
+    assert.match(s.status.textContent, /unlabeled dishes are not assumed nut-free/);
+    // Exercise future caterer-confirmed labels without changing actual menu data.
+    s.rows[0].dataset.diets = 'nf v';
+    s.rows[1].dataset.diets = 'nf';
+    s.rows[2].dataset.diets = 'v';
+    s.rows[3].dataset.diets = 'nuts v';
+    s.events.change();
+    assert.equal(s.rows.filter(r => r.classes.has('is-match')).length, 2);
+    s.choices.find(c => c.value === 'v').checked = true;
+    s.events.change();
+    assert.deepEqual(s.rows.filter(r => r.classes.has('is-match')), [s.rows[0]]);
+    s.only.checked = true;
+    s.events.change();
+    assert.deepEqual(s.rows.filter(r => !r.hidden), [s.rows[0]]);
+  }
 });

@@ -306,9 +306,12 @@ Initial source: the supplied Uthsaav Lunch, Reception and Sangeet PDFs (November
 11 draft). Equipment quantities, serving instructions and source-document links
 are omitted from guest menus. The Haldi menu was supplied separately by the organizer;
 its dietary labels are awaiting confirmation. Labels remain provisional.
-Tags: `v` vegetarian, `vg` vegan, `df` dairy-free, `gf` gluten-free, `nuts` contains
+Tags: `v` vegetarian, `vg` vegan, `df` dairy-free, `gf` gluten-free, `nf` nut-free, `nuts` contains
 nuts. Vegan implies vegetarian and dairy-free for matching. Missing labels never
-imply ingredient absence; no nut-free or soy-free claims are inferred. Use `review`
+imply ingredient absence; no nut-free or soy-free claims are inferred. The Nut-free
+checkbox matches only explicit `nf` tags. Add `nf` after confirming a dish’s nut
+status with the caterer; it cannot be combined with `nuts`. No current dishes have
+confirmed nut-free labels, so this selection initially shows zero matches. Use `review`
 to explain conflicting labels; do not include a disputed tag until confirmed.
 Yogurt rice and reception raita have disputed vegan labels withheld. Cross-contact
 and soy-oil notes stay visible even when filtering. Ingredient subcomponents do

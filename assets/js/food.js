@@ -33,6 +33,9 @@
       status.textContent = count + ' draft ' + (count === 1 ? 'match' : 'matches') + ' for ' + names.join(' + ') + '. ' +
         (only.checked ? 'Other dishes are hidden.' : 'The full menu is shown; matches are highlighted.') +
         (count ? ' Labels await caterer confirmation.' : ' Labels may be incomplete; ask the catering team.');
+      if (selected.some(function (input) { return input.value === 'nf'; }) && !count) {
+        status.textContent += ' Nut-free labels are awaiting confirmation; unlabeled dishes are not assumed nut-free.';
+      }
     }
   }
   form.hidden = false;

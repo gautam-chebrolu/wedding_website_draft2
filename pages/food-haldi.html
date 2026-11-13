@@ -23,9 +23,9 @@
     <nav class="event-index" aria-label="Jump to an event menu"><a href="#haldi">Haldi</a><a href="#sangeet">Sangeet</a><a href="#wedding">Wedding</a><a href="#reception">Reception</a></nav>
     <section class="dietary-tools" aria-labelledby="dietary-title">
       <h2 id="dietary-title">Find your favorites</h2>
-      <p id="diet-help">Choose your dietary needs to highlight dishes. Multiple selections must all match. The full menu stays in view.</p>
+      <p id="diet-help">Choose your dietary needs to highlight dishes. Multiple selections must all match. The full menu stays in view. Nut-free highlights require an explicit nut-free label; missing nut information does not qualify.</p>
       <form id="diet-form" hidden>
-        <fieldset aria-describedby="diet-help"><legend class="sr-only">Dietary preferences</legend><div class="diet-options"><label class="diet-option"><input type="checkbox" name="diet" value="v" /> <span>Vegetarian</span></label><label class="diet-option"><input type="checkbox" name="diet" value="vg" /> <span>Vegan</span></label><label class="diet-option"><input type="checkbox" name="diet" value="df" /> <span>Dairy-free</span></label><label class="diet-option"><input type="checkbox" name="diet" value="gf" /> <span>Gluten-free</span></label></div></fieldset>
+        <fieldset aria-describedby="diet-help"><legend class="sr-only">Dietary preferences</legend><div class="diet-options"><label class="diet-option"><input type="checkbox" name="diet" value="v" /> <span>Vegetarian</span></label><label class="diet-option"><input type="checkbox" name="diet" value="vg" /> <span>Vegan</span></label><label class="diet-option"><input type="checkbox" name="diet" value="df" /> <span>Dairy-free</span></label><label class="diet-option"><input type="checkbox" name="diet" value="gf" /> <span>Gluten-free</span></label><label class="diet-option"><input type="checkbox" name="diet" value="nf" /> <span>Nut-free</span></label></div></fieldset>
         <div class="diet-actions"><label class="matches-toggle"><input type="checkbox" id="matches-only" /> Show matches only</label><button type="reset" id="clear-diets">Clear selections</button></div>
       </form>
       <p id="diet-status" class="diet-status" role="status" aria-live="polite" aria-atomic="true">All dishes are shown. Dietary labels are provisional.</p>

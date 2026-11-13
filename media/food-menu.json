@@ -5,8 +5,96 @@
     "date": "Thursday, November 19",
     "venue": "Gupta Home",
     "intro": "A little spice, a little sunshine.",
-    "courses": [],
-    "pending": "Our Haldi menu is still being finalized. Check back here for dishes and dietary details."
+    "courses": [
+      {
+        "title": "Drinks",
+        "items": [
+          {
+            "name": "Masala chai",
+            "tags": [],
+            "note": "",
+            "review": "",
+            "translation": "Indian tea brewed with aromatic spices"
+          }
+        ]
+      },
+      {
+        "title": "Appetizers",
+        "items": [
+          {
+            "name": "Veg Manchow Soup",
+            "tags": [],
+            "note": "",
+            "review": "",
+            "translation": "A savory Indo-Chinese vegetable soup"
+          },
+          {
+            "name": "Chili Paneer Dry",
+            "tags": [],
+            "note": "",
+            "review": "",
+            "translation": "Indian cottage cheese tossed in a chili sauce, served without gravy"
+          },
+          {
+            "name": "Veg spring rolls",
+            "tags": [],
+            "note": "",
+            "review": "",
+            "translation": "Crisp rolls filled with vegetables"
+          }
+        ]
+      },
+      {
+        "title": "Entrées",
+        "items": [
+          {
+            "name": "Szechuan Veg Balls Gravy",
+            "tags": [],
+            "note": "",
+            "review": "",
+            "translation": "Vegetable dumplings in a spicy Szechuan-style sauce"
+          },
+          {
+            "name": "Chili Gobi gravy",
+            "tags": [],
+            "note": "",
+            "review": "",
+            "translation": "Cauliflower in a savory chili sauce"
+          }
+        ]
+      },
+      {
+        "title": "Rice & Noodles",
+        "items": [
+          {
+            "name": "Chili Garlic Fried Rice (Mixed Vegetables)",
+            "tags": [],
+            "note": "",
+            "review": "",
+            "translation": "Rice stir-fried with mixed vegetables, chili and garlic"
+          },
+          {
+            "name": "Hakka Noodles with Paneer",
+            "tags": [],
+            "note": "",
+            "review": "",
+            "translation": "Stir-fried noodles with Indian cottage cheese"
+          }
+        ]
+      },
+      {
+        "title": "Dessert",
+        "items": [
+          {
+            "name": "Gajar Halwa",
+            "tags": [],
+            "note": "",
+            "review": "",
+            "translation": "A traditional sweet carrot pudding"
+          }
+        ]
+      }
+    ]
   },
   {
     "id": "sangeet",

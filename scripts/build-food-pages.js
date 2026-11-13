@@ -65,6 +65,6 @@ for (const [slug, ids] of Object.entries(versions)) {
   </main>
 </body>
 </html>\n`;
- fs.writeFileSync(path.join(root, 'pages', slug + '.html'), html);
+ fs.writeFileSync(path.join(root, 'pages', slug + '.html'), html.replace(/[ \t]+$/gm, ''));
  console.log(`Built /${slug}: ${events.map(e => e.name).join(', ')}`);
 }

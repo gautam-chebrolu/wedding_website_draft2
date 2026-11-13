@@ -289,8 +289,7 @@ can optionally show only matches. The pages work as complete menus without JavaS
 
 - `/food`: Wedding (breakfast, post-baraat refreshments and lunch) + Reception.
 - `/food-sangeet`: Sangeet + Wedding + Reception.
-- `/food-haldi`: Haldi + Sangeet + Wedding + Reception. Haldi is a placeholder
-  until its menu arrives.
+- `/food-haldi`: Haldi + Sangeet + Wedding + Reception.
 
 The main navigation links to `/food`. Share the expanded links directly with the
 appropriate invitees; the pages do not link to the other audience versions. These
@@ -305,7 +304,8 @@ and the HTML template in `scripts/build-food-pages.js`.
 
 Initial source: the supplied Uthsaav Lunch, Reception and Sangeet PDFs (November
 11 draft). Equipment quantities, serving instructions and source-document links
-are omitted from guest menus. No Haldi menu was supplied. Labels remain provisional.
+are omitted from guest menus. The Haldi menu was supplied separately by the organizer;
+its dietary labels are awaiting confirmation. Labels remain provisional.
 Tags: `v` vegetarian, `vg` vegan, `df` dairy-free, `gf` gluten-free, `nuts` contains
 nuts. Vegan implies vegetarian and dairy-free for matching. Missing labels never
 imply ingredient absence; no nut-free or soy-free claims are inferred. Use `review`

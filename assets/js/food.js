@@ -13,7 +13,9 @@
     var count = 0;
     items.forEach(function (item) {
       var diets = item.dataset.diets.split(' ');
-      var match = active && selected.every(function (input) { return diets.includes(input.value); });
+      var match = active && selected.every(function (input) {
+        return input.value === 'nf' ? !diets.includes('nuts') : diets.includes(input.value);
+      });
       if (match) count++;
       item.classList.toggle('is-match', match);
       item.querySelector('.dish-match').hidden = !match;
@@ -33,8 +35,8 @@
       status.textContent = count + ' draft ' + (count === 1 ? 'match' : 'matches') + ' for ' + names.join(' + ') + '. ' +
         (only.checked ? 'Other dishes are hidden.' : 'The full menu is shown; matches are highlighted.') +
         (count ? ' Labels await caterer confirmation.' : ' Labels may be incomplete; ask the catering team.');
-      if (selected.some(function (input) { return input.value === 'nf'; }) && !count) {
-        status.textContent += ' Nut-free labels are awaiting confirmation; unlabeled dishes are not assumed nut-free.';
+      if (selected.some(function (input) { return input.value === 'nf'; })) {
+        status.textContent += ' Nut-free matches dishes not tagged as containing nuts.';
       }
     }
   }

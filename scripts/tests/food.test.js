@@ -94,28 +94,40 @@ test('an empty result keeps an explanation, and filter-only with no needs shows 
 });
 
 
-test('nut-free requires an explicit label and combines with other dietary needs', () => {
+test('nut-free labels and highlights every dish without nuts, including untagged dishes', () => {
   for (const slug of ['food', 'food-sangeet', 'food-haldi']) {
-    assert.match(readPage(slug), /name="diet" value="nf"/);
+    const html = readPage(slug);
+    assert.match(html, /name="diet" value="nf"/);
+    for (const [, diets, content] of html.matchAll(/<li class="menu-item" data-diets="([^"]*)">([\s\S]*?)<\/li>/g)) {
+      const containsNuts = diets.split(' ').includes('nuts');
+      assert.equal(diets.split(' ').includes('nf'), !containsNuts);
+      assert.equal(content.includes('<span>Nut-free</span>'), !containsNuts);
+    }
     const s = setup(slug);
     s.choices.find(c => c.value === 'nf').checked = true;
     s.events.change();
-    // Current menus have no explicit nut-free confirmations.
-    assert.equal(s.rows.filter(r => r.classes.has('is-match')).length, 0);
+    const expected = s.rows.filter(r => !r.dataset.diets.split(' ').includes('nuts'));
+    assert(expected.length > 0 && expected.length < s.rows.length);
+    assert.deepEqual(s.rows.filter(r => r.classes.has('is-match')), expected);
     assert(s.rows.every(r => !r.hidden));
-    assert.match(s.status.textContent, /unlabeled dishes are not assumed nut-free/);
-    // Exercise future caterer-confirmed labels without changing actual menu data.
-    s.rows[0].dataset.diets = 'nf v';
-    s.rows[1].dataset.diets = 'nf';
-    s.rows[2].dataset.diets = 'v';
-    s.rows[3].dataset.diets = 'nuts v';
+    // No dietary tags must still match Nut-free, but nuts overrides an explicit nf.
+    s.rows[0].dataset.diets = '';
+    s.rows[1].dataset.diets = 'v';
+    s.rows[2].dataset.diets = 'nuts nf v';
     s.events.change();
-    assert.equal(s.rows.filter(r => r.classes.has('is-match')).length, 2);
+    assert(s.rows[0].classes.has('is-match'));
+    assert(s.rows[1].classes.has('is-match'));
+    assert(!s.rows[2].classes.has('is-match'));
     s.choices.find(c => c.value === 'v').checked = true;
     s.events.change();
-    assert.deepEqual(s.rows.filter(r => r.classes.has('is-match')), [s.rows[0]]);
+    const combined = s.rows.filter(r => {
+      const diets = r.dataset.diets.split(' ');
+      return !diets.includes('nuts') && diets.includes('v');
+    });
+    assert.deepEqual(s.rows.filter(r => r.classes.has('is-match')), combined);
+    assert(!s.rows[0].classes.has('is-match'));
     s.only.checked = true;
     s.events.change();
-    assert.deepEqual(s.rows.filter(r => !r.hidden), [s.rows[0]]);
+    assert.deepEqual(s.rows.filter(r => !r.hidden), combined);
   }
 });

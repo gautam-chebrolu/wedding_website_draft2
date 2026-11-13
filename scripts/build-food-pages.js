@@ -8,13 +8,19 @@ const escape = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<'
 const versions = { food: ['wedding', 'reception'], 'food-sangeet': ['sangeet', 'wedding', 'reception'], 'food-haldi': ['haldi', 'sangeet', 'wedding', 'reception'] };
 function renderItem(item) {
   const tags = new Set(item.tags);
-  if (tags.has('nf') && tags.has('nuts')) throw new Error(`Conflicting nut labels for ${item.name}`);
+  const displayTags = item.tags.filter(tag => tag !== 'nf');
+  if (tags.has('nuts')) {
+    tags.delete('nf');
+  } else {
+    tags.add('nf');
+    displayTags.push('nf');
+  }
   if (tags.has('vg') && !item.review) { tags.add('df'); tags.add('v'); }
   return `<li class="menu-item" data-diets="${escape([...tags].join(' '))}">
     <div class="dish-heading"><h4>${escape(item.name)}</h4><span class="dish-match" hidden>✦ Draft match</span></div>
     ${item.translation ? `<p class="dish-translation"><i>${escape(item.translation)}</i></p>` : ''}
     ${item.note ? `<p class="dish-note">${escape(item.note)}</p>` : ''}
-    <p class="dish-tags">${item.tags.length ? item.tags.map(t => `<span${t === 'nuts' ? ' class="contains-nuts"' : ''}>${labels[t]}</span>`).join('<span class="tag-divider" aria-hidden="true"> · </span>') : 'Dietary details to come'}${item.review ? '<span class="review-label"> · Label under review</span>' : ''}</p>
+    <p class="dish-tags">${displayTags.length ? displayTags.map(t => `<span${t === 'nuts' ? ' class="contains-nuts"' : ''}>${labels[t]}</span>`).join('<span class="tag-divider" aria-hidden="true"> · </span>') : 'Dietary details to come'}${item.review ? '<span class="review-label"> · Label under review</span>' : ''}</p>
     ${item.review ? `<p class="dish-review">${escape(item.review)}</p>` : ''}
   </li>`;
 }
@@ -52,7 +58,7 @@ for (const [slug, ids] of Object.entries(versions)) {
     <nav class="event-index" aria-label="Jump to an event menu">${events.map(e => `<a href="#${e.id}">${e.name}</a>`).join('')}</nav>
     <section class="dietary-tools" aria-labelledby="dietary-title">
       <h2 id="dietary-title">Find your favorites</h2>
-      <p id="diet-help">Choose your dietary needs to highlight dishes. Multiple selections must all match. The full menu stays in view. Nut-free highlights require an explicit nut-free label; missing nut information does not qualify.</p>
+      <p id="diet-help">Choose your dietary needs to highlight dishes. Multiple selections must all match. The full menu stays in view. Nut-free highlights every dish not tagged “Contains nuts.”</p>
       <form id="diet-form" hidden>
         <fieldset aria-describedby="diet-help"><legend class="sr-only">Dietary preferences</legend><div class="diet-options">${['v','vg','df','gf','nf'].map(key => `<label class="diet-option"><input type="checkbox" name="diet" value="${key}" /> <span>${labels[key]}</span></label>`).join('')}</div></fieldset>
         <div class="diet-actions"><label class="matches-toggle"><input type="checkbox" id="matches-only" /> Show matches only</label><button type="reset" id="clear-diets">Clear selections</button></div>
@@ -60,7 +66,7 @@ for (const [slug, ids] of Object.entries(versions)) {
       <p id="diet-status" class="diet-status" role="status" aria-live="polite" aria-atomic="true">All dishes are shown. Dietary labels are provisional.</p>
       <noscript><p>Enable JavaScript to highlight dishes. You can still browse the complete menus below.</p></noscript>
     </section>
-    <aside class="menu-notice" aria-label="About dietary information"><p><strong>A menu in the making.</strong> Dishes and event menus may change. Dietary labels come from our caterer’s draft and are awaiting confirmation. Highlights show draft matches, not confirmed allergy-safe dishes. Missing labels do not mean a dish is free of an ingredient.</p><p>The caterer notes that cooking oil may contain soy. Nut labels are shown where supplied; nut-free and soy-free options are not yet confirmed. For allergies, please check ingredients and preparation with the catering team before eating.</p></aside>
+    <aside class="menu-notice" aria-label="About dietary information"><p><strong>A menu in the making.</strong> Dishes and event menus may change. Dietary labels come from our caterer’s draft and are awaiting confirmation. Highlights show draft matches, not confirmed allergy-safe dishes. Missing labels do not mean a dish is free of an ingredient.</p><p>The caterer notes that cooking oil may contain soy. Nut-free labels mean no nuts are listed in the draft; ingredients and preparation still need confirmation. Soy-free options are not yet confirmed. For allergies, please check ingredients and preparation with the catering team before eating.</p></aside>
     <div id="menu">${events.map(renderEvent).join('\n')}</div>
     <footer class="food-footer"><span aria-hidden="true">✦</span><p>Made for gathering.</p><p class="menu-eyebrow">With love, Priya &amp; Gautam</p><a href="/">Back to our wedding website</a></footer>
   </main>

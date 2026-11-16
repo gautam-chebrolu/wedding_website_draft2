@@ -1,34 +1,95 @@
-.ceremony-page .page-hero { padding-bottom: 20px; }
-.ceremony-page .page-subtitle { line-height: 1.8; }
-.ceremony-content { max-width: 1120px; margin: 0 auto; padding: 0 24px 64px; }
-.ceremony-intro { max-width: 700px; margin: 0 auto 24px; text-align: center; line-height: 1.7; }
-.ceremony-live { border: 1px solid #806d43; border-radius: 16px; background: #191713; padding: 20px 24px; }
-.ceremony-eyebrow, .ritual-state { font: 500 11px/1.5 'Montserrat', sans-serif; letter-spacing: .12em; text-transform: uppercase; color: #d4bc83; }
-.ceremony-live h2 { font-size: clamp(26px, 5vw, 38px); margin: 6px 0; }
-.ceremony-live p { margin: 8px 0; line-height: 1.6; }
-.ceremony-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 20px 0 12px; }
-.ceremony-toolbar p { flex: 1 1 200px; margin: 0; font-size: 14px; }
-.ceremony-toolbar button { min-height: 44px; padding: 10px 16px; background: #191713; color: #eadab8; border: 1px solid #806d43; border-radius: 24px; font: inherit; cursor: pointer; }
-.ceremony-toolbar button:disabled { opacity: .4; cursor: default; }
-.ceremony-page :focus-visible { outline: 2px solid #edce87; outline-offset: 4px; }
-.ceremony-track { display: grid; grid-auto-flow: column; grid-auto-columns: min(340px, 87%); gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 4px; padding: 5px 4px 20px; overscroll-behavior-x: contain; scrollbar-color: #a28c58 #211e19; }
-.ritual-card { scroll-snap-align: start; border: 1px solid #484035; border-radius: 16px; background: #151411; padding: 22px; min-width: 0; align-self: start; }
-.ritual-card[aria-current='step'] { border-color: #e2c17a; box-shadow: inset 0 3px #e2c17a; background: #242015; }
-.ritual-card h3 { font-size: 28px; line-height: 1.15; margin: 12px 0; overflow-wrap: anywhere; }
-.ritual-time { font: 500 13px/1.8 'Montserrat', sans-serif; color: #e0c998; }
-.ritual-duration { display: block; color: #c2b8a4; font-size: 11px; }
-.ritual-card p, .ritual-card details { font-size: 16px; line-height: 1.6; }
-.ritual-card summary { cursor: pointer; color: #ead6a7; padding: 12px 0; min-height: 44px; }
-.ritual-card details p { margin-top: 0; }
-.ritual-sources { font-size: 12px; display: flex; flex-wrap: wrap; gap: 12px; }
-.ceremony-note { color: #c2b8a4; font-size: 13px; line-height: 1.7; }
-.ceremony-after { max-width: 720px; margin: 24px auto 0; text-align: center; line-height: 1.7; }
-.ceremony-preview { padding: 10px; border: 1px solid #b99752; margin-bottom: 12px; }
-@media (max-width: 480px) {
-  .ceremony-content { padding-inline: 16px; }
-  .ceremony-live { padding: 18px; }
-  .ritual-card { padding: 18px; }
-  .ceremony-toolbar { gap: 8px; }
-  .ceremony-toolbar p { flex-basis: 100%; }
+.ceremony-page {
+  --ceremony-gold: #d7bb80;
+  --ceremony-muted: #c2b8a5;
+  --ceremony-line: rgba(215, 187, 128, .23);
+  --ceremony-sans: 'Montserrat', sans-serif;
 }
-@media (prefers-reduced-motion: reduce) { .ceremony-track { scroll-behavior: auto; } }
+.ceremony-page .page-hero { position: relative; padding: 28px 20px 24px; background: radial-gradient(ellipse at 50% 0, #302416 0, #15120e 38%, #0d0c0b 75%); }
+.ceremony-page .page-hero h1 { font-size: clamp(42px, 7vw, 68px); margin: 8px 0 4px; letter-spacing: -.02em; }
+.ceremony-page .page-hero .page-subtitle { text-transform: none; letter-spacing: .02em; font-size: 12px; margin-top: 16px; }
+.ceremony-page .page-subtitle a { color: var(--ceremony-muted); text-decoration: none; border-bottom: 1px solid var(--ceremony-line); padding-bottom: 4px; }
+.ceremony-eyebrow { font: 500 10px/1.6 var(--ceremony-sans); letter-spacing: .15em; text-transform: uppercase; color: var(--ceremony-gold); }
+.ceremony-dedication { font-size: 20px; font-style: italic; color: #d9cdb8; }
+.ceremony-content { width: 100%; max-width: 1000px; margin: 0 auto; padding: 0 24px 60px; }
+.ceremony-intro { margin: 20px auto; text-align: center; font-size: 18px; line-height: 1.5; color: var(--ceremony-muted); }
+.ceremony-live { padding: 20px 24px 16px; border: 1px solid var(--ceremony-line); border-radius: 18px; background: linear-gradient(120deg, #221c12, #151411); }
+.ceremony-live h2 { margin: 4px 0 8px; font-size: clamp(25px, 4.5vw, 34px); font-weight: 400; line-height: 1.2; }
+.ceremony-live-time { font: 400 11px/1.7 var(--ceremony-sans); color: var(--ceremony-muted); }
+.ceremony-live-next { margin-top: 8px; font: 400 11px/1.6 var(--ceremony-sans); color: var(--ceremony-gold); }
+.ceremony-meter { margin-top: 14px; }
+.ceremony-meter progress { display: block; width: 100%; height: 3px; border: 0; border-radius: 4px; overflow: hidden; appearance: none; background: #3d3528; color: var(--ceremony-gold); }
+.ceremony-meter progress::-webkit-progress-bar { background: #3d3528; }
+.ceremony-meter progress::-webkit-progress-value { background: var(--ceremony-gold); }
+.ceremony-meter progress::-moz-progress-bar { background: var(--ceremony-gold); }
+#ceremony-countdown { min-height: 16px; margin-top: 8px; color: var(--ceremony-muted); font: 400 10px/1.6 var(--ceremony-sans); font-variant-numeric: tabular-nums; }
+.ceremony-note { margin: 12px 4px 24px; font: 400 10px/1.8 var(--ceremony-sans); color: var(--ceremony-muted); }
+.ceremony-program-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin-bottom: 12px; }
+.ceremony-program-heading h2 { margin: 0; font-size: clamp(24px, 4vw, 30px); font-weight: 400; }
+.ceremony-program-heading > span { flex-shrink: 0; font: 400 10px/1.5 var(--ceremony-sans); color: var(--ceremony-muted); }
+.ceremony-steps { display: flex; gap: 10px; overflow-x: auto; padding: 4px 2px 12px; scrollbar-width: thin; scrollbar-color: #77613b transparent; }
+.ceremony-step { flex: 0 0 168px; min-height: 86px; padding: 12px 14px; border: 1px solid #3d362b; border-radius: 12px; background: #151411; color: #e1d6c4; text-align: left; cursor: pointer; font-family: var(--ceremony-sans); }
+.ceremony-step-meta { display: block; margin-bottom: 7px; color: var(--ceremony-muted); font-size: 9px; letter-spacing: .06em; }
+.ceremony-step-title { display: block; font-size: 11px; line-height: 1.5; font-weight: 500; }
+.ceremony-step[aria-pressed='true'] { background: #302619; border-color: var(--ceremony-gold); }
+.ceremony-step[aria-current='step'] .ceremony-step-meta { color: var(--ceremony-gold); }
+.ceremony-step[data-past='true']:not([aria-pressed='true']) { opacity: .6; }
+.ceremony-toolbar { display: flex; align-items: center; gap: 12px; position: sticky; top: 100px; z-index: 5; margin-top: 6px; padding: 12px 0; background: rgba(13, 12, 11, .96); backdrop-filter: blur(12px); }
+#ceremony-position { flex: 1; font: 400 11px/1.6 var(--ceremony-sans); color: var(--ceremony-muted); }
+.ceremony-arrows { display: flex; gap: 6px; }
+.ceremony-toolbar button { min-height: 44px; min-width: 44px; border: 1px solid var(--ceremony-line); border-radius: 50%; background: #17140f; color: #e7d5ae; cursor: pointer; font: 400 18px/1 var(--ceremony-sans); }
+.ceremony-toolbar #ritual-follow { min-width: 144px; padding: 12px 16px; border-radius: 24px; font-size: 10px; }
+#ritual-follow[aria-pressed='true']::before { content: ''; display: inline-block; width: 6px; height: 6px; margin-right: 7px; border-radius: 50%; background: var(--ceremony-gold); }
+.ceremony-toolbar button:disabled { opacity: .35; cursor: default; }
+.ceremony-scroll-hint { margin: 0 0 4px; font: 400 10px/1.7 var(--ceremony-sans); color: var(--ceremony-muted); }
+.ceremony-track { display: grid; grid-auto-flow: column; grid-auto-columns: calc(100% - 20px); gap: 16px; overflow-x: auto; padding: 10px 10px 20px; scroll-snap-type: x mandatory; scroll-padding-inline: 10px; overscroll-behavior-x: contain; scrollbar-width: thin; scrollbar-color: #97794a #211c14; scroll-margin-top: 165px; }
+.ritual-card { position: relative; scroll-snap-align: start; align-self: start; min-width: 0; padding: 32px 36px; border: 1px solid #484031; border-radius: 22px; background: radial-gradient(ellipse at 100% 0, rgba(177, 125, 48, .12), transparent 55%), #171510; }
+.ritual-card::before { content: ''; position: absolute; top: 0; left: 36px; right: 36px; height: 2px; background: var(--ceremony-line); }
+.ritual-card[aria-current='step'] { border-color: var(--ceremony-gold); box-shadow: 0 12px 48px rgba(0, 0, 0, .2); }
+.ritual-card[aria-current='step']::before { background: var(--ceremony-gold); }
+.ritual-topline { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 24px; }
+.ritual-number { font: 400 10px/1.6 var(--ceremony-sans); color: var(--ceremony-muted); letter-spacing: .15em; text-transform: uppercase; }
+.ritual-state { font: 500 9px/1.5 var(--ceremony-sans); color: var(--ceremony-gold); padding: 5px 9px; border: 1px solid var(--ceremony-line); border-radius: 20px; }
+.ritual-card[aria-current='step'] .ritual-state { background: var(--ceremony-gold); color: #241a0c; }
+.ritual-time { display: block; font: 500 11px/1.8 var(--ceremony-sans); color: var(--ceremony-gold); }
+.ritual-duration { display: inline; color: var(--ceremony-muted); font-size: 10px; }
+.ritual-card h3 { font-weight: 400; font-size: clamp(32px, 5.5vw, 48px); line-height: 1.06; letter-spacing: -.02em; margin: 12px 0 28px; overflow-wrap: break-word; }
+.ritual-body { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+.ritual-section-title { font: 500 9px/1.6 var(--ceremony-sans); letter-spacing: .15em; text-transform: uppercase; color: var(--ceremony-gold); margin-bottom: 10px; }
+.ritual-section p { font: 300 14px/1.85 var(--ceremony-sans); color: #e0d7c7; }
+.ritual-meaning { border-left: 1px solid var(--ceremony-line); padding-left: 28px; }
+.ritual-references { border-top: 1px solid var(--ceremony-line); margin-top: 26px; padding-top: 12px; }
+.ritual-references summary { padding: 10px 0; cursor: pointer; font: 400 10px/1.8 var(--ceremony-sans); color: var(--ceremony-muted); min-height: 44px; }
+.ritual-sources { display: flex; flex-direction: column; gap: 10px; padding: 8px 0 4px; font: 400 11px/1.7 var(--ceremony-sans); }
+.ritual-sources a { color: var(--ceremony-gold); text-underline-offset: 4px; }
+.ritual-provenance { margin-top: 24px; font: 400 10px/1.7 var(--ceremony-sans); color: var(--ceremony-muted); }
+.ceremony-after { max-width: 680px; margin: 24px auto 0; text-align: center; }
+.ceremony-after p { margin-bottom: 24px; color: var(--ceremony-muted); font-size: 16px; line-height: 1.7; }
+.ceremony-preview { margin-bottom: 16px; border: 1px solid #b99752; border-radius: 10px; padding: 12px; color: #e5c587; font: 400 11px/1.7 var(--ceremony-sans); }
+.ceremony-page :focus-visible { outline: 2px solid #edce87; outline-offset: 4px; }
+@media (max-width: 600px) {
+  .ceremony-page .page-header { height: 100px; }
+  .ceremony-page .page-hero { padding: 22px 16px; }
+  .ceremony-content { padding: 0 14px 40px; }
+  .ceremony-intro { font-size: 16px; margin: 16px 8px; }
+  .ceremony-live { padding: 18px; }
+  .ceremony-note { font-size: 9px; margin-bottom: 20px; }
+  .ceremony-program-heading { align-items: center; gap: 8px; }
+  .ceremony-program-heading h2 { font-size: 23px; }
+  .ceremony-program-heading > span { font-size: 9px; }
+  .ceremony-step { flex-basis: 150px; }
+  .ceremony-toolbar { top: 105px; gap: 8px; }
+  #ceremony-position { font-size: 10px; }
+  .ceremony-toolbar #ritual-follow { min-width: 120px; padding-inline: 10px; font-size: 9px; }
+  .ceremony-track { margin-inline: -4px; }
+  .ritual-card { padding: 24px 22px; border-radius: 18px; }
+  .ritual-card::before { left: 22px; right: 22px; }
+  .ritual-topline { margin-bottom: 20px; }
+  .ritual-number { font-size: 9px; letter-spacing: .08em; }
+  .ritual-body { grid-template-columns: 1fr; gap: 24px; }
+  .ritual-meaning { padding: 20px 0 0; border-left: 0; border-top: 1px solid var(--ceremony-line); }
+  .ritual-section p { font-size: 14px; line-height: 1.8; }
+  .ritual-card h3 { margin-bottom: 24px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ceremony-track, .ceremony-steps { scroll-behavior: auto; }
+}

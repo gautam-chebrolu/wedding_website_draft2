@@ -325,13 +325,20 @@ Run the local food checks with `node --test scripts/tests/food.test.js`.
 
 ### Ceremony guide (`/ceremony`)
 
-The 16 moments use the organizer?s November 21, 2026 program in Eastern Time.
-Cards can be swiped horizontally or browsed with buttons. The status and current
-card change at each scheduled start/end, including gaps between rites. Browsing
-pauses automatic scrolling; ?Follow the ceremony? resumes it. It honors reduced
-motion and refreshes after the tab becomes visible. The clock follows scheduled
-rather than priest-confirmed progress. Test a moving preview with
-`/ceremony?now=2026-11-21T10:51`; the preview notice is visible.
+The 16 moments use the organizer's November 21, 2026 program in Eastern Time.
+The guide shows large ritual cards with descriptions and meanings, a scrollable
+program timeline, the current ritual's progress, and a countdown to the next
+moment. Guests can swipe, use arrows, choose a timeline moment, or navigate the
+card rail with Arrow Left/Right and Home/End. Horizontal browsing pauses following;
+"Return to live" resumes it. Clicking the active follow control pauses it.
+Vertical reading does not pause the clock. It honors reduced motion and catches
+up immediately after the tab becomes visible.
+
+The clock follows scheduled rather than priest-confirmed progress, including
+gaps between rites. Test a moving preview with
+`/ceremony?now=2026-11-21T10:51:59&speed=60`; the visible preview clock advances
+one simulated minute per real second. With no preview, all displayed times use
+Eastern Time regardless of the guest's location.
 
 The ceremony data script must precede `live_schedule_data.js` in browser pages.
 Node consumers load it through `require`. Run `node --test scripts/tests/*.test.js`.

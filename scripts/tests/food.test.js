@@ -32,7 +32,7 @@ test('updated yogurt labels cannot produce incorrect matches', () => {
       }
     }
     assert.match(html,/cooking oil may contain soy/);
-    assert.match(html,/Missing labels do not mean/);
+    assert.doesNotMatch(html,/A menu in the making/);
   }
 });
 

@@ -66,7 +66,7 @@ for (const [slug, ids] of Object.entries(versions)) {
       <p id="diet-status" class="diet-status" role="status" aria-live="polite" aria-atomic="true">All dishes are shown. Dietary labels are provisional.</p>
       <noscript><p>Enable JavaScript to highlight dishes. You can still browse the complete menus below.</p></noscript>
     </section>
-    <aside class="menu-notice" aria-label="About dietary information"><p><strong>A menu in the making.</strong> Dishes and event menus may change. Dietary labels come from our caterer’s draft and are awaiting confirmation. Highlights show draft matches, not confirmed allergy-safe dishes. Missing labels do not mean a dish is free of an ingredient.</p><p>The caterer notes that cooking oil may contain soy. Nut-free labels mean no nuts are listed in the draft; ingredients and preparation still need confirmation. Soy-free options are not yet confirmed. For allergies, please check ingredients and preparation with the catering team before eating.</p></aside>
+    <aside class="menu-notice" aria-label="About dietary information"><p>The caterer notes that cooking oil may contain soy. Nut-free labels mean no nuts are listed in the draft; ingredients and preparation still need confirmation. Soy-free options are not yet confirmed. For allergies, please check ingredients and preparation with the catering team before eating.</p></aside>
     <div id="menu">${events.map(renderEvent).join('\n')}</div>
     <footer class="food-footer"><span aria-hidden="true">✦</span><p>Made for gathering.</p><p class="menu-eyebrow">With love, Priya &amp; Gautam</p><a href="/">Back to our wedding website</a></footer>
   </main>

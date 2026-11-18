@@ -308,8 +308,9 @@ Current source: the supplied Uthsaav Lunch, Reception and Sangeet PDFs printed
 November 17, 2026 (`Priya Gautam … - Uthsaav (1).pdf`). Equipment quantities,
 serving instructions and source-document links are omitted from guest menus.
 Haldi labels follow the organizer’s November 17 corrections: everything is
-vegetarian, Veg Manchow Soup and veg spring rolls are also vegan, and Gajar Halwa
-contains nuts. Other Haldi vegan/gluten-free labels have not been supplied.
+vegetarian; Veg Manchow Soup, veg spring rolls, both entrées and chili garlic
+fried rice are also vegan. Hakka noodles with paneer remain vegetarian, and
+Gajar Halwa contains nuts. Haldi gluten-free labels have not been supplied.
 Tags: `v` vegetarian, `vg` vegan, `gf` gluten-free, `nuts` contains nuts. Vegan
 implies vegetarian for matching. Dairy-free labels and filtering have been removed.
 The Nut-free checkbox highlights every dish without a `nuts` tag, including

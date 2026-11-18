@@ -17,7 +17,7 @@ function renderItem(item) {
   }
   if (tags.has('vg')) tags.add('v');
   return `<li class="menu-item" data-diets="${escape([...tags].join(' '))}">
-    <div class="dish-heading"><h4>${escape(item.name)}</h4><span class="dish-match" hidden>✦ Draft match</span></div>
+    <div class="dish-heading"><h4>${escape(item.name)}</h4><span class="dish-match" hidden>✦ Match</span></div>
     ${item.translation ? `<p class="dish-translation"><i>${escape(item.translation)}</i></p>` : ''}
     ${item.note ? `<p class="dish-note">${escape(item.note)}</p>` : ''}
     <p class="dish-tags">${displayTags.length ? displayTags.map(t => `<span${t === 'nuts' ? ' class="contains-nuts"' : ''}>${labels[t]}</span>`).join('<span class="tag-divider" aria-hidden="true"> · </span>') : 'Dietary details to come'}${item.review ? '<span class="review-label"> · Label under review</span>' : ''}</p>
@@ -28,7 +28,7 @@ function renderEvent(event, index) {
  return `<section class="menu-event" id="${event.id}" aria-labelledby="heading-${event.id}">
     <header class="event-heading"><span class="event-number" aria-hidden="true">0${index + 1}</span><div><p class="menu-eyebrow">${event.date}</p><h2 id="heading-${event.id}">${event.name}</h2><p class="event-venue">${escape(event.venue)}</p></div></header>
     <p class="event-intro">${escape(event.intro)}</p>
-    ${event.pending ? `<p class="pending-menu">${escape(event.pending)}</p>` : `<div class="menu-columns">${event.courses.map(course => `<section class="menu-course"><h3>${escape(course.title)}</h3><ul>${course.items.map(renderItem).join('')}</ul></section>`).join('')}</div><p class="event-empty" hidden>No draft matches for these selections at ${event.name}. Dietary details may still be incomplete.</p>`}
+    ${event.pending ? `<p class="pending-menu">${escape(event.pending)}</p>` : `<div class="menu-columns">${event.courses.map(course => `<section class="menu-course"><h3>${escape(course.title)}</h3><ul>${course.items.map(renderItem).join('')}</ul></section>`).join('')}</div><p class="event-empty" hidden>No matches for these selections at ${event.name}.</p>`}
   </section>`;
 }
 for (const [slug, ids] of Object.entries(versions)) {
@@ -63,10 +63,10 @@ for (const [slug, ids] of Object.entries(versions)) {
         <fieldset aria-describedby="diet-help"><legend class="sr-only">Dietary preferences</legend><div class="diet-options">${['v','vg','gf','nf'].map(key => `<label class="diet-option"><input type="checkbox" name="diet" value="${key}" /> <span>${labels[key]}</span></label>`).join('')}</div></fieldset>
         <div class="diet-actions"><label class="matches-toggle"><input type="checkbox" id="matches-only" /> Show matches only</label><button type="reset" id="clear-diets">Clear selections</button></div>
       </form>
-      <p id="diet-status" class="diet-status" role="status" aria-live="polite" aria-atomic="true">All dishes are shown. Dietary labels are provisional.</p>
+      <p id="diet-status" class="diet-status" role="status" aria-live="polite" aria-atomic="true">All dishes are shown. Choose a dietary need to highlight matches.</p>
       <noscript><p>Enable JavaScript to highlight dishes. You can still browse the complete menus below.</p></noscript>
     </section>
-    <aside class="menu-notice" aria-label="About dietary information"><p>The caterer notes that cooking oil may contain soy. Nut-free labels mean no nuts are listed in the draft; ingredients and preparation still need confirmation. Soy-free options are not yet confirmed. For allergies, please check ingredients and preparation with the catering team before eating.</p></aside>
+    <aside class="menu-notice" aria-label="About dietary information"><p>The caterer notes that cooking oil may contain soy. Nut-free labels mean no nuts are listed. Soy-free options are not yet confirmed. For allergies, please check ingredients and preparation with the catering team before eating.</p></aside>
     <div id="menu">${events.map(renderEvent).join('\n')}</div>
     <footer class="food-footer"><span aria-hidden="true">✦</span><p>Made for gathering.</p><p class="menu-eyebrow">With love, Priya &amp; Gautam</p><a href="/">Back to our wedding website</a></footer>
   </main>

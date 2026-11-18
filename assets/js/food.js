@@ -29,12 +29,12 @@
       if (empty) empty.hidden = !(active && only.checked && !event.querySelector('.is-match'));
     });
     if (!active) {
-      status.textContent = 'All ' + items.length + ' dishes are shown. Choose a dietary need to highlight draft matches.';
+      status.textContent = 'All ' + items.length + ' dishes are shown. Choose a dietary need to highlight matches.';
     } else {
       var names = selected.map(function (input) { return input.nextElementSibling.textContent; });
-      status.textContent = count + ' draft ' + (count === 1 ? 'match' : 'matches') + ' for ' + names.join(' + ') + '. ' +
+      status.textContent = count + ' ' + (count === 1 ? 'match' : 'matches') + ' for ' + names.join(' + ') + '. ' +
         (only.checked ? 'Other dishes are hidden.' : 'The full menu is shown; matches are highlighted.') +
-        (count ? ' Labels await caterer confirmation.' : ' Labels may be incomplete; ask the catering team.');
+        (count ? '' : ' Ask the catering team about other options.');
       if (selected.some(function (input) { return input.value === 'nf'; })) {
         status.textContent += ' Nut-free matches dishes not tagged as containing nuts.';
       }

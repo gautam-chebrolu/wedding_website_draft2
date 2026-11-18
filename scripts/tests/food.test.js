@@ -92,7 +92,7 @@ test('an empty result keeps an explanation, and filter-only with no needs shows 
   assert(s.rows.every(r=>r.hidden));
   assert.equal(s.empty.hidden,false);
   assert.equal(s.course.hidden,true);
-  assert.match(s.status.textContent,/0 draft matches/);
+  assert.match(s.status.textContent,/0 matches/);
 });
 
 
@@ -150,9 +150,10 @@ test('Haldi corrections and latest source allergen changes reach the generated m
   assert.equal(rows.length, 9);
   assert(rows.every(([, diets]) => diets.split(' ').includes('v')));
   s.choices.find(c => c.value === 'vg').checked = true; s.events.change();
-  for (const name of ['Veg Manchow Soup', 'Veg spring rolls']) {
+  for (const name of ['Veg Manchow Soup', 'Veg spring rolls', 'Szechuan Veg Balls Gravy', 'Chili Gobi gravy', 'Chili Garlic Fried Rice (Mixed Vegetables)']) {
     assert(s.rows.find(r => r.content.includes('<h4>' + name + '</h4>')).classes.has('is-match'));
   }
+  assert(!s.rows.find(r => r.content.includes('<h4>Hakka Noodles with Paneer</h4>')).classes.has('is-match'));
   s.choices.find(c => c.value === 'vg').checked = false;
   s.choices.find(c => c.value === 'nf').checked = true; s.events.change();
   for (const name of ['Gajar Halwa', 'Tindora fry', 'Sengapappu karam']) {

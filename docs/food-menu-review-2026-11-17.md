@@ -27,8 +27,9 @@ can be labeled Gluten-free and included in Gluten-free matches without the bread
 ## Other reconciled changes
 
 - **Haldi:** all nine dishes are Vegetarian; Veg Manchow Soup and veg spring rolls
-  are also Vegan; Gajar Halwa contains nuts. No further Vegan or Gluten-free
-  labels were inferred.
+  are also Vegan, as are both entrées and chili garlic fried rice per the
+  organizer’s follow-up. Hakka noodles with paneer remain Vegetarian. Gajar
+  Halwa contains nuts. No Gluten-free labels were inferred.
 - **Sangeet:** added fruit/cheese/cracker platters, guacamole, corn bean salad and
   beet salad. Replaced the chaat station’s generic condiments with the listed
   pickle. Added the listed Vegan/Gluten-free labels for pickle, salsa and salads.

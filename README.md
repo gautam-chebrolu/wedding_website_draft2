@@ -304,22 +304,27 @@ Each item’s `translation` field supplies the small italic English description 
 To change layout or interactions, edit `assets/css/food.css`, `assets/js/food.js`
 and the HTML template in `scripts/build-food-pages.js`.
 
-Initial source: the supplied Uthsaav Lunch, Reception and Sangeet PDFs (November
-11 draft). Equipment quantities, serving instructions and source-document links
-are omitted from guest menus. The Haldi menu was supplied separately by the organizer;
-its dietary labels are awaiting confirmation. Labels remain provisional.
-Tags: `v` vegetarian, `vg` vegan, `df` dairy-free, `gf` gluten-free, `nuts` contains
-nuts. Vegan implies vegetarian and dairy-free for matching. The Nut-free checkbox
-highlights every dish without a `nuts` tag, including dishes with no tags. These
-items automatically display a Nut-free label; no explicit `nf` tag is needed.
-Adding `nuts` removes that label and excludes the dish from Nut-free matches.
-These labels reflect the draft menu; ingredients and preparation await confirmation.
-Use `review`
-to explain conflicting labels; do not include a disputed tag until confirmed.
-Yogurt rice and reception raita have disputed vegan labels withheld. Cross-contact
-and soy-oil notes stay visible even when filtering. Ingredient subcomponents do
-not qualify an entire dish (for example, chole alone is listed gluten-free, while
-the chole bhatura dish is not).
+Current source: the supplied Uthsaav Lunch, Reception and Sangeet PDFs printed
+November 17, 2026 (`Priya Gautam … - Uthsaav (1).pdf`). Equipment quantities,
+serving instructions and source-document links are omitted from guest menus.
+Haldi labels follow the organizer’s November 17 corrections: everything is
+vegetarian, Veg Manchow Soup and veg spring rolls are also vegan, and Gajar Halwa
+contains nuts. Other Haldi vegan/gluten-free labels have not been supplied.
+Tags: `v` vegetarian, `vg` vegan, `gf` gluten-free, `nuts` contains nuts. Vegan
+implies vegetarian for matching. Dairy-free labels and filtering have been removed.
+The Nut-free checkbox highlights every dish without a `nuts` tag, including
+dishes with no tags. These items automatically display a Nut-free label; no
+explicit `nf` tag is needed. Adding `nuts` removes that label and excludes the
+dish from Nut-free matches. This is an absence-of-listed-nuts convention, not a
+caterer certification. The organizer confirmed that dishes without an explicit
+Contains nuts label should be labeled Nut-free.
+Use `review` to explain conflicting labels; do not include a disputed tag until
+confirmed. The latest PDFs resolve the old yogurt rice and reception raita vegan
+conflicts: both are now vegetarian and gluten-free. Chole and bhatura are separate menu items so chole
+can match Gluten-free without including the bread. Bullet naan remains on the
+Sangeet menu per organizer confirmation. Cross-contact and soy-oil notes stay visible even
+when filtering. See [the November 17 review](docs/food-menu-review-2026-11-17.md)
+for major changes and source questions.
 
 Run the local food checks with `node --test scripts/tests/food.test.js`.
 

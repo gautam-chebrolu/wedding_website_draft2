@@ -11,7 +11,9 @@
         "items": [
           {
             "name": "Masala chai",
-            "tags": [],
+            "tags": [
+              "v"
+            ],
             "note": "",
             "review": "",
             "translation": "Indian tea brewed with aromatic spices"
@@ -23,21 +25,29 @@
         "items": [
           {
             "name": "Veg Manchow Soup",
-            "tags": [],
+            "tags": [
+              "v",
+              "vg"
+            ],
             "note": "",
             "review": "",
             "translation": "A savory Indo-Chinese vegetable soup"
           },
           {
             "name": "Chili Paneer Dry",
-            "tags": [],
+            "tags": [
+              "v"
+            ],
             "note": "",
             "review": "",
             "translation": "Indian cottage cheese tossed in a chili sauce, served without gravy"
           },
           {
             "name": "Veg spring rolls",
-            "tags": [],
+            "tags": [
+              "v",
+              "vg"
+            ],
             "note": "",
             "review": "",
             "translation": "Crisp rolls filled with vegetables"
@@ -49,14 +59,18 @@
         "items": [
           {
             "name": "Szechuan Veg Balls Gravy",
-            "tags": [],
+            "tags": [
+              "v"
+            ],
             "note": "",
             "review": "",
             "translation": "Vegetable dumplings in a spicy Szechuan-style sauce"
           },
           {
             "name": "Chili Gobi gravy",
-            "tags": [],
+            "tags": [
+              "v"
+            ],
             "note": "",
             "review": "",
             "translation": "Cauliflower in a savory chili sauce"
@@ -68,14 +82,18 @@
         "items": [
           {
             "name": "Chili Garlic Fried Rice (Mixed Vegetables)",
-            "tags": [],
+            "tags": [
+              "v"
+            ],
             "note": "",
             "review": "",
             "translation": "Rice stir-fried with mixed vegetables, chili and garlic"
           },
           {
             "name": "Hakka Noodles with Paneer",
-            "tags": [],
+            "tags": [
+              "v"
+            ],
             "note": "",
             "review": "",
             "translation": "Stir-fried noodles with Indian cottage cheese"
@@ -87,7 +105,10 @@
         "items": [
           {
             "name": "Gajar Halwa",
-            "tags": [],
+            "tags": [
+              "v",
+              "nuts"
+            ],
             "note": "",
             "review": "",
             "translation": "A traditional sweet carrot pudding"
@@ -104,14 +125,25 @@
     "intro": "An evening of dancing, grazing & going back for seconds.",
     "courses": [
       {
+        "title": "To graze",
+        "items": [
+          {
+            "name": "Fruit, cheese & cracker platters",
+            "tags": [],
+            "note": "",
+            "review": "",
+            "translation": "Fruit, cheese and crackers for grazing"
+          }
+        ]
+      },
+      {
         "title": "Chaat station",
         "items": [
           {
             "name": "Pani puri",
             "tags": [
               "v",
-              "vg",
-              "df"
+              "vg"
             ],
             "note": "",
             "review": "",
@@ -125,24 +157,37 @@
             ],
             "note": "",
             "review": "",
-            "translation": "Crispy spinach with savory chaat toppings"
+            "translation": "Crispy kale and spinach with savory chaat toppings"
           },
           {
-            "name": "Chole bhatura",
+            "name": "Chole",
             "tags": [
               "v",
-              "df"
+              "gf"
             ],
-            "note": "Only the chole is listed as gluten-free; the bhatura is not.",
+            "note": "Gluten-free when served without bhatura.",
             "review": "",
-            "translation": "Spiced chickpea curry with fluffy, deep-fried bread"
+            "translation": "Spiced chickpea curry"
           },
           {
-            "name": "Condiments",
-            "tags": [],
+            "name": "Bhatura",
+            "tags": [
+              "v"
+            ],
             "note": "",
             "review": "",
-            "translation": "Sauces and accompaniments"
+            "translation": "Fluffy, deep-fried bread served with chole"
+          },
+          {
+            "name": "Pickle",
+            "tags": [
+              "v",
+              "vg",
+              "gf"
+            ],
+            "note": "",
+            "review": "",
+            "translation": "A tangy, spiced Indian pickle"
           }
         ]
       },
@@ -171,9 +216,7 @@
           },
           {
             "name": "Salmon tikka",
-            "tags": [
-              "gf"
-            ],
+            "tags": [],
             "note": "",
             "review": "",
             "translation": "Marinated, roasted salmon pieces"
@@ -257,7 +300,10 @@
           },
           {
             "name": "Raita",
-            "tags": [],
+            "tags": [
+              "v",
+              "gf"
+            ],
             "note": "",
             "review": "",
             "translation": "A savory yogurt accompaniment"
@@ -275,29 +321,40 @@
         "title": "Mexican station",
         "items": [
           {
-            "name": "Paneer & vegetable karahi with cheese",
+            "name": "Paneer & vegetable kadai with cheese",
             "tags": [
               "v"
             ],
             "note": "",
             "review": "",
-            "translation": "Indian cottage cheese and vegetables cooked with spices, topped with cheese"
+            "translation": "Crisp grilled tortilla filled with Indian cottage cheese, vegetables and cheese"
           },
           {
-            "name": "Paneer & mushroom karahi with cheese",
+            "name": "Paneer & mushroom kadai with cheese",
             "tags": [
               "v"
             ],
             "note": "",
             "review": "",
-            "translation": "Indian cottage cheese and mushrooms cooked with spices, topped with cheese"
+            "translation": "Crisp grilled tortilla filled with Indian cottage cheese, mushrooms and cheese"
           },
           {
             "name": "Salsa",
-            "tags": [],
+            "tags": [
+              "v",
+              "vg",
+              "gf"
+            ],
             "note": "",
             "review": "",
             "translation": "A savory sauce for dipping"
+          },
+          {
+            "name": "Guacamole",
+            "tags": [],
+            "note": "",
+            "review": "",
+            "translation": "A creamy avocado dip"
           },
           {
             "name": "Chips",
@@ -305,6 +362,28 @@
             "note": "",
             "review": "",
             "translation": "Crisp chips for dipping"
+          },
+          {
+            "name": "Corn bean salad",
+            "tags": [
+              "v",
+              "vg",
+              "gf"
+            ],
+            "note": "",
+            "review": "",
+            "translation": "A salad of corn and beans"
+          },
+          {
+            "name": "Beet salad",
+            "tags": [
+              "v",
+              "vg",
+              "gf"
+            ],
+            "note": "",
+            "review": "",
+            "translation": "A salad featuring beets"
           }
         ]
       },
@@ -323,6 +402,7 @@
           {
             "name": "Live kulfi falooda",
             "tags": [
+              "v",
               "nuts"
             ],
             "note": "",
@@ -335,11 +415,18 @@
         "title": "To sip",
         "items": [
           {
-            "name": "Mocktail station",
+            "name": "Guava margarita",
             "tags": [],
-            "note": "Selections to come",
+            "note": "",
             "review": "",
-            "translation": "A selection of alcohol-free mixed drinks"
+            "translation": "An alcohol-free guava margarita"
+          },
+          {
+            "name": "Butter beer",
+            "tags": [],
+            "note": "",
+            "review": "",
+            "translation": "A sweet, alcohol-free butter beer"
           }
         ]
       }
@@ -367,7 +454,11 @@
           },
           {
             "name": "Coconut chutney",
-            "tags": [],
+            "tags": [
+              "v",
+              "vg",
+              "gf"
+            ],
             "note": "",
             "review": "",
             "translation": "A savory coconut relish"
@@ -380,7 +471,7 @@
             ],
             "note": "",
             "review": "",
-            "translation": "A sweet semolina pudding"
+            "translation": "A sweet semolina pudding with pineapple and cardamom"
           },
           {
             "name": "Samosa",
@@ -408,10 +499,24 @@
           },
           {
             "name": "Panakam",
-            "tags": [],
+            "tags": [
+              "v",
+              "vg",
+              "gf"
+            ],
             "note": "",
             "review": "",
-            "translation": "A traditional sweet, spiced jaggery drink"
+            "translation": "A cooling jaggery drink with ginger and cardamom"
+          },
+          {
+            "name": "Mango lassi",
+            "tags": [
+              "v",
+              "gf"
+            ],
+            "note": "",
+            "review": "",
+            "translation": "A creamy yogurt drink blended with sweet mango"
           }
         ]
       },
@@ -432,7 +537,7 @@
             "tags": [
               "v",
               "vg",
-              "df"
+              "gf"
             ],
             "note": "",
             "review": "",
@@ -443,7 +548,7 @@
             "tags": [
               "v",
               "vg",
-              "df"
+              "gf"
             ],
             "note": "",
             "review": "",
@@ -453,7 +558,7 @@
             "name": "Gutti vankaya",
             "tags": [
               "v",
-              "vg",
+              "gf",
               "nuts"
             ],
             "note": "",
@@ -464,22 +569,22 @@
             "name": "Tindora fry",
             "tags": [
               "v",
-              "vg"
+              "gf",
+              "nuts"
             ],
             "note": "",
             "review": "",
             "translation": "Stir-fried ivy gourd"
           },
           {
-            "name": "Mango pappu",
+            "name": "Mango spinach pappu",
             "tags": [
               "v",
-              "vg",
               "gf"
             ],
             "note": "",
             "review": "",
-            "translation": "Lentils cooked with tangy mango"
+            "translation": "Lentils simmered with tangy mango and spinach"
           },
           {
             "name": "Tamarind rice",
@@ -507,10 +612,11 @@
           {
             "name": "Yogurt rice",
             "tags": [
-              "v"
+              "v",
+              "gf"
             ],
             "note": "",
-            "review": "The draft lists this as vegan, but also names yogurt. Vegan and dairy-free status need confirmation.",
+            "review": "",
             "translation": "Rice mixed with savory yogurt"
           },
           {
@@ -522,6 +628,73 @@
             "note": "",
             "review": "",
             "translation": "A soft, unleavened Indian flatbread"
+          }
+        ]
+      },
+      {
+        "title": "On the side",
+        "items": [
+          {
+            "name": "Fryums",
+            "tags": [
+              "v",
+              "vg",
+              "gf"
+            ],
+            "note": "",
+            "review": "",
+            "translation": "Crisp savory snacks"
+          },
+          {
+            "name": "Dry curd chili",
+            "tags": [
+              "v",
+              "gf"
+            ],
+            "note": "",
+            "review": "",
+            "translation": "Dried yogurt-marinated chilies"
+          },
+          {
+            "name": "Papad",
+            "tags": [
+              "v",
+              "vg",
+              "gf"
+            ],
+            "note": "",
+            "review": "",
+            "translation": "Thin, crisp Indian wafers"
+          },
+          {
+            "name": "Karivepaku karam",
+            "tags": [],
+            "note": "",
+            "review": "",
+            "translation": "Spiced curry leaf powder"
+          },
+          {
+            "name": "Sengapappu karam",
+            "tags": [
+              "nuts"
+            ],
+            "note": "",
+            "review": "",
+            "translation": "Roasted split lentil powder"
+          },
+          {
+            "name": "Maadupu karam",
+            "tags": [],
+            "note": "",
+            "review": "",
+            "translation": "Roasted lentil and sesame powder"
+          },
+          {
+            "name": "Kobbari karam",
+            "tags": [],
+            "note": "",
+            "review": "",
+            "translation": "Spiced coconut powder"
           }
         ]
       },
@@ -538,11 +711,47 @@
             "translation": "A thin, savory South Indian crepe"
           },
           {
-            "name": "Chutney",
-            "tags": [],
+            "name": "Coconut chutney",
+            "tags": [
+              "v",
+              "vg",
+              "gf"
+            ],
             "note": "",
             "review": "",
-            "translation": "A savory relish served alongside dosa"
+            "translation": "A savory coconut relish"
+          },
+          {
+            "name": "Tomato chutney",
+            "tags": [
+              "v",
+              "vg",
+              "gf"
+            ],
+            "note": "",
+            "review": "",
+            "translation": "A savory tomato relish"
+          },
+          {
+            "name": "Sambhar",
+            "tags": [
+              "v",
+              "gf"
+            ],
+            "note": "",
+            "review": "",
+            "translation": "Lentils and vegetables simmered in a tangy tamarind broth"
+          },
+          {
+            "name": "Potato filling",
+            "tags": [
+              "v",
+              "vg",
+              "gf"
+            ],
+            "note": "",
+            "review": "",
+            "translation": "Soft potatoes tossed with South Indian seasoning"
           }
         ]
       },
@@ -550,23 +759,33 @@
         "title": "Something sweet",
         "items": [
           {
-            "name": "Payasam",
+            "name": "Semiya & sabudana payasam",
             "tags": [
               "v",
               "nuts"
             ],
             "note": "",
             "review": "",
-            "translation": "A traditional sweet pudding"
+            "translation": "A creamy vermicelli and tapioca pearl pudding"
           },
           {
             "name": "Mysore pak",
+            "tags": [
+              "v",
+              "gf"
+            ],
+            "note": "",
+            "review": "",
+            "translation": "A rich, crumbly South Indian sweet"
+          },
+          {
+            "name": "Badushah",
             "tags": [
               "v"
             ],
             "note": "",
             "review": "",
-            "translation": "A rich, crumbly South Indian sweet"
+            "translation": "A flaky Indian glazed doughnut"
           }
         ]
       }
@@ -586,7 +805,6 @@
             "name": "Stuffed mushrooms",
             "tags": [
               "v",
-              "vg",
               "gf"
             ],
             "note": "",
@@ -610,6 +828,24 @@
             "note": "",
             "review": "",
             "translation": "Chicken pieces in a creamy marinade"
+          },
+          {
+            "name": "Bruschetta",
+            "tags": [
+              "v"
+            ],
+            "note": "",
+            "review": "",
+            "translation": "Toasted bread with savory toppings"
+          },
+          {
+            "name": "Hara bara kabab",
+            "tags": [
+              "v"
+            ],
+            "note": "",
+            "review": "",
+            "translation": "Savory vegetable patties"
           }
         ]
       },
@@ -617,14 +853,14 @@
         "title": "Dinner buffet",
         "items": [
           {
-            "name": "Paneer tikka masala",
+            "name": "Paneer kadai",
             "tags": [
               "v",
               "gf"
             ],
             "note": "",
             "review": "",
-            "translation": "Roasted Indian cottage cheese in a spiced curry sauce"
+            "translation": "Indian cottage cheese and bell pepper in a spiced gravy"
           },
           {
             "name": "Dal makhani",
@@ -647,7 +883,7 @@
             "translation": "Fenugreek and green peas in a creamy sauce"
           },
           {
-            "name": "Bhindi masala",
+            "name": "Tava vegetables",
             "tags": [
               "v",
               "vg",
@@ -655,7 +891,7 @@
             ],
             "note": "",
             "review": "",
-            "translation": "Okra cooked with aromatic spices"
+            "translation": "Spiced vegetables cooked on a griddle"
           },
           {
             "name": "Tandoori chicken tikka in butter chicken gravy",
@@ -693,8 +929,8 @@
             "name": "Pickle",
             "tags": [
               "v",
-              "gf",
-              "df"
+              "vg",
+              "gf"
             ],
             "note": "",
             "review": "",
@@ -703,10 +939,11 @@
           {
             "name": "Raita",
             "tags": [
-              "v"
+              "v",
+              "gf"
             ],
             "note": "",
-            "review": "The draft lists this as vegan. Ingredients need confirmation before vegan or dairy-free highlighting.",
+            "review": "",
             "translation": "A savory yogurt accompaniment"
           },
           {
@@ -722,22 +959,14 @@
         "title": "Something sweet",
         "items": [
           {
-            "name": "Kulfi falooda",
+            "name": "Mango mousse & berries",
             "tags": [
-              "nuts"
+              "v",
+              "gf"
             ],
             "note": "",
             "review": "",
-            "translation": "Indian frozen dessert served with sweet vermicelli"
-          },
-          {
-            "name": "Rabri jalebi",
-            "tags": [
-              "nuts"
-            ],
-            "note": "",
-            "review": "",
-            "translation": "Syrup-soaked spiral sweets served with thickened sweet milk"
+            "translation": "Mango mousse served with berries"
           }
         ]
       }

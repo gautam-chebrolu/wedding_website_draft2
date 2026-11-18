@@ -20,14 +20,16 @@ test('each public URL has exactly the requested events and only local jump links
   }
 });
 
-test('disputed labels and component-only claims cannot produce allergy matches', () => {
+test('updated yogurt labels cannot produce incorrect matches', () => {
   for (const slug of ['food','food-sangeet','food-haldi']) {
     const html=readPage(slug);
     for (const [, diets, content] of html.matchAll(/<li class="menu-item" data-diets="([^"]*)">([\s\S]*?)<\/li>/g)) {
-      if (/Yogurt rice/.test(content) || (/Raita/.test(content) && /Label under review/.test(content))) {
-        assert(!diets.split(' ').some(d=>['vg','df'].includes(d)));
+      if (/Yogurt rice|<h4>Raita<\/h4>/.test(content)) {
+        assert(!diets.split(' ').includes('vg'));
+        assert(diets.split(' ').includes('v'));
+        assert(diets.split(' ').includes('gf'));
+        assert(!content.includes('Label under review'));
       }
-      if (/Chole bhatura/.test(content)) assert(!diets.split(' ').includes('gf'));
     }
     assert.match(html,/cooking oil may contain soy/);
     assert.match(html,/Missing labels do not mean/);
@@ -39,7 +41,7 @@ test('disputed labels and component-only claims cannot produce allergy matches',
 function setup(slug) {
   const html=readPage(slug);
   const events={};
-  const choices=['v','vg','df','gf','nf'].map(value=>({value,checked:false,nextElementSibling:{textContent:value}}));
+  const choices=['v','vg','gf','nf'].map(value=>({value,checked:false,nextElementSibling:{textContent:value}}));
   const only={checked:false};
   const status={textContent:''};
   const rows=[...html.matchAll(/<li class="menu-item" data-diets="([^"]*)">([\s\S]*?)<\/li>/g)].map(([,diets,content])=>{
@@ -129,5 +131,52 @@ test('nut-free labels and highlights every dish without nuts, including untagged
     s.only.checked = true;
     s.events.change();
     assert.deepEqual(s.rows.filter(r => !r.hidden), combined);
+  }
+});
+
+
+test('all pages offer exactly four dietary filters and omit dairy-free labels', () => {
+  for (const slug of ['food', 'food-sangeet', 'food-haldi']) {
+    const html = readPage(slug);
+    assert.deepEqual([...html.matchAll(/name="diet" value="([^"]+)"/g)].map(m => m[1]), ['v', 'vg', 'gf', 'nf']);
+    assert(!/dairy-free|\bdf\b/i.test(html));
+  }
+});
+
+test('Haldi corrections and latest source allergen changes reach the generated menus', () => {
+  const s = setup('food-haldi');
+  const haldi = readPage('food-haldi').split('id="sangeet"')[0];
+  const rows = [...haldi.matchAll(/<li class="menu-item" data-diets="([^"]*)">([\s\S]*?)<\/li>/g)];
+  assert.equal(rows.length, 9);
+  assert(rows.every(([, diets]) => diets.split(' ').includes('v')));
+  s.choices.find(c => c.value === 'vg').checked = true; s.events.change();
+  for (const name of ['Veg Manchow Soup', 'Veg spring rolls']) {
+    assert(s.rows.find(r => r.content.includes('<h4>' + name + '</h4>')).classes.has('is-match'));
+  }
+  s.choices.find(c => c.value === 'vg').checked = false;
+  s.choices.find(c => c.value === 'nf').checked = true; s.events.change();
+  for (const name of ['Gajar Halwa', 'Tindora fry', 'Sengapappu karam']) {
+    const row = s.rows.find(r => r.content.includes('<h4>' + name + '</h4>'));
+    assert(row.dataset.diets.split(' ').includes('nuts'));
+    assert(!row.classes.has('is-match'));
+  }
+  assert(!s.rows.find(r => r.content.includes('<h4>Salmon tikka</h4>')).dataset.diets.split(' ').includes('gf'));
+  assert(!s.rows.find(r => r.content.includes('<h4>Stuffed mushrooms</h4>')).dataset.diets.split(' ').includes('vg'));
+});
+
+
+test('gluten-free filtering separates chole from bhatura and keeps Bullet naan available', () => {
+  for (const slug of ['food-sangeet', 'food-haldi']) {
+    const s = setup(slug);
+    s.choices.find(c => c.value === 'gf').checked = true;
+    s.only.checked = true;
+    s.events.change();
+    const chole = s.rows.find(r => r.content.includes('<h4>Chole</h4>'));
+    const bhatura = s.rows.find(r => r.content.includes('<h4>Bhatura</h4>'));
+    assert(chole && !chole.hidden);
+    assert(chole.content.includes('Gluten-free when served without bhatura.'));
+    assert(bhatura && bhatura.hidden);
+    assert(s.rows.some(r => r.content.includes('<h4>Bullet naan</h4>')));
+    assert(!s.rows.some(r => r.content.includes('<h4>Chole bhatura</h4>')));
   }
 });

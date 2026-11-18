@@ -3,7 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const root = path.resolve(__dirname, '..');
 const menus = JSON.parse(fs.readFileSync(path.join(root, 'media/food-menu.json'), 'utf8'));
-const labels = { v: 'Vegetarian', vg: 'Vegan', df: 'Dairy-free', gf: 'Gluten-free', nf: 'Nut-free', nuts: 'Contains nuts' };
+const labels = { v: 'Vegetarian', vg: 'Vegan', gf: 'Gluten-free', nf: 'Nut-free', nuts: 'Contains nuts' };
 const escape = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const versions = { food: ['wedding', 'reception'], 'food-sangeet': ['sangeet', 'wedding', 'reception'], 'food-haldi': ['haldi', 'sangeet', 'wedding', 'reception'] };
 function renderItem(item) {
@@ -15,7 +15,7 @@ function renderItem(item) {
     tags.add('nf');
     displayTags.push('nf');
   }
-  if (tags.has('vg') && !item.review) { tags.add('df'); tags.add('v'); }
+  if (tags.has('vg')) tags.add('v');
   return `<li class="menu-item" data-diets="${escape([...tags].join(' '))}">
     <div class="dish-heading"><h4>${escape(item.name)}</h4><span class="dish-match" hidden>✦ Draft match</span></div>
     ${item.translation ? `<p class="dish-translation"><i>${escape(item.translation)}</i></p>` : ''}
@@ -60,7 +60,7 @@ for (const [slug, ids] of Object.entries(versions)) {
       <h2 id="dietary-title">Find your favorites</h2>
       <p id="diet-help">Choose your dietary needs to highlight dishes. Multiple selections must all match. The full menu stays in view. Nut-free highlights every dish not tagged “Contains nuts.”</p>
       <form id="diet-form" hidden>
-        <fieldset aria-describedby="diet-help"><legend class="sr-only">Dietary preferences</legend><div class="diet-options">${['v','vg','df','gf','nf'].map(key => `<label class="diet-option"><input type="checkbox" name="diet" value="${key}" /> <span>${labels[key]}</span></label>`).join('')}</div></fieldset>
+        <fieldset aria-describedby="diet-help"><legend class="sr-only">Dietary preferences</legend><div class="diet-options">${['v','vg','gf','nf'].map(key => `<label class="diet-option"><input type="checkbox" name="diet" value="${key}" /> <span>${labels[key]}</span></label>`).join('')}</div></fieldset>
         <div class="diet-actions"><label class="matches-toggle"><input type="checkbox" id="matches-only" /> Show matches only</label><button type="reset" id="clear-diets">Clear selections</button></div>
       </form>
       <p id="diet-status" class="diet-status" role="status" aria-live="polite" aria-atomic="true">All dishes are shown. Dietary labels are provisional.</p>

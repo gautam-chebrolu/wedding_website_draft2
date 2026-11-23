@@ -36,9 +36,9 @@ guest-facing links.
 ## Spot It gallery (`/games`)
 
 An interactive scatter of all 60 pictures from our wedding deck, with a fresh
-arrangement on each visit, gentle floating motion, hover previews, and a focused
+arrangement on each visit, gentle floating motion, hover previews, and an in-place
 story carousel. The carousel supports arrow buttons, Left/Right keys, swiping,
-Escape, and clicking the backdrop. Motion can be paused and honors the guest's
+Escape, and clicking outside the selected picture. Motion can be paused and honors the guest's
 reduced-motion setting. A Games link is added by the shared navigation script.
 
 **To add our stories:** edit `media/spot-it-data.js`. Each entry has a `file`

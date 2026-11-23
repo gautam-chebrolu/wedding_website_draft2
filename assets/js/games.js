@@ -10,7 +10,8 @@
     return;
   }
 
-  var dialog = document.getElementById('games-dialog');
+  var dialog = document.getElementById('games-story');
+  var selectedNode = null;
   var detailImage = document.getElementById('games-detail-image');
   var detailTitle = document.getElementById('games-detail-title');
   var detailSummary = document.getElementById('games-detail-summary');
@@ -79,8 +80,8 @@
       button.type = 'button';
       button.className = 'games-symbol';
       button.setAttribute('aria-label', item.name + ': open story');
-      button.setAttribute('aria-haspopup', 'dialog');
-      button.setAttribute('aria-controls', 'games-dialog');
+      button.setAttribute('aria-expanded', 'false');
+      button.setAttribute('aria-controls', 'games-story');
       button.setAttribute('aria-describedby', 'games-peek-' + index);
       var img = document.createElement('img');
       img.src = imageURL(item);
@@ -95,7 +96,8 @@
       title.textContent = item.name;
       var summary = document.createElement('span');
       summary.id = 'games-peek-' + index;
-      summary.textContent = item.summary || 'A little piece of our world. Story coming soon.';
+      summary.textContent = item.summary || '';
+      summary.hidden = !item.summary;
       tooltip.append(title, summary);
       button.append(img, tooltip);
       button.addEventListener('click', function () { openStory(index, button); });
@@ -111,6 +113,15 @@
   function showStory(index) {
     activeIndex = (index + order.length) % order.length;
     var item = order[activeIndex].item;
+    if (selectedNode) {
+      selectedNode.classList.remove('is-selected');
+      selectedNode.querySelector('button').setAttribute('aria-expanded', 'false');
+    }
+    selectedNode = order[activeIndex].node;
+    selectedNode.classList.add('is-selected');
+    selectedNode.querySelector('button').setAttribute('aria-expanded', 'true');
+    selectedNode.appendChild(dialog);
+    dialog.hidden = false;
     detailImage.src = imageURL(item);
     detailImage.alt = item.name;
     detailTitle.textContent = item.name;
@@ -123,13 +134,16 @@
       var next = new Image();
       next.src = imageURL(order[(activeIndex + offset + order.length) % order.length].item);
     });
-    dialog.scrollTop = 0;
+    requestAnimationFrame(function () {
+      var bounds = selectedNode.getBoundingClientRect();
+      if (bounds.top < 130 || bounds.bottom > innerHeight - 40) selectedNode.scrollIntoView({ block: 'center', behavior: reducedMotion.matches ? 'instant' : 'smooth' });
+    });
   }
 
   function openStory(index, button) {
+    if (selectedNode === order[index].node && !dialog.hidden) { closeStory(); return; }
     returnFocus = button;
     showStory(index);
-    dialog.showModal();
     document.body.dataset.storyOpen = 'true';
   }
 
@@ -141,28 +155,30 @@
     motionButton.hidden = reducedMotion.matches;
   }
 
-  document.getElementById('games-close').addEventListener('click', function () { dialog.close(); });
-  document.getElementById('games-previous').addEventListener('click', function () { showStory(activeIndex - 1); });
-  document.getElementById('games-next').addEventListener('click', function () { showStory(activeIndex + 1); });
-  dialog.addEventListener('close', function () {
+  function closeStory() {
+    dialog.hidden = true;
     delete document.body.dataset.storyOpen;
-    if (returnFocus && returnFocus.isConnected) returnFocus.focus({ preventScroll: true });
-  });
-  // A backdrop click closes the focused view; clicks inside the card stay inside it.
-  var backdropDown = false;
-  dialog.addEventListener('pointerdown', function (event) { backdropDown = event.target === dialog; });
-  dialog.addEventListener('click', function (event) {
-    if (backdropDown && event.target === dialog) {
-      var bounds = dialog.getBoundingClientRect();
-      if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) dialog.close();
+    if (selectedNode) {
+      selectedNode.classList.remove('is-selected');
+      selectedNode.querySelector('button').setAttribute('aria-expanded', 'false');
+      selectedNode.querySelector('button').focus({ preventScroll: true });
     }
-    backdropDown = false;
+    selectedNode = null;
+    scatter.after(dialog);
+  }
+  document.getElementById('games-close').addEventListener('click', closeStory);
+  document.getElementById('games-previous').addEventListener('click', function () { showStory(activeIndex - 1); document.getElementById('games-previous').focus({ preventScroll: true }); });
+  document.getElementById('games-next').addEventListener('click', function () { showStory(activeIndex + 1); document.getElementById('games-next').focus({ preventScroll: true }); });
+  document.addEventListener('click', function (event) {
+    if (selectedNode && !event.target.closest('.games-item, #games-story')) closeStory();
   });
-  dialog.addEventListener('keydown', function (event) {
-    if (event.altKey || event.ctrlKey || event.metaKey) return;
+  document.addEventListener('keydown', function (event) {
+    if (!selectedNode || event.altKey || event.ctrlKey || event.metaKey) return;
+    if (event.key === 'Escape') closeStory();
     if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
       event.preventDefault();
       showStory(activeIndex + (event.key === 'ArrowLeft' ? -1 : 1));
+      document.getElementById(event.key === 'ArrowLeft' ? 'games-previous' : 'games-next').focus({ preventScroll: true });
     }
   });
 
@@ -182,7 +198,7 @@
 
   motionButton.addEventListener('click', function () { motionPaused = !motionPaused; updateMotion(); });
   reducedMotion.addEventListener('change', function () { motionPaused = reducedMotion.matches; updateMotion(); });
-  document.getElementById('games-shuffle').addEventListener('click', function () { renderScatter(); });
+  document.getElementById('games-shuffle').addEventListener('click', function () { if (selectedNode) closeStory(); renderScatter(); });
   var observer = new ResizeObserver(function () {
     cancelAnimationFrame(resizeFrame);
     resizeFrame = requestAnimationFrame(layout);

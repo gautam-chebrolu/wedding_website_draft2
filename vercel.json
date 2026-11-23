@@ -11,6 +11,7 @@
         { "source": "/atl_invitation", "destination": "/pages/atl_invitation" },
         { "source": "/ceremony", "destination": "/pages/ceremony" },
         { "source": "/funds", "destination": "/pages/funds" },
+        { "source": "/games", "destination": "/pages/games" },
         { "source": "/guests", "destination": "/pages/guests" },
         { "source": "/invitation", "destination": "/pages/invitation" },
         { "source": "/live-admin", "destination": "/pages/live-admin" },

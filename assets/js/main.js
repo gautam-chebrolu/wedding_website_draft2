@@ -35,6 +35,17 @@
   var nav = document.querySelector('nav.site-nav');
   if (!nav) return;
 
+  // Keep the new gallery discoverable across the existing page templates.
+  var links = nav.querySelector('ul');
+  if (links && !links.querySelector('a[href="/games"]')) {
+    var gamesItem = document.createElement('li');
+    var gamesLink = document.createElement('a');
+    gamesLink.href = '/games';
+    gamesLink.textContent = 'Games';
+    gamesItem.appendChild(gamesLink);
+    links.appendChild(gamesItem);
+  }
+
   function onScroll() {
     if (window.scrollY > 20) {
       nav.classList.add('scrolled');

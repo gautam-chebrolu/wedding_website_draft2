@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Games — Priya &amp; Gautam</title>
+  <meta name="description" content="A little bit of us: explore the pictures and stories in Priya and Gautam’s custom Spot It wedding deck." />
+  <link rel="stylesheet" href="/assets/css/styles.css" />
+  <link rel="stylesheet" href="/assets/css/games.css" />
+  <link rel="icon" type="image/svg+xml" href="/media/wedding_logo.svg" />
+  <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+  <script defer src="/_vercel/insights/script.js"></script>
+  <script defer src="/assets/js/main.js"></script>
+  <script defer src="/media/spot-it-data.js"></script>
+  <script defer src="/assets/js/games.js"></script>
+</head>
+<body class="games-page">
+  <nav class="site-nav scrolled" aria-label="Main navigation">
+    <a href="/" class="nav-logo" aria-label="Home"><img src="/media/wedding_logo.svg" alt="Priya &amp; Gautam" /></a>
+    <ul>
+      <li><a href="/schedule">Schedule / RSVP</a></li>
+      <li><a href="/travel">Travel</a></li>
+      <li><a href="/funds">Gifts</a></li>
+      <li><a href="/pictures">Pictures</a></li>
+      <li><a href="/games" class="active" aria-current="page">Games</a></li>
+    </ul>
+  </nav>
+
+  <main class="games-main" id="main-content">
+    <header class="games-intro">
+      <p class="games-eyebrow">Spot It · The wedding edition</p>
+      <h1>A little bit <em>of us.</em></h1>
+      <p class="games-dedication">One deck. So many little stories.</p>
+      <p class="games-intro-copy">We made our own version of Spot It to share with you.<br class="games-desktop-break" /> Every picture is a little piece of our world. Take a look around.</p>
+      <p class="games-hint"><span class="games-hover-hint">Hover to peek. </span>Pick a picture to find its story.</p>
+    </header>
+
+    <section class="games-collection" aria-label="Pictures from our Spot It deck">
+      <div class="games-toolbar" id="games-toolbar" hidden>
+        <p id="games-count" aria-live="polite"></p>
+        <div class="games-actions">
+          <button id="games-motion" type="button" aria-pressed="false">Pause motion</button>
+          <button id="games-shuffle" type="button"><span aria-hidden="true">⤨</span> Mix it up</button>
+        </div>
+      </div>
+      <p class="games-loading" id="games-loading" role="status">Gathering our little stories…</p>
+      <noscript><p class="games-loading">Turn on JavaScript to explore the pictures and their stories.</p></noscript>
+      <ul class="games-scatter" id="games-scatter" aria-label="Explore each picture"></ul>
+    </section>
+    <p class="games-signoff">Made with love, and a few inside jokes.<span>Priya &amp; Gautam</span></p>
+  </main>
+
+  <dialog class="games-dialog" id="games-dialog" aria-labelledby="games-detail-title" aria-describedby="games-detail-description">
+    <button class="games-close" id="games-close" type="button" aria-label="Close story" autofocus>×</button>
+    <div class="games-detail" id="games-detail">
+      <div class="games-detail-art"><img id="games-detail-image" alt="" /></div>
+      <div class="games-detail-copy" aria-live="polite" aria-atomic="true">
+        <p class="games-eyebrow">A little piece of our world</p>
+        <h2 id="games-detail-title"></h2>
+        <p class="games-detail-summary" id="games-detail-summary" hidden></p>
+        <p id="games-detail-description"></p>
+      </div>
+    </div>
+    <div class="games-carousel">
+      <button id="games-previous" type="button" aria-label="Previous picture">←</button>
+      <p><span id="games-position" aria-live="polite" aria-atomic="true"></span><span class="games-keyboard-hint">Use ← → to wander</span></p>
+      <button id="games-next" type="button" aria-label="Next picture">→</button>
+    </div>
+  </dialog>
+
+  <footer class="games-footer">Priya &amp; Gautam · 2026 <a href="/">Back to our wedding</a></footer>
+</body>
+</html>

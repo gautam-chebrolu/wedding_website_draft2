@@ -33,6 +33,34 @@ guest-facing links.
 
 ---
 
+## Spot It gallery (`/games`)
+
+An interactive scatter of all 60 pictures from our wedding deck, with a fresh
+arrangement on each visit, gentle floating motion, hover previews, and a focused
+story carousel. The carousel supports arrow buttons, Left/Right keys, swiping,
+Escape, and clicking the backdrop. Motion can be paused and honors the guest's
+reduced-motion setting. A Games link is added by the shared navigation script.
+
+**To add our stories:** edit `media/spot-it-data.js`. Each entry has a `file`
+(WebP filename), `name` (display title), `summary` (one short hover line), and
+`description` (the full 2–3 sentence story). Blank copy shows a neutral coming-soon
+message. The same content supplies both hover previews and the focused carousel.
+
+The page serves only optimized WebP files from `media/spot_it/web/`. The originals
+are kept outside this repository in the local sibling folder
+`../wedding_spot_it_originals/`, so they are not pushed or deployed. After adding
+or changing originals, regenerate the web images from that folder (or another
+source folder):
+
+```bash
+npm install --no-save --package-lock=false sharp
+node scripts/build-spot-it-images.js ../wedding_spot_it_originals
+```
+
+No install or build is needed to serve the checked-in site. Layout and behavior
+live in `pages/games.html`, `assets/css/games.css`, and `assets/js/games.js`.
+Preview locally with `node scripts/dev-server.js` and open `/games`.
+
 ## Managing the Guest List
 
 Guests can be managed through the password-protected **Guest List Manager** at

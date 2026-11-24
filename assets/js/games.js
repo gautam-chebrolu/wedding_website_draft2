@@ -11,6 +11,7 @@
   }
 
   var dialog = document.getElementById('games-story');
+  scatter.after(dialog);
   var selectedNode = null;
   var detailImage = document.getElementById('games-detail-image');
   var detailTitle = document.getElementById('games-detail-title');
@@ -22,7 +23,6 @@
   var motionPaused = reducedMotion.matches;
   var order = [];
   var activeIndex = 0;
-  var returnFocus = null;
   var lastWidth = 0;
   var resizeFrame = 0;
 
@@ -61,9 +61,55 @@
       entry.node.style.setProperty('--x', (14 + cellWidth * (col + .5) + entry.x * jitterX) + 'px');
       var stagger = (col % 2 ? .13 : -.13) * cellHeight;
       entry.node.style.setProperty('--y', (15 + cellHeight * (row + .5) + stagger + entry.y * jitterY) + 'px');
+      entry.centerX = parseFloat(entry.node.style.getPropertyValue('--x'));
+      entry.centerY = parseFloat(entry.node.style.getPropertyValue('--y'));
+      entry.pixelSize = size;
       if (col === 0) entry.node.dataset.edge = 'left';
       else if (col === columns - 1) entry.node.dataset.edge = 'right';
       else delete entry.node.dataset.edge;
+    });
+    spreadNeighbors();
+  }
+
+  function spreadNeighbors() {
+    var active = selectedNode ? order[activeIndex] : null;
+    var width = scatter.clientWidth;
+    var centerX = 0;
+    var radius = 0;
+    if (active) {
+      var scale = Math.min(2.2, (width - 24) / active.pixelSize);
+      radius = active.pixelSize * scale / 2;
+      // At the edges, grow toward the available space rather than off the page.
+      centerX = Math.max(radius + 12, Math.min(width - radius - 12, active.centerX));
+      var storyWidth = Math.min(340, width - 24);
+      var storyCenter = Math.max(storyWidth / 2 + 12, Math.min(width - storyWidth / 2 - 12, centerX));
+      active.node.style.setProperty('--grow-scale', scale);
+      active.node.style.setProperty('--grow-x', (centerX - active.centerX) + 'px');
+      dialog.style.setProperty('--story-top', (active.centerY + radius + 24) + 'px');
+      dialog.style.setProperty('--story-left', storyCenter + 'px');
+      dialog.style.setProperty('--story-width', storyWidth + 'px');
+    }
+    order.forEach(function (entry) {
+      var pushX = 0;
+      var pushY = 0;
+      if (active && entry !== active) {
+        var dx = entry.centerX - centerX;
+        var dy = entry.centerY - active.centerY;
+        var distance = Math.hypot(dx, dy);
+        var reach = radius + entry.pixelSize * .7 + 80;
+        // A continuous falloff keeps the nearest pictures moving most.
+        var strength = Math.max(0, 1 - distance / reach);
+        var push = Math.min(110, reach * strength * strength);
+        pushX = dx / (distance || 1) * push;
+        pushY = dy / (distance || 1) * push;
+        if (push > 0) {
+          var margin = entry.pixelSize * .65 + 6;
+          pushX = Math.max(margin - entry.centerX, Math.min(width - margin - entry.centerX, pushX));
+          pushY = Math.max(margin - entry.centerY, pushY);
+        }
+      }
+      entry.node.style.setProperty('--push-x', pushX + 'px');
+      entry.node.style.setProperty('--push-y', pushY + 'px');
     });
   }
 
@@ -120,8 +166,8 @@
     selectedNode = order[activeIndex].node;
     selectedNode.classList.add('is-selected');
     selectedNode.querySelector('button').setAttribute('aria-expanded', 'true');
-    selectedNode.appendChild(dialog);
     dialog.hidden = false;
+    spreadNeighbors();
     detailImage.src = imageURL(item);
     detailImage.alt = item.name;
     detailTitle.textContent = item.name;
@@ -135,14 +181,17 @@
       next.src = imageURL(order[(activeIndex + offset + order.length) % order.length].item);
     });
     requestAnimationFrame(function () {
+      if (!selectedNode) return;
       var bounds = selectedNode.getBoundingClientRect();
-      if (bounds.top < 130 || bounds.bottom > innerHeight - 40) selectedNode.scrollIntoView({ block: 'center', behavior: reducedMotion.matches ? 'instant' : 'smooth' });
+      var top = bounds.top - order[activeIndex].pixelSize * .6;
+      var bottom = bounds.bottom + order[activeIndex].pixelSize * .6;
+      var scroll = top < 130 ? top - 145 : bottom > innerHeight - 40 ? bottom - innerHeight + 60 : 0;
+      if (scroll) window.scrollBy({ top: scroll, behavior: reducedMotion.matches ? 'instant' : 'smooth' });
     });
   }
 
   function openStory(index, button) {
     if (selectedNode === order[index].node && !dialog.hidden) { closeStory(); return; }
-    returnFocus = button;
     showStory(index);
     document.body.dataset.storyOpen = 'true';
   }
@@ -164,6 +213,7 @@
       selectedNode.querySelector('button').focus({ preventScroll: true });
     }
     selectedNode = null;
+    spreadNeighbors();
     scatter.after(dialog);
   }
   document.getElementById('games-close').addEventListener('click', closeStory);
